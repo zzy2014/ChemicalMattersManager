@@ -1,0 +1,307 @@
+*{
+    margin:0px;
+    padding:0px;
+    border:0px;
+}
+
+html,body{
+    height:100%;
+    width:100%;
+}
+
+body{
+    font-family: sans-serif;
+    font-size:18px;
+} 
+
+div.div_headnavi{
+    position:relative;
+    padding-top:10px;
+    /*overflow:hidden; 添上此句可能会导致二级导航菜单被截断*/
+    width:100%;
+    min-width:1190px;
+    min-height:90px;
+    background-color:#d9d9cfb5;
+}
+
+ul.ul_headmainnavi{
+    position:relative;
+    margin-left:15%;
+	list-style-type:none; /没有项前面的点
+	overflow:hidden;
+}
+
+li.li_headmainnavi{
+    position:relative;
+    margin-left:13%;
+	float:left;
+}
+
+/*链接正常的状态*/
+a.a_headmainnavi{
+	color:black;
+	text-decoration:none;
+	font-size:24px;
+	font-family: "Microsoft YaHei"!important;
+	text-align:center;
+}
+
+/*主菜单选中时*/
+a.a_headmainnavi:hover{
+	background-color:white;
+    color:blue;
+    text-decoration:none;
+}
+
+
+/*头部的次级导航栏*/
+ul.ul_headsubnavi{
+    position:absolute;
+	z-index:999999; /*显示在最上层*/
+  	display:none; /*子菜单初始状态时不显示*/
+	border-bottom: 2px solid #ef3dba;
+    background-color:white;
+    list-style-type:none; /没有项前面的点
+	top: 52px;
+	width:auto;
+	min-width:100px;
+}
+
+li.li_headsubnavi{
+    position:relative;
+    height:auto;
+    padding:10px;
+	text-align:center;
+}
+
+a.a_headsubnavi{
+	color:black;
+	text-decoration:none;
+	font-size:20px;
+	font-family: "Microsoft YaHei"!important;
+}
+
+a.a_headsubnavi:hover{
+    text-decoration:none;
+    color:white;
+    background-color:blue;
+}
+
+/*鼠标移动到主菜单时，显示子菜单*/
+li.li_headmainnavi:hover ul{
+    display:block;
+}
+
+
+/*中间滚动新闻容器*/
+div.swiper-container{
+    width: 100%;
+    min-width:1190px;
+    height: 68%;
+}
+
+div.swiper-wrapper {
+    position:relative;
+}
+
+/*滚动新闻内容*/
+div.swiper-slide {
+    position:relative;
+    height:100%;
+    text-align: center;
+    font-size: 28px;
+    /*background-image:url("../img/news.jpg");*/
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+div.swiper-pagination{
+    position:relative;
+}
+
+
+/*下部的角注*/
+div.div_footer{
+    position:relative;
+    width:100%;
+    min-width:1190px;
+    height:20%;
+    background-color:blue;
+}
+
+p.p_footer{
+    position:relative;
+    text-align:center;
+    padding-top:3%;
+}
+
+
+/*弹出的注册DIV框*/
+div#div_register{
+    display:none;
+    position:absolute;
+    top: 25%; 
+    left: 35%; 
+    width: 26%; 
+    min-width:400px;
+    height: 25%;
+    min-height:200px;
+    z-index:9999;
+    border:2px solid black;
+    background-color:white;
+}
+
+div#div_registerleft{
+    position:relative;
+    float:left;
+    top:3%;
+    left:3%;
+}
+
+div#div_registerright{
+    position:relative;
+    float:left;
+    left:20%;
+    top:3%;
+    right:3%;
+}
+
+select#select_usertype{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+input#input_username{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+input#input_password{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+input#input_repassword{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+input#input_submit{
+    position:relative;
+    width:30%;
+    top:70%;
+    left:-60%;
+}
+
+button#button_cancel{
+    position:relative;
+    width:30%;
+    top:58%;
+    left:-20%;
+}
+
+
+/*弹出的登录框*/
+div#div_login{
+    display:none;
+    position:absolute;
+    top: 25%; 
+    left: 35%; 
+    width: 26%; 
+    min-width:400px;
+    height: 25%;
+    min-height:200px;
+    z-index:9999;
+    border:2px solid black;
+    background-color:white;
+}
+
+div#div_loginleft{
+    position:relative;
+    float:left;
+    top:20%;
+    left:8%;
+}
+
+div#div_loginright{
+    position:relative;
+    float:left;
+    top:20%;
+    left:18%;
+}
+
+input#input_loginname{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+input#input_loginpassword{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
+a#a_loginquit{
+    position:relative;
+    top:-3%;
+	color:black;
+	text-decoration:none;
+	font-size:20px;
+	font-family: "Microsoft YaHei"!important;
+	text-align:center;
+}
+
+input#input_logincheck{
+    position:relative;
+    top:70%;
+    left:-50%;
+}
+
+label.label_logincheck{
+    position:relative;
+    top:70%;
+    left:-50%;
+}
+
+input#input_loginsubmit{
+    position:relative;
+    top:56%;
+    right:15%;
+    width:30%;
+    font-size:18px;
+}
+
+
+/*弹出div框后的黑背景*/
+div#div_block{ 
+    display: none; 
+    position: absolute; 
+    top: 0%; 
+    left: 0%; 
+    width: 100%; 
+    height: 100%; 
+    background-color: black; 
+    z-index:1001; 
+    -moz-opacity: 0.5; 
+    opacity:.50; 
+    filter: alpha(opacity=50); 
+}
+
+
