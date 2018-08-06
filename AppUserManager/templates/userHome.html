@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>个人管理页面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/userHome.css"/>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+    <!--jsgrid相关的css与js-->
+    <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/jsgrid.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/theme.css" />
+    <script src="/static/js/jsgrid/jsgrid.core.js"></script>
+    <script src="/static/js/jsgrid/jsgrid.load-indicator.js"></script>
+    <script src="/static/js/jsgrid/jsgrid.load-strategies.js"></script>
+    <script src="/static/js/jsgrid/jsgrid.sort-strategies.js"></script>
+    <script src="/static/js/jsgrid/jsgrid.field.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.text.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.number.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.select.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.checkbox.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.control.js"></script>
+
+    <!--数据管理相关的js-->
+    <script src="/static/js/userHome.js"></script>
+</head>
+
+<body>
+
+<!--左侧的功能界面-->
+<div class="div_leftpalate">
+    <ul class="ul_leftnavi">
+        <li class="li_leftnavi">
+            <a class="a_leftnavi" href="javascript:void(0)" 
+                onclick="showSubNavi('ul_usercenter')">个人中心
+            </a>
+            <ul id="ul_usercenter" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">用户名</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">修改密码</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">退出账号</a> </li>
+            </ul>
+        </li> 
+
+        <li class="li_leftnavi">
+            <!--只有超级管理员才可以看到-->
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_usermanage')">用户管理
+            </a>
+            <ul id="ul_usermanage" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi"  href="javascript:void(0)"
+                        onclick="showUserStates()">用户状态
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showUserTypes()">用户类型</a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showStudentTypes()">学生类型
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showAdministrators()">管理员
+                    </a>
+                </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">院长</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">副院长</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">教师</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">学生</a> </li>
+            </ul>
+        </li>
+
+        <li class="li_leftnavi">
+            <!--只有超级管理员和管理员才可以看到-->
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_mattermanage')">药品管理
+            </a>
+            <ul id="ul_mattermanage" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">入库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购</a> </li>
+            </ul>
+        </li>
+
+        <li class="li_leftnavi">
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_financemanage')">经费管理
+            </a>
+            <ul id="ul_financemanage" class="ul_leftsubnavi">
+                <!--只有超级管理员与管量员可见-->
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">所有经费</a> </li>
+                <!--只有教师和学生可见-->
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的经费</a> </li>
+            </ul>
+        </li>
+
+        <li class="li_leftnavi">
+            <!--只有教师才可以看到-->
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_studentmanage')">学生管理
+            </a>
+            <ul id="ul_studentmanage" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">所有学生</a> </li>
+            </ul>
+        </li>
+
+        <li class="li_leftnavi">
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_reserve')">预约系统
+            </a>
+            <ul id="ul_reserve" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品预约</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预约审核</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的预约</a> </li>
+            </ul>
+        </li>
+
+    <ul>
+</div>
+
+
+<!--右侧的用户列表-->
+<div id="jsGrid">
+</div>
+
+</body>
+</html>
