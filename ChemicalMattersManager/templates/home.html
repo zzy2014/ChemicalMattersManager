@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>药品管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/swiper/swiper.min.css">
+    <script type="text/javascript" src="/static/js/home.js"></script>
+    <script type="text/javascript" src="/static/js/swiper/swiper.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+
+<!--头部的导航-->
+<div class="div_headnavi">
+    <ul class="ul_headmainnavi">
+        <li class="li_headmainnavi">
+            <a class="a_headmainnavi" href="">常用网址</a>
+            <ul class="ul_headsubnavi">
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="">学校主页</a>
+                </li>
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="">学院主页</a>
+                </li>
+            </ul>
+        </li>
+        <li class="li_headmainnavi">
+            <a class="a_headmainnavi" href="">使用指南</a>
+            <ul class="ul_headsubnavi">
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="">系统简介</a>
+                </li>
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="">药品领取</a>
+                </li>
+            </ul>
+        </li>
+        <li class="li_headmainnavi">
+        <a class="a_headmainnavi" href="">用户中心</a>
+            <ul class="ul_headsubnavi">
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="javascript:void(0)" 
+                        onclick="showDivBlock('div_register','div_block')">注册
+                    </a>
+                </li>
+                <li class="li_headsubnavi">
+                    <a class="a_headsubnavi" href="javascript:void(0)"
+                        onclick="showDivBlock('div_login','div_block')">登录
+                    </a>
+                </li>
+            </ul>
+        <li>
+    </ul>
+   
+</div>
+
+<!-- 中间的滚动内容Swiper -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">新闻1</div>
+        <div class="swiper-slide">新闻2</div>
+        <div class="swiper-slide">新闻3</div>
+        <div class="swiper-slide">新闻4</div>
+        <div class="swiper-slide">新闻5</div>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+    
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    
+</div>
+
+
+<!--脚注部分-->
+<div class="div_footer">
+    <p class="p_footer">制作人：张战运&nbsp &nbsp &nbsp地址：中国.桂林 </p>
+</div>
+
+
+<!--弹出的注册框-->
+<form method="get">
+    <div id="div_register">
+        <div id="div_registerleft">
+            <p>用户类型：</p>
+            <p>用户名&nbsp&nbsp&nbsp：</p>
+            <p>密&nbsp&nbsp&nbsp码&nbsp&nbsp&nbsp&nbsp：</p>
+            <p>重复密码：</p>
+        </div>
+        <div id="div_registerright"> 
+            <select id="select_usertype">
+                <option value ="教师">教师</option>
+                <option value ="博士生">博士生</option>
+                <option value="硕士生">硕士生</option>
+                <option value="本科生">本科生</option>
+                <option value="留学生">留学生</option>
+            </select>
+            <p> </p>
+            <input id="input_username" type="text" name="username" /> 
+            <p> </p>
+            <input id="input_password" type="text" name="password" />
+            <p> </p>
+            <input id="input_repassword" type="text" name="repassword" />
+        </div>
+
+        <input id="input_submit" type="submit" value="确认"/>
+        <button id="button_cancel" type="button" onclick="hideDivBlock('div_register','div_block')">取消</button>
+    </div>
+</form>
+
+
+
+<!--弹出的登录框-->
+<form method="get">
+    <div id="div_login">
+        <div id="div_loginleft">
+            <p>用户名：</p>
+            <p>密&nbsp&nbsp&nbsp码：</p>
+        </div>
+        <div id="div_loginright">
+            <input id="input_loginname" type="text" name="loginname"/>
+            <p> </p>
+            <input id="input_loginpassword" type="text" name="loginpassword"/>
+        </div>
+
+        <input id="input_logincheck" type="checkbox" name="remember" value="isremember" checked="checked"/>
+        <label class="label_logincheck" for="input_logincheck">记住用户</label>
+        <input id="input_loginsubmit" type="submit" value="登录" onclick=" return loginVertify('input_loginsubmit','input_loginname', 'input_loginpassword')"/>
+
+        <!--用于关闭窗口-->
+        <a id="a_loginquit" href="javascript:void(0)" 
+            onclick="hideDivBlock('div_login','div_block')">X
+        </a>
+
+    </div>
+</form>
+
+<!--弹出框的黑背景-->
+<div id="div_block">
+</div>
+
+
+<script>
+
+    //初始化滚动新闻
+    var mySwiper = new Swiper
+    (
+        '.swiper-container', 
+        {
+            // 如果需要分页器
+            pagination:
+            {
+              el: '.swiper-pagination',
+            },
+            
+            // 如果需要前进后退按钮
+            navigation:
+            {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            },
+      }
+    );
+
+</script>
+
+
+
+</body>
+
+</html>
+
+
+
