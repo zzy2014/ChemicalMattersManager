@@ -11,5 +11,5 @@ The real manager of chemical labs can organize all kinds of matters easily.
 6. javascript
 7. jquery-3.3.1
 7. swiper-4.3.3
-# alert
+# Alert
 1. we are busily developing it now, and we have accomplished about 20% of the total workload. 
