@@ -2,7 +2,7 @@
 This is a manager of chemical matters in the chemistry college.
 Students can reserve chemical matters for their experiments just via this system.
 The real manager of chemical labs can organize all kinds of matters easily.
-# Necessary develop tools
+# Necessary develop tools(Windows platform)
 1. Python-3.7.0
 2. Django-2.0.7
 3. Mysql-5.7.23.0
