@@ -214,7 +214,7 @@ class CAdministratorsView(Resource):
 
     def get(self, request):
         strId = request.GET.get("id", "") 
-        strStateId = request.GET.get("EF_UserStateId", "") 
+        strUserStateId = request.GET.get("EF_UserStateId", "") 
         strUserName = request.GET.get("EF_UserName", "") 
         strPassWord = request.GET.get("EF_PassWord", "") 
         strOfficeAddress = request.GET.get("EF_OfficeAddress", "") 
@@ -224,8 +224,8 @@ class CAdministratorsView(Resource):
 
         if (strId != ""):
             arrValidItems = arrValidItems.filter(id__contains = int(strId))
-        if (strStateId != ""):
-            arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strStateId))
+        if (strUserStateId != "" and strUserStateId != "0"):
+            arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
         if (strUserName != ""):
             arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
         if (strPassWord != ""):
@@ -289,8 +289,6 @@ class CAdministratorsView(Resource):
         jsonDict["EF_PhoneNum"] = strPhoneNum
 
         jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
-
-        print(jsonStr)
 
         return JsonResponse(jsonStr, status = 200, safe = False)
 
