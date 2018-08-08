@@ -238,9 +238,7 @@ class CAdministratorsView(Resource):
         return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
 
     def post(self, request):
-        strStateId = request.POST.get("EF_UserStateId", "") 
-        if (strStateId == ""):
-            strStateId = "0";
+        strStateId = request.POST.get("EF_UserStateId", "0") 
         strUserName = request.POST.get("EF_UserName", "") 
         strPassWord = request.POST.get("EF_PassWord", "") 
         strOfficeAddress = request.POST.get("EF_OfficeAddress", "") 
@@ -262,15 +260,11 @@ class CAdministratorsView(Resource):
 
     def put(self, request):
         intCurId = int(request.PUT.get("id"))
-        strStateId = request.PUT.get("EF_UserStateId", "") 
-        if (strStateId == ""):
-            strStateId = "0"
+        strStateId = request.PUT.get("EF_UserStateId", "0") 
         strUserName = request.PUT.get("EF_UserName", "") 
         strPassWord = request.PUT.get("EF_PassWord", "") 
         strOfficeAddress = request.PUT.get("EF_OfficeAddress", "") 
         strPhoneNum = request.PUT.get("EF_PhoneNum", "") 
-
-        print(strUserName)
 
         curAdmin = Administrators.objects.get(id = intCurId)
         curAdmin.EF_UserStateId = strStateId
@@ -294,6 +288,99 @@ class CAdministratorsView(Resource):
 
     def delete(self, request, intTypeId):
         curAdmin = Administrators.objects.get(id = int(intTypeId))
+        curAdmin.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+#院长接口
+class CChiefCollegeLeadersView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strUserStateId = request.GET.get("EF_UserStateId", "") 
+        strTeacherId = request.GET.get("EF_TeacherId", "") 
+        strUserName = request.GET.get("EF_UserName", "") 
+        strPassWord = request.GET.get("EF_PassWord", "") 
+        strOfficeAddress = request.GET.get("EF_OfficeAddress", "") 
+        strPhoneNum = request.GET.get("EF_PhoneNum", "") 
+        arrAllItems = ChiefCollegeLeaders.objects.all()
+        arrValidItems = arrAllItems
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strUserStateId != "" and strUserStateId != "0"):
+            arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
+        if (strTeacherId != "" and strTeacherId != "0"):
+            arrValidItems = arrValidItems.filter(EF_TeacherId_contains = int(strTeacherId))
+        if (strUserName != ""):
+            arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
+        if (strPassWord != ""):
+            arrValidItems = arrValidItems.filter(EF_PassWord__contains = strPassWord)
+        if (strOfficeAddress != ""):
+            arrValidItems = arrValidItems.filter(EF_OfficeAddress__contains = strOfficeAddress)
+        if (strPhoneNum != ""):
+            arrValidItems = arrValidItems.filter(EF_PhoneNum__contains = strPhoneNum)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strStateId = request.POST.get("EF_UserStateId", "0") 
+        strTeacherId = request.POST.get("EF_TeacherId", "0") 
+        strUserName = request.POST.get("EF_UserName", "") 
+        strPassWord = request.POST.get("EF_PassWord", "") 
+        strOfficeAddress = request.POST.get("EF_OfficeAddress", "") 
+        strPhoneNum = request.POST.get("EF_PhoneNum", "") 
+        newItem = ChiefCollegeLeaders.objects.create(EF_UserStateId = int(strStateId), EF_TeacherId = int(strTeacherId),
+            EF_UserName = strUserName,EF_PassWord = strPassWord, EF_OfficeAddress = strOfficeAddress, EF_PhoneNum = strPhoneNum)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_UserStateId"] = int(strStateId)
+        jsonDict["EF_TeacherId"] = int(strTeacherId)
+        jsonDict["EF_UserName"] = strUserName
+        jsonDict["EF_PassWord"] = strPassWord
+        jsonDict["EF_OfficeAddress"] = strOfficeAddress
+        jsonDict["EF_PhoneNum"] = strPhoneNum
+
+        jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        strStateId = request.PUT.get("EF_UserStateId", "0") 
+        strTeacherId = request.PUT.get("EF_TeacherId", "0") 
+        strUserName = request.PUT.get("EF_UserName", "") 
+        strPassWord = request.PUT.get("EF_PassWord", "") 
+        strOfficeAddress = request.PUT.get("EF_OfficeAddress", "") 
+        strPhoneNum = request.PUT.get("EF_PhoneNum", "") 
+
+        curAdmin = ChiefCollegeLeaders.objects.get(id = intCurId)
+        curAdmin.EF_UserStateId = int(strStateId)
+        curAdmin.EF_TeacherId = int(strTeacherId)
+        curAdmin.EF_UserName = strUserName
+        curAdmin.EF_PassWord = strPassWord
+        curAdmin.EF_OfficeAddress = strOfficeAddress
+        curAdmin.EF_PhoneNum = strPhoneNum
+        curAdmin.save()
+
+        jsonDict = {}
+        jsonDict["id"] = intCurId 
+        jsonDict["EF_UserStateId"] = strStateId
+        jsonDict["EF_TeacherId"] = strTeacherId
+        jsonDict["EF_UserName"] = strUserName
+        jsonDict["EF_PassWord"] = strPassWord
+        jsonDict["EF_OfficeAddress"] = strOfficeAddress
+        jsonDict["EF_PhoneNum"] = strPhoneNum
+
+        jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
+
+        return JsonResponse(jsonStr, status = 200, safe = False)
+
+    def delete(self, request, intTypeId):
+        curAdmin = ChiefCollegeLeaders.objects.get(id = int(intTypeId))
         curAdmin.delete()
         return HttpResponse(status = 200)
 
