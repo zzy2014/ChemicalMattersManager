@@ -15,10 +15,10 @@ def loginVerify(request):
     strUserSubType ="none"
     bIsContinue = True
 
-    if request.method == 'GET' :
+    if request.method == 'POST' :
         intUserId = 0
-        strUserName = request.GET.get('name')
-        strPassWord = request.GET.get('password')
+        strUserName = request.POST.get('name')
+        strPassWord = request.POST.get('password')
 
         #是否为超级管理员
         if bIsContinue:
@@ -313,7 +313,7 @@ class CChiefCollegeLeadersView(Resource):
         if (strUserStateId != "" and strUserStateId != "0"):
             arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
         if (strTeacherId != "" and strTeacherId != "0"):
-            arrValidItems = arrValidItems.filter(EF_TeacherId_contains = int(strTeacherId))
+            arrValidItems = arrValidItems.filter(EF_TeacherId__contains = int(strTeacherId))
         if (strUserName != ""):
             arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
         if (strPassWord != ""):
@@ -406,7 +406,7 @@ class CCollegeLeadersView(Resource):
         if (strUserStateId != "" and strUserStateId != "0"):
             arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
         if (strTeacherId != "" and strTeacherId != "0"):
-            arrValidItems = arrValidItems.filter(EF_TeacherId_contains = int(strTeacherId))
+            arrValidItems = arrValidItems.filter(EF_TeacherId__contains = int(strTeacherId))
         if (strUserName != ""):
             arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
         if (strPassWord != ""):
@@ -500,7 +500,7 @@ class CTeachersView(Resource):
         if (strUserStateId != "" and strUserStateId != "0"):
             arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
         if (strFinancialId != "" and strFinancialId != "0"):
-            arrValidItems = arrValidItems.filter(EF_FinancialId_contains = int(strFinancialId))
+            arrValidItems = arrValidItems.filter(EF_FinancialId__contains = int(strFinancialId))
         if (strUserName != ""):
             arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
         if (strPassWord != ""):
@@ -592,7 +592,7 @@ class CStudentsView(Resource):
         if (strUserStateId != "" and strUserStateId != "0"):
             arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
         if (strTypeId != "" and strTypeId != "0"):
-            arrValidItems = arrValidItems.filter(EF_TypeId_contains = int(strTypeId))
+            arrValidItems = arrValidItems.filter(EF_TypeId__contains = int(strTypeId))
         if (strTeacherId != "" and strTeacherId != "0"):
             arrValidItems = arrValidItems.filter(EF_TeacherId_contains = int(strTypeId))
         if (strUserName != ""):

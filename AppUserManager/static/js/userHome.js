@@ -402,7 +402,27 @@ function showChiefCollegeLeaders()
         });
     });
 
+    var teachers = []; //获取所有的教师
+    teachers.push({"id":0, "EF_UserStateId":0, "EF_FinancialId":0, "EF_UserName":"",
+                "EF_PassWord":"", "EF_OfficeAddress":"", "EF_PhoneNum":""});
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/teachers/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            teachers.push(newFields);
+        });
+    });
 
+    
     $("#jsGrid").jsGrid({
         height: "100%",
         width: "100%",
@@ -481,7 +501,7 @@ function showChiefCollegeLeaders()
 
         fields: [
             { name: "id", title: "院长ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_TeacherId", title: "教师ID", type: "number", width: 80, editing: true, align:"left"},
+            { name: "EF_TeacherId", title: "教师", type: "select", items: teachers, valueField:"id", textField:"EF_UserName"},
             { name: "EF_UserStateId", title:"状态", type: "select", items: userStates, valueField:"id", textField:"EF_TypeName"},
             { name: "EF_UserName", title:"名称", type: "text", width: 100, align:"left"},
             { name: "EF_PassWord", title:"密码", type: "text", width: 100, align:"left"},
@@ -516,6 +536,28 @@ function showCollegeLeaders()
             userStates.push(newFields);
         });
     });
+
+
+    var teachers = []; //获取所有的教师
+    teachers.push({"id":0, "EF_UserStateId":0, "EF_FinancialId":0, "EF_UserName":"",
+                "EF_PassWord":"", "EF_OfficeAddress":"", "EF_PhoneNum":""});
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/teachers/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            teachers.push(newFields);
+        });
+    });
+
 
 
     $("#jsGrid").jsGrid({
@@ -596,7 +638,7 @@ function showCollegeLeaders()
 
         fields: [
             { name: "id", title: "副院长ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_TeacherId", title: "教师ID", type: "number", width: 80, editing: true, align:"left"},
+            { name: "EF_TeacherId", title: "教师", type: "select", items: teachers, valueField:"id", textField:"EF_UserName"},
             { name: "EF_UserStateId", title:"状态", type: "select", items: userStates, valueField:"id", textField:"EF_TypeName"},
             { name: "EF_UserName", title:"名称", type: "text", width: 100, align:"left"},
             { name: "EF_PassWord", title:"密码", type: "text", width: 100, align:"left"},
@@ -747,6 +789,50 @@ function showStudents()
         });
     });
 
+    //从数据库获取用户状态
+    var stuTypes = [];
+    stuTypes.push({"id":0, "EF_TypeName":""});
+
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/studentTypes/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            stuTypes.push(newFields);
+        });
+    });
+
+
+    //从数据库获取所有教师信息
+    var teachers = [];
+    teachers.push({"id":0, "EF_UserStateId":0, "EF_FinancialId":0, "EF_UserName":"",
+                "EF_PassWord":"", "EF_OfficeAddress":"", "EF_PhoneNum":""});
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/teachers/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            teachers.push(newFields);
+        });
+    });
+
+
 
     $("#jsGrid").jsGrid({
         height: "100%",
@@ -826,8 +912,8 @@ function showStudents()
 
         fields: [
             { name: "id", title: "学生ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_TypeId", title: "类型ID", type: "number", width: 80, editing: true, align:"left"},
-            { name: "EF_TeacherId", title: "教师ID", type: "number", width: 80, editing: true, align:"left"},
+            { name: "EF_TypeId", title: "类型", type: "select", items:stuTypes, valueField:"id", textField:"EF_TypeName"},
+            { name: "EF_TeacherId", title: "教师", type: "select", items: teachers, valueField:"id", textField:"EF_UserName"},
             { name: "EF_UserStateId", title:"状态", type: "select", items: userStates, valueField:"id", textField:"EF_TypeName"},
             { name: "EF_UserName", title:"名称", type: "text", width: 100, align:"left"},
             { name: "EF_PassWord", title:"密码", type: "text", width: 100, align:"left"},

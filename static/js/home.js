@@ -27,7 +27,7 @@ function loginVertify(idSubmitBtn, idLoginName, idLoginPs)
     }
 
     var ajax =$.ajax({
-        'type':"get",
+        'type':"POST",
         'url':'/AppUserManager/loginVerify/',
         'data': {'name': strUserName, 'password':strPassWord}, //要发送的数据（参数）格式为{'val1':"1","val2":"2"}
         'dataType':'json'
