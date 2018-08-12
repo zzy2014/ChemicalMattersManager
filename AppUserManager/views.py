@@ -487,7 +487,6 @@ class CTeachersView(Resource):
     def get(self, request):
         strId = request.GET.get("id", "") 
         strUserStateId = request.GET.get("EF_UserStateId", "0") 
-        strFinancialId = request.GET.get("EF_FinancialId", "0") 
         strUserName = request.GET.get("EF_UserName", "") 
         strPassWord = request.GET.get("EF_PassWord", "") 
         strOfficeAddress = request.GET.get("EF_OfficeAddress", "") 
@@ -499,8 +498,6 @@ class CTeachersView(Resource):
             arrValidItems = arrValidItems.filter(id__contains = int(strId))
         if (strUserStateId != "" and strUserStateId != "0"):
             arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
-        if (strFinancialId != "" and strFinancialId != "0"):
-            arrValidItems = arrValidItems.filter(EF_FinancialId__contains = int(strFinancialId))
         if (strUserName != ""):
             arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
         if (strPassWord != ""):
@@ -514,18 +511,16 @@ class CTeachersView(Resource):
 
     def post(self, request):
         strStateId = request.POST.get("EF_UserStateId", "0") 
-        strFinancialId = request.POST.get("EF_FinancialId", "0") 
         strUserName = request.POST.get("EF_UserName", "") 
         strPassWord = request.POST.get("EF_PassWord", "") 
         strOfficeAddress = request.POST.get("EF_OfficeAddress", "") 
         strPhoneNum = request.POST.get("EF_PhoneNum", "") 
-        newItem = Teachers.objects.create(EF_UserStateId = int(strStateId), EF_FinancialId = int(strFinancialId),
-            EF_UserName = strUserName,EF_PassWord = strPassWord, EF_OfficeAddress = strOfficeAddress, EF_PhoneNum = strPhoneNum)
+        newItem = Teachers.objects.create(EF_UserStateId = int(strStateId), EF_UserName = strUserName,
+                EF_PassWord = strPassWord, EF_OfficeAddress = strOfficeAddress, EF_PhoneNum = strPhoneNum)
 
         jsonDict = {}
         jsonDict["id"] = newItem.id
         jsonDict["EF_UserStateId"] = int(strStateId)
-        jsonDict["EF_FinancialId"] = int(strFinancialId)
         jsonDict["EF_UserName"] = strUserName
         jsonDict["EF_PassWord"] = strPassWord
         jsonDict["EF_OfficeAddress"] = strOfficeAddress
@@ -538,7 +533,6 @@ class CTeachersView(Resource):
     def put(self, request):
         intCurId = int(request.PUT.get("id"))
         strStateId = request.PUT.get("EF_UserStateId", "0") 
-        strFinancialId = request.PUT.get("EF_FinancialId", "0") 
         strUserName = request.PUT.get("EF_UserName", "") 
         strPassWord = request.PUT.get("EF_PassWord", "") 
         strOfficeAddress = request.PUT.get("EF_OfficeAddress", "") 
@@ -546,7 +540,6 @@ class CTeachersView(Resource):
 
         curAdmin = Teachers.objects.get(id = intCurId)
         curAdmin.EF_UserStateId = int(strStateId)
-        curAdmin.EF_FinancialId = int(strFinancialId)
         curAdmin.EF_UserName = strUserName
         curAdmin.EF_PassWord = strPassWord
         curAdmin.EF_OfficeAddress = strOfficeAddress
@@ -556,7 +549,6 @@ class CTeachersView(Resource):
         jsonDict = {}
         jsonDict["id"] = intCurId 
         jsonDict["EF_UserStateId"] = strStateId
-        jsonDict["EF_FinancialId"] = strFinancialId
         jsonDict["EF_UserName"] = strUserName
         jsonDict["EF_PassWord"] = strPassWord
         jsonDict["EF_OfficeAddress"] = strOfficeAddress

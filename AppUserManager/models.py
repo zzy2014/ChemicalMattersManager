@@ -63,7 +63,6 @@ class CollegeLeaders(models.Model):
 #教师
 class Teachers(models.Model):
     EF_UserStateId = models.IntegerField(default=0)
-    EF_FinancialId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
@@ -76,6 +75,7 @@ class Teachers(models.Model):
 class Finances(models.Model):
     EF_Name = models.CharField(max_length=30,default="")
     EF_TotalAmount = models.FloatField(default=0.0)
+    EF_TeacherId = models.IntegerField(default=0)
     def __str__(self):
         return self.EF_Name
 

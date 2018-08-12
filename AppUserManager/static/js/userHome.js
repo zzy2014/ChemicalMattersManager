@@ -753,7 +753,6 @@ function showTeachers()
 
         fields: [
             { name: "id", title: "教师ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_FinancialId", title: "经费ID", type: "number", width: 80, editing: true, align:"left"},
             { name: "EF_UserStateId", title:"状态", type: "select", items: userStates, valueField:"id", textField:"EF_TypeName"},
             { name: "EF_UserName", title:"名称", type: "text", width: 100, align:"left"},
             { name: "EF_PassWord", title:"密码", type: "text", width: 100, align:"left"},
