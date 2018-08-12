@@ -10,92 +10,82 @@ import json
 #登录检测入口
 def loginVerify(request):
 
-    intUserId = -1 #返回的用户ID，且作为结果码，-1表示访问出错,0表示用户名或密码错误，>0表示登录正常
-    strUserType ="none"
-    strUserSubType ="none"
-    bIsContinue = True
+    intUserId = -1 #返回的用户ID，且作为结果码，小于0表示用户名或密码错误，>0表示登录正常
+    strUserType = "";
+    strUserName = ""
+    strPassWord = "";
 
     if request.method == 'POST' :
-        intUserId = 0
+        strUserType = request.POST.get('type')
         strUserName = request.POST.get('name')
         strPassWord = request.POST.get('password')
 
-        #是否为超级管理员
-        if bIsContinue:
-            setSuperAdmin = SuperAdministrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setSuperAdmin.count() > 0):
-                bIsContinue = False
-                strUserType = "SuperAdmin"
-                intUserId = setSuperAdmin[0].id
+    if (strUserType == "" or strUserName == "" or strPassWord == ""):
+         return JsonResponse({'userId':intUserId})
 
-        #是否为管理员
-        if bIsContinue:
-            setAdmin = Administrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setAdmin.count() > 0):
-                bIsContinue = False
-                strUserType = "Admin"
-                intUserId = setAdmin[0].id
+    #是否为超级管理员
+    if (strUserType == "SuperAdmin"):
+        setSuperAdmin = SuperAdministrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setSuperAdmin.count() > 0):
+            intUserId = setSuperAdmin[0].id
 
-
-       #是否为院长
-        if bIsContinue:
-            setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setChiefLeaders.count() > 0):
-                bIsContinue = False
-                strUserType = "ChiefLeader"
-                intUserId = setChiefLeaders[0].id
-
-        #是否为副院长
-        if bIsContinue:
-            setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setLeaders.count() > 0):
-                bIsContinue = False
-                strUserType = "Leader"
-                intUserId = setLeaders[0].id
-
-        #是否为老师
-        if bIsContinue:
-            setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setTeachers.count() > 0):
-                bIsContinue = False
-                strUserType = "Teacher"
-                intUserId = setTeachers[0].id
-
-        #是否为学生
-        if bIsContinue:
-            setStudents = Students.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-            if (setStudents.count() > 0):
-                bIsContinue = False
-                strUserType = "Student"
-                strUserSubType = "Bacholer"
-                intUserId = setStudents[0].id
+    #是否为管理员
+    elif (strUserType == "Admin"):
+        setAdmin = Administrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setAdmin.count() > 0):
+            intUserId = setAdmin[0].id
 
 
-    return JsonResponse({'userId':intUserId, 'userType':strUserType, 'userSubType':strUserSubType})
+    #是否为院长
+    elif (strUserType == "ChiefLeader"):
+        setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setChiefLeaders.count() > 0):
+            intUserId = setChiefLeaders[0].id
+
+    #是否为副院长
+    elif (strUserType == "Leader"):
+        setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setLeaders.count() > 0):
+            intUserId = setLeaders[0].id
+
+    #是否为老师
+    elif (strUserType == "Teacher"):
+        setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setTeachers.count() > 0):
+            intUserId = setTeachers[0].id
+
+    #是否为学生
+    elif (strUserType == "Student"):
+        setStudents = Students.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setStudents.count() > 0):
+            intUserId = setStudents[0].id
+
+    return JsonResponse({'userId':intUserId})
 
 
 #用户登录成功后界面接口，用以为每种用户分配主页
 def userHome(request):
     if (request.method != 'GET'):
         return HttpResponse("访问错误");
-    else:
-        intUserId = request.GET.get('userId')
-        strUserType = request.GET.get('userType')
-        strUserSubType = request.GET.get('userSubType')
 
-        if (strUserType == "SuperAdmin"):
+    intUserId = request.GET.get('userId')
+    strUserType = request.GET.get('userType')
+    strUserPassWord = request.GET.get('userPassWord')
+
+    if (strUserType == "SuperAdmin"):
+        setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+        if (setSuperAdmin.count() > 0):
             return render(request, 'userHome.html')
-
-        elif (strUserType == "Admin"):
-            return HttpResponse(strUserType)
-        elif (strUserType == "ChiefLeader"):
-            return HttpResponse(strUserType)
-        elif (strUserType == "Leader"):
-            return HttpResponse(strUserType)
-        elif (strUserType == "Teacher"):
-            return HttpResponse(strUserType)
-        elif (strUserType == "Student"):
-            return HttpResponse(strUserType)
+    elif (strUserType == "Admin"):
+        return HttpResponse(strUserType)
+    elif (strUserType == "ChiefLeader"):
+        return HttpResponse(strUserType)
+    elif (strUserType == "Leader"):
+        return HttpResponse(strUserType)
+    elif (strUserType == "Teacher"):
+        return HttpResponse(strUserType)
+    elif (strUserType == "Student"):
+        return HttpResponse(strUserType)
 
     return HttpResponse(strUserType)
 

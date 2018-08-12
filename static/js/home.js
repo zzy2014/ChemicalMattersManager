@@ -10,16 +10,24 @@ function hideDivBlock(idHide, idBlock)
     document.getElementById(idBlock).style.display='none';
 }
 
-function loginVertify(idSubmitBtn, idLoginName, idLoginPs)
+function loginVertify(idLoginType, idLoginName, idLoginPs)
 {
-    strUserName = $('#input_loginname').val()
+    strUserType = $("#" + idLoginType + " option:selected").val()
+    if (strUserType == "")
+    {
+        alert("用户类型为空！");
+        return false;
+    }
+
+    strUserName = $("#"+idLoginName).val()
     if (strUserName == "")
     {
-        alert("用户名为空！")
+        alert("用户名为空！");
         return false; 
     }
 
-    strPassWord = $('#input_loginpassword').val()
+
+    strPassWord = $("#"+idLoginPs).val()
     if (strPassWord == "")
     {
         alert("密码为空！");
@@ -29,7 +37,7 @@ function loginVertify(idSubmitBtn, idLoginName, idLoginPs)
     var ajax =$.ajax({
         'type':"POST",
         'url':'/AppUserManager/loginVerify/',
-        'data': {'name': strUserName, 'password':strPassWord}, //要发送的数据（参数）格式为{'val1':"1","val2":"2"}
+        'data': {'type':strUserType, 'name': strUserName, 'password':strPassWord}, //要发送的数据（参数）格式为{'val1':"1","val2":"2"}
         'dataType':'json'
     });
 
@@ -37,15 +45,9 @@ function loginVertify(idSubmitBtn, idLoginName, idLoginPs)
             function(data)
             {
                 var intUserId = data["userId"];
-                var strUserType = data["userType"]; 
-                var strUserSubType = data["userSubType"]; 
+
                 //回调函数获取的data就是view返回的json数据
-                if (intUserId < 0)
-                {
-                    alert('传入数据有误！'); //jQuery动态添加网页内容
-                    return false;
-                }
-                else if(intUserId == 0)
+                if(intUserId <= 0)
                 {
                     alert('用户名或密码不正确！');
                     return false;
@@ -53,7 +55,7 @@ function loginVertify(idSubmitBtn, idLoginName, idLoginPs)
                 else
                 {
                     //验证成功后将当前用户信息传入，登录首页
-                    location.href = '/AppUserManager/userHome/?userId='+intUserId+'&userType='+strUserType+'&userSubType='+strUserSubType;
+                    location.href = '/AppUserManager/userHome/?userType='+strUserType + '&userId=' + intUserId +'&userPassWord=' + strPassWord;
                     return true;
                 }
 

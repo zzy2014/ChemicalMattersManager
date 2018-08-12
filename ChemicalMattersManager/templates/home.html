@@ -93,11 +93,11 @@
         </div>
         <div id="div_registerright"> 
             <select id="select_usertype">
-                <option value ="教师">教师</option>
-                <option value ="博士生">博士生</option>
-                <option value="硕士生">硕士生</option>
-                <option value="本科生">本科生</option>
-                <option value="留学生">留学生</option>
+                <option value ="Teacher">教师</option>
+                <option value ="Doctor.">博士生</option>
+                <option value="Master">硕士生</option>
+                <option value="Bachelor">本科生</option>
+                <option value="OverSea-Bachelor">留学生</option>
             </select>
             <p> </p>
             <input id="input_username" type="text" name="username" /> 
@@ -118,10 +118,20 @@
 <form method="get">
     <div id="div_login">
         <div id="div_loginleft">
-            <p>用户名：</p>
-            <p>密&nbsp&nbsp&nbsp码：</p>
+            <p>用户类型：</p>
+            <p>用&nbsp户&nbsp&nbsp名：</p>
+            <p>密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码：</p>
         </div>
         <div id="div_loginright">
+            <select id="select_logintype">
+                <option value ="SuperAdmin">超级管理员</option>
+                <option value ="Admin">管理员</option>
+                <option value ="ChiefLeader">院长</option>
+                <option value ="Leader">副院长</option>
+                <option value ="Teacher">教师</option>
+                <option value ="Student">学生</option>
+            </select>
+            <p> </p>
             <input id="input_loginname" type="text" name="loginname"/>
             <p> </p>
             <input id="input_loginpassword" type="text" name="loginpassword"/>
@@ -129,7 +139,7 @@
 
         <input id="input_logincheck" type="checkbox" name="remember" value="isremember" checked="checked"/>
         <label class="label_logincheck" for="input_logincheck">记住用户</label>
-        <input id="input_loginsubmit" type="submit" value="登录" onclick=" return loginVertify('input_loginsubmit','input_loginname', 'input_loginpassword')"/>
+        <input id="input_loginsubmit" type="submit" value="登录" onclick=" return loginVertify('select_logintype','input_loginname', 'input_loginpassword')"/>
 
         <!--用于关闭窗口-->
         <a id="a_loginquit" href="javascript:void(0)" 

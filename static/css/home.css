@@ -246,6 +246,12 @@ div#div_loginright{
     left:18%;
 }
 
+select#select_logintype{
+    position:relative;
+    width:100%;
+    border:2px solid black;
+}
+
 input#input_loginname{
     position:relative;
     width:100%;
@@ -259,8 +265,8 @@ input#input_loginpassword{
 }
 
 a#a_loginquit{
-    position:relative;
-    top:-3%;
+    position:absolute;
+    top:-1%;
 	color:black;
 	text-decoration:none;
 	font-size:20px;
