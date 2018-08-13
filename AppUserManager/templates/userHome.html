@@ -17,6 +17,7 @@
     <script src="/static/js/jsgrid/jsgrid.field.js"></script>
     <script src="/static/js/jsgrid/fields/jsgrid.field.text.js"></script>
     <script src="/static/js/jsgrid/fields/jsgrid.field.number.js"></script>
+    <script src="/static/js/jsgrid/fields/jsgrid.field.float.js"></script>
     <script src="/static/js/jsgrid/fields/jsgrid.field.select.js"></script>
     <script src="/static/js/jsgrid/fields/jsgrid.field.checkbox.js"></script>
     <script src="/static/js/jsgrid/fields/jsgrid.field.control.js"></script>
@@ -107,7 +108,11 @@
             </a>
             <ul id="ul_financemanage" class="ul_leftsubnavi">
                 <!--只有超级管理员与管量员可见-->
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">所有经费</a> </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showFinances()">所有经费
+                    </a>
+                </li>
                 <!--只有教师和学生可见-->
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的经费</a> </li>
             </ul>
@@ -119,7 +124,7 @@
                 onclick="showSubNavi('ul_studentmanage')">学生管理
             </a>
             <ul id="ul_studentmanage" class="ul_leftsubnavi">
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">所有学生</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的学生</a> </li>
             </ul>
         </li>
 

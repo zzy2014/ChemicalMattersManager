@@ -2,7 +2,7 @@ from django.conf.urls import url
 from . import views
 from .views import CUserTypesView, CUserStatesView, CStudentTypesView
 from .views import CAdministratorsView, CChiefCollegeLeadersView, CCollegeLeadersView
-from .views import CTeachersView, CStudentsView
+from .views import CTeachersView, CStudentsView, CFinancesView
 
 urlpatterns = [
     url(r'loginVerify/$', views.loginVerify, name='loginVerify'),
@@ -23,5 +23,7 @@ urlpatterns = [
     url(r'teachers/(?P<intTypeId>[0-9]+)/?$', CTeachersView.as_view(), name='deleteTeachers'),
     url(r'students/$', CStudentsView.as_view(), name='students'),
     url(r'students/(?P<intTypeId>[0-9]+)/?$', CStudentsView.as_view(), name='deleteStudents'),
+    url(r'finances/$', CFinancesView.as_view(), name='finances'),
+    url(r'finances/(?P<intTypeId>[0-9]+)/?$', CFinancesView.as_view(), name='deleteFinances'),
 ]
 
