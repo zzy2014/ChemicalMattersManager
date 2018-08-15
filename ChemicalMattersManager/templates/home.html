@@ -93,11 +93,12 @@
         </div>
         <div id="div_registerright"> 
             <select id="select_usertype">
-                <option value ="Teacher">教师</option>
-                <option value ="Doctor.">博士生</option>
-                <option value="Master">硕士生</option>
-                <option value="Bachelor">本科生</option>
-                <option value="OverSea-Bachelor">留学生</option>
+                <option value = "Admin">管理员</option>
+                <option value = "ChiefLeader">院长</option>
+                <option value = "Leader">副院长</option>
+                <option value = "Teacher">教师</option>
+                <option value = "Student_Graduate">研究生</option>
+                <option value = "Student_Bachelor">本科生</option>
             </select>
             <p> </p>
             <input id="input_username" type="text" name="username" /> 
@@ -107,7 +108,7 @@
             <input id="input_repassword" type="text" name="repassword" />
         </div>
 
-        <input id="input_submit" type="submit" value="确认"/>
+        <input id="input_submit" type="submit" value="确认" onclick="return register('select_usertype', 'input_username', 'input_password', 'input_repassword')"/>
         <button id="button_cancel" type="button" onclick="hideDivBlock('div_register','div_block')">取消</button>
     </div>
 </form>

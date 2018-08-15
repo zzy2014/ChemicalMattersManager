@@ -7,6 +7,93 @@ from .models import SuperAdministrators, Administrators, ChiefCollegeLeaders, Co
 from .models import Teachers, Finances, StudentTypes, Students
 import json
 
+
+#注册入口
+def register(request):
+    intRetCode = -1 #返回结果码，小于0表示注册失败，=0表示当前用户名己存在，>0表示注册成功
+    strUserType = "";
+    strUserName = ""
+    strPassWord = "";
+
+    if request.method == 'POST' :
+        strUserType = request.POST.get('type')
+        strUserName = request.POST.get('name')
+        strPassWord = request.POST.get('password')
+
+    if (strUserType == "" or strUserName == "" or strPassWord == ""):
+         return JsonResponse({'userId':intUserId})
+
+    #是否为管理员
+    if (strUserType == "Admin"):
+        setAdmin = Administrators.objects.filter(EF_UserName=strUserName)
+        if (setAdmin.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = Administrators.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
+                EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+            intRetCode = newItem.id
+        
+    #是否为院长
+    elif (strUserType == "ChiefLeader"):
+        setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName)
+        if (setChiefLeaders.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = ChiefCollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0, EF_UserName = strUserName,
+                 EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+            intRetCode = newItem.id
+
+    #是否为副院长
+    elif (strUserType == "Leader"):
+        setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName)
+        if (setLeaders.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = CollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0,
+                 EF_UserName = strUserName, EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+            intRetCode = newItem.id
+
+    #是否为老师
+    elif (strUserType == "Teacher"):
+        setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+        if (setTeachers.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = Teachers.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
+               EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+            intRetCode = newItem.id
+
+    #是否为研究生
+    elif (strUserType == "Student_Graduate"):
+        studentType = StudentTypes.objects.get(EF_TypeName="研究生")
+        setGraduates = Students.objects.filter(EF_UserName=strUserName, EF_TypeId = studentType.id)
+        if (setGraduates.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = Students.objects.create(EF_UserStateId = 0, EF_TypeId = studentType.id,
+                EF_TeacherId = 0, EF_UserName = strUserName, EF_PassWord = strPassWord)
+
+            intRetCode = newItem.id
+
+    #是否为本科生
+    elif (strUserType == "Student_Bachelor"):
+        studentType = StudentTypes.objects.get(EF_TypeName="本科生")
+        setBachelors = Students.objects.filter(EF_UserName=strUserName, EF_TypeId = studentType.id)
+        if (setBachelors.count() > 0):
+            intRetCode = 0
+        else:
+            newItem = Students.objects.create(EF_UserStateId = 0, EF_TypeId = studentType.id,
+                EF_TeacherId = 0, EF_UserName = strUserName, EF_PassWord = strPassWord)
+
+            intRetCode = newItem.id
+
+    return JsonResponse({'retCode':intRetCode})
+
+
 #登录检测入口
 def loginVerify(request):
 

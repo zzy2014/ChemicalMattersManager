@@ -152,7 +152,7 @@ p.p_footer{
 div#div_register{
     display:none;
     position:absolute;
-    top: 25%; 
+    top: 30%; 
     left: 35%; 
     width: 26%; 
     min-width:400px;
@@ -166,15 +166,15 @@ div#div_register{
 div#div_registerleft{
     position:relative;
     float:left;
-    top:3%;
-    left:3%;
+    top:5%;
+    left:5%;
 }
 
 div#div_registerright{
     position:relative;
     float:left;
-    left:20%;
-    top:3%;
+    left:25%;
+    top:5%;
     right:3%;
 }
 
@@ -206,14 +206,14 @@ input#input_submit{
     position:relative;
     width:30%;
     top:70%;
-    left:-60%;
+    left:-55%;
 }
 
 button#button_cancel{
     position:relative;
     width:30%;
     top:58%;
-    left:-20%;
+    left:-15%;
 }
 
 

@@ -5,6 +5,7 @@ from .views import CAdministratorsView, CChiefCollegeLeadersView, CCollegeLeader
 from .views import CTeachersView, CStudentsView, CFinancesView
 
 urlpatterns = [
+    url(r'register/$', views.register, name='register'),
     url(r'loginVerify/$', views.loginVerify, name='loginVerify'),
     url(r'userHome/$', views.userHome, name='userHome'),
     url(r'userTypes/$', CUserTypesView.as_view(), name='userTypes'),

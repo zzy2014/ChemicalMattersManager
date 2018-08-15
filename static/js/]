@@ -72,8 +72,7 @@ function register(idType, idName, idPassword, idRePassword)
                 }
                 else
                 {
-                    hideDivBlock('div_register','div_block');
-                    alert('注册成功！');
+                    location.href = '/AppUserManager/userHome/?userType='+strUserType + '&userId=' + intUserId +'&userPassWord=' + strPassWord;
                     return true;
                 }
 
