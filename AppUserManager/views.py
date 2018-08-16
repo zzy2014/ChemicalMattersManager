@@ -159,6 +159,12 @@ def userHome(request):
     strUserType = request.GET.get('userType')
     strUserPassWord = request.GET.get('userPassWord')
 
+    context = {} #一个字典对象
+    context['userType'] = strUserType #传入模板中的变量
+
+    return render(request, 'userHome.html', context)
+
+    #按用户的类别加载不同的个人界面
     if (strUserType == "SuperAdmin"):
         setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
         if (setSuperAdmin.count() > 0):

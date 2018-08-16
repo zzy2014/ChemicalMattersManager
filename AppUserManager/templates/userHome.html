@@ -42,8 +42,9 @@
             </ul>
         </li> 
 
+        <!--只有超级管理员才可以看到-->
+        {% if userType == 'SuperAdmin' %}
         <li class="li_leftnavi">
-            <!--只有超级管理员才可以看到-->
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_usermanage')">用户管理
             </a>
@@ -89,9 +90,11 @@
                 </li>
             </ul>
         </li>
+        {% endif %}
 
+        <!--只有超级管理员和管理员才可以看到-->
+        {% if userType == 'SuperAdmin' or userType == 'Admin' %}
         <li class="li_leftnavi">
-            <!--只有超级管理员和管理员才可以看到-->
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_mattermanage')">药品管理
             </a>
@@ -101,25 +104,43 @@
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购</a> </li>
             </ul>
         </li>
+        {% endif %}
 
+        <!--只有超级管理员、教师和学生可见-->
+        {% if userType == 'SuperAdmin' or userType == 'Teacher' or userType == 'Student' %}
         <li class="li_leftnavi">
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_financemanage')">经费管理
             </a>
+
             <ul id="ul_financemanage" class="ul_leftsubnavi">
-                <!--只有超级管理员与管量员可见-->
+                {% if userType == 'SuperAdmin' %}
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
                         onclick="showFinances()">所有经费
                     </a>
                 </li>
-                <!--只有教师和学生可见-->
+
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showFinances()">经费充值
+                    </a>
+                </li>
+
+                {% elif userType == 'Teacher' %}
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的经费</a> </li>
+
+                {% elif userType == 'Student' %}
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">教师经费</a> </li>
+
+                {% endif %}
             </ul>
         </li>
+        {% endif %}
 
+        <!--只有教师才可以看到-->
+        {% if userType == 'Teacher' %}
         <li class="li_leftnavi">
-            <!--只有教师才可以看到-->
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_studentmanage')">学生管理
             </a>
@@ -127,15 +148,20 @@
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的学生</a> </li>
             </ul>
         </li>
+        {% endif %}
 
         <li class="li_leftnavi">
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_reserve')">预约系统
             </a>
             <ul id="ul_reserve" class="ul_leftsubnavi">
+                <!--除学生外均有审核权限-->
+                {% if userType == 'Student' %}
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品预约</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预约审核</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的预约</a> </li>
+                {% else %}
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预约审核</a> </li>
+                {% endif %}
             </ul>
         </li>
 
