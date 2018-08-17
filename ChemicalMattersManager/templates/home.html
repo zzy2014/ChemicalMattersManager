@@ -93,12 +93,12 @@
         </div>
         <div id="div_registerright"> 
             <select id="select_usertype">
-                <option value = "Admin">管理员</option>
-                <option value = "ChiefLeader">院长</option>
-                <option value = "Leader">副院长</option>
-                <option value = "Teacher">教师</option>
-                <option value = "Student_Graduate">研究生</option>
-                <option value = "Student_Bachelor">本科生</option>
+                {% for item in userTypes_register %}
+                <option value = "User_{{ item.id }}_{{ item.EF_TypeName }}">{{ item.EF_TypeName}}</li>
+                {% endfor %}
+                {% for item in studentTypes %}
+                <option value = "Student_{{ item.id }}_{{ item.EF_TypeName }}">{{ item.EF_TypeName}}</li>
+                {% endfor %}
             </select>
             <p> </p>
             <input id="input_username" type="text" name="username" /> 
@@ -125,12 +125,12 @@
         </div>
         <div id="div_loginright">
             <select id="select_logintype">
-                <option value ="SuperAdmin">超级管理员</option>
-                <option value ="Admin">管理员</option>
-                <option value ="ChiefLeader">院长</option>
-                <option value ="Leader">副院长</option>
-                <option value ="Teacher">教师</option>
-                <option value ="Student">学生</option>
+                {% for item in userTypes_login %}
+                <option value = "User_{{ item.id }}_{{ item.EF_TypeName }}">{{ item.EF_TypeName}}</li>
+                {% endfor %}
+                {% for item in studentTypes %}
+                <option value = "Student_{{ item.id }}_{{ item.EF_TypeName }}">{{ item.EF_TypeName}}</li>
+                {% endfor %}
             </select>
             <p> </p>
             <input id="input_loginname" type="text" name="loginname"/>

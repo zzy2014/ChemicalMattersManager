@@ -20,73 +20,66 @@ def register(request):
         strUserName = request.POST.get('name')
         strPassWord = request.POST.get('password')
 
+    #有空值时返回
     if (strUserType == "" or strUserName == "" or strPassWord == ""):
          return JsonResponse({'userId':intUserId})
 
-    #是否为管理员
-    if (strUserType == "Admin"):
-        setAdmin = Administrators.objects.filter(EF_UserName=strUserName)
-        if (setAdmin.count() > 0):
+    #拆分后若不足两项，返回
+    arrTypeIndex = strUserType.split("_");
+    if (len(arrTypeIndex) < 3):
+         return JsonResponse({'userId':intUserId})
+
+    if (arrTypeIndex[0] == "User"):
+        #是否为管理员
+        if (arrTypeIndex[2] == Administrators.Type):
+            setAdmin = Administrators.objects.filter(EF_UserName = strUserName)
+            if (setAdmin.count() > 0):
+                intRetCode = 0
+            else:
+                newItem = Administrators.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
+                    EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+                intRetCode = newItem.id
+            
+        #是否为院长
+        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
+            setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName)
+            if (setChiefLeaders.count() > 0):
+                intRetCode = 0
+            else:
+                newItem = ChiefCollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0, EF_UserName = strUserName,
+                     EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+                intRetCode = newItem.id
+
+        #是否为副院长
+        elif (arrTypeIndex[2] == CollegeLeaders.Type):
+            setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName)
+            if (setLeaders.count() > 0):
+                intRetCode = 0
+            else:
+                newItem = CollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0,
+                     EF_UserName = strUserName, EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+                intRetCode = newItem.id
+
+        #是否为老师
+        elif (arrTypeIndex[2] == Teachers.Type):
+            setTeachers = Teachers.objects.filter(EF_UserName=strUserName)
+            if (setTeachers.count() > 0):
+                intRetCode = 0
+            else:
+                newItem = Teachers.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
+                   EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
+
+                intRetCode = newItem.id
+
+    if (arrTypeIndex[0] == "Student"):
+        setStudent = Students.objects.filter(EF_UserName=strUserName, EF_TypeId = int(arrTypeIndex[1]))
+        if (setStudent.count() > 0):
             intRetCode = 0
         else:
-            newItem = Administrators.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
-                EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
-
-            intRetCode = newItem.id
-        
-    #是否为院长
-    elif (strUserType == "ChiefLeader"):
-        setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName)
-        if (setChiefLeaders.count() > 0):
-            intRetCode = 0
-        else:
-            newItem = ChiefCollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0, EF_UserName = strUserName,
-                 EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
-
-            intRetCode = newItem.id
-
-    #是否为副院长
-    elif (strUserType == "Leader"):
-        setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName)
-        if (setLeaders.count() > 0):
-            intRetCode = 0
-        else:
-            newItem = CollegeLeaders.objects.create(EF_UserStateId = 0, EF_TeacherId = 0,
-                 EF_UserName = strUserName, EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
-
-            intRetCode = newItem.id
-
-    #是否为老师
-    elif (strUserType == "Teacher"):
-        setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setTeachers.count() > 0):
-            intRetCode = 0
-        else:
-            newItem = Teachers.objects.create(EF_UserStateId = 0, EF_UserName = strUserName,
-               EF_PassWord = strPassWord, EF_OfficeAddress = "", EF_PhoneNum = "")
-
-            intRetCode = newItem.id
-
-    #是否为研究生
-    elif (strUserType == "Student_Graduate"):
-        studentType = StudentTypes.objects.get(EF_TypeName="研究生")
-        setGraduates = Students.objects.filter(EF_UserName=strUserName, EF_TypeId = studentType.id)
-        if (setGraduates.count() > 0):
-            intRetCode = 0
-        else:
-            newItem = Students.objects.create(EF_UserStateId = 0, EF_TypeId = studentType.id,
-                EF_TeacherId = 0, EF_UserName = strUserName, EF_PassWord = strPassWord)
-
-            intRetCode = newItem.id
-
-    #是否为本科生
-    elif (strUserType == "Student_Bachelor"):
-        studentType = StudentTypes.objects.get(EF_TypeName="本科生")
-        setBachelors = Students.objects.filter(EF_UserName=strUserName, EF_TypeId = studentType.id)
-        if (setBachelors.count() > 0):
-            intRetCode = 0
-        else:
-            newItem = Students.objects.create(EF_UserStateId = 0, EF_TypeId = studentType.id,
+            newItem = Students.objects.create(EF_UserStateId = 0, EF_TypeId = int(arrTypeIndex[1]),
                 EF_TeacherId = 0, EF_UserName = strUserName, EF_PassWord = strPassWord)
 
             intRetCode = newItem.id
@@ -110,42 +103,48 @@ def loginVerify(request):
     if (strUserType == "" or strUserName == "" or strPassWord == ""):
          return JsonResponse({'userId':intUserId})
 
-    #是否为超级管理员
-    if (strUserType == "SuperAdmin"):
-        setSuperAdmin = SuperAdministrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setSuperAdmin.count() > 0):
-            intUserId = setSuperAdmin[0].id
-
-    #是否为管理员
-    elif (strUserType == "Admin"):
-        setAdmin = Administrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setAdmin.count() > 0):
-            intUserId = setAdmin[0].id
+    #拆分后若不足两项，返回
+    arrTypeIndex = strUserType.split("_");
+    if (len(arrTypeIndex) < 3):
+         return JsonResponse({'userId':intUserId})
 
 
-    #是否为院长
-    elif (strUserType == "ChiefLeader"):
-        setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setChiefLeaders.count() > 0):
-            intUserId = setChiefLeaders[0].id
+    if (arrTypeIndex[0] == "User"):
+        #是否为超级管理员
+        if (arrTypeIndex[2] == SuperAdministrators.Type):
+            setSuperAdmin = SuperAdministrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+            if (setSuperAdmin.count() > 0):
+                intUserId = setSuperAdmin[0].id
 
-    #是否为副院长
-    elif (strUserType == "Leader"):
-        setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setLeaders.count() > 0):
-            intUserId = setLeaders[0].id
+        #是否为管理员
+        elif (arrTypeIndex[2] == Administrators.Type):
+            setAdmin = Administrators.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+            if (setAdmin.count() > 0):
+                intUserId = setAdmin[0].id
 
-    #是否为老师
-    elif (strUserType == "Teacher"):
-        setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setTeachers.count() > 0):
-            intUserId = setTeachers[0].id
+        #是否为院长
+        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
+            setChiefLeaders = ChiefCollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+            if (setChiefLeaders.count() > 0):
+                intUserId = setChiefLeaders[0].id
+
+        #是否为副院长
+        elif (arrTypeIndex[2] == CollegeLeaders.Type):
+            setLeaders = CollegeLeaders.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+            if (setLeaders.count() > 0):
+                intUserId = setLeaders[0].id
+
+        #是否为老师
+        elif (arrTypeIndex[2] == Teachers.Type):
+            setTeachers = Teachers.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
+            if (setTeachers.count() > 0):
+                intUserId = setTeachers[0].id
 
     #是否为学生
-    elif (strUserType == "Student"):
-        setStudents = Students.objects.filter(EF_UserName=strUserName, EF_PassWord=strPassWord)
-        if (setStudents.count() > 0):
-            intUserId = setStudents[0].id
+    if (arrTypeIndex[0] == "Student"):
+        setStudent = Students.objects.filter(EF_UserName=strUserName, EF_PassWord = strPassWord, EF_TypeId = int(arrTypeIndex[1]))
+        if (setStudent.count() > 0):
+            intUserId = setStudent[0].id
 
     return JsonResponse({'userId':intUserId})
 
@@ -157,30 +156,49 @@ def userHome(request):
 
     intUserId = request.GET.get('userId')
     strUserType = request.GET.get('userType')
+    strUserName = ""
     strUserPassWord = request.GET.get('userPassWord')
 
-    context = {} #一个字典对象
-    context['userType'] = strUserType #传入模板中的变量
-
-    return render(request, 'userHome.html', context)
+    #拆分后若不足两项，返回
+    arrTypeIndex = strUserType.split("_");
+    if (len(arrTypeIndex) < 3):
+         return JsonResponse({'userId':intUserId})
 
     #按用户的类别加载不同的个人界面
-    if (strUserType == "SuperAdmin"):
-        setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-        if (setSuperAdmin.count() > 0):
-            return render(request, 'userHome.html')
-    elif (strUserType == "Admin"):
-        return HttpResponse(strUserType)
-    elif (strUserType == "ChiefLeader"):
-        return HttpResponse(strUserType)
-    elif (strUserType == "Leader"):
-        return HttpResponse(strUserType)
-    elif (strUserType == "Teacher"):
-        return HttpResponse(strUserType)
-    elif (strUserType == "Student"):
-        return HttpResponse(strUserType)
+    if (arrTypeIndex[0] == "User"):
+        if (arrTypeIndex[2] == SuperAdministrators.Type):
+            setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+            if (setSuperAdmin.count() > 0):
+                strUserName = setSuperAdmin[0].EF_UserName
+        elif (arrTypeIndex[2] == Administrators.Type):
+            setAdmin = Administrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+            if (setAdmin.count() > 0):
+                strUserName = setAdmin[0].EF_UserName
+        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
+            setChiefLeader = ChiefCollegeLeaders.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+            if (setChiefLeader.count() > 0):
+                strUserName = setChiefLeader[0].EF_UserName
+        elif (arrTypeIndex[2] == CollegeLeaders.Type):
+            setLeader = CollegeLeaders.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+            if (setLeader.count() > 0):
+                strUserName = setLeader[0].EF_UserName
+        elif (arrTypeIndex[2] == Teachers.Type):
+            setTeacher = Teachers.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
+            if (setTeacher.count() > 0):
+                strUserName = setTeacher[0].EF_UserName
+    elif (arrTypeIndex[0] == "Student"):
+        setStudent = Students.objects.filter(id = intUserId, EF_PassWord = strUserPassWord, EF_TypeId = int(arrTypeIndex[1]))
+        if (setStudent.count() > 0):
+            strUserName = setStudent[0].EF_UserName
 
-    return HttpResponse(strUserType)
+    #没有找到任何用户
+    if (strUserName == ""):
+        return HttpResponse("用户名或密码错误")
+
+    context = {} #一个字典对象
+    context['userType'] = arrTypeIndex[2] #传入模板中的变量
+    context['userName'] = strUserName #传入模板中的变量
+    return render(request, 'userHome.html', context)
 
 
 #用户状态接口

@@ -16,6 +16,7 @@ class UserStates(models.Model):
 
 #超级管理员
 class SuperAdministrators(models.Model):
+    Type = "超级管理员"
     EF_UserStateId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
     EF_PassWord = models.CharField(max_length=30)
@@ -27,6 +28,7 @@ class SuperAdministrators(models.Model):
 
 #管理员
 class Administrators(models.Model):
+    Type = "管理员"
     EF_UserStateId = models.IntegerField(default=1)
     EF_UserName = models.CharField(max_length=30)
     EF_PassWord = models.CharField(max_length=30)
@@ -38,6 +40,7 @@ class Administrators(models.Model):
 
 #院长
 class ChiefCollegeLeaders(models.Model):
+    Type = "院长"
     EF_UserStateId = models.IntegerField(default=0)
     EF_TeacherId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
@@ -50,6 +53,7 @@ class ChiefCollegeLeaders(models.Model):
 
 #副院长
 class CollegeLeaders(models.Model):
+    Type = "副院长"
     EF_UserStateId = models.IntegerField(default=1)
     EF_TeacherId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
@@ -62,6 +66,7 @@ class CollegeLeaders(models.Model):
 
 #教师
 class Teachers(models.Model):
+    Type = "教师"
     EF_UserStateId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
     EF_PassWord = models.CharField(max_length=30)
