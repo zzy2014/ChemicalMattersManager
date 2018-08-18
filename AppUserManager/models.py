@@ -99,6 +99,8 @@ class Students(models.Model):
     EF_TeacherId = models.IntegerField(default=0)
     EF_UserName = models.CharField(max_length=30)
     EF_PassWord = models.CharField(max_length=30)
+    EF_OfficeAddress = models.TextField(default="")
+    EF_PhoneNum = models.CharField(max_length=15, default="")
     def __str__(self):
         return self.EF_UserName
 

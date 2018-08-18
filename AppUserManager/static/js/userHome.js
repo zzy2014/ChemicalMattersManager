@@ -4,9 +4,45 @@ function showSubNavi(subUlId)
     $("#"+subUlId).toggle();
 }
 
+//个人主页
+function showUserInfo()
+{
+    $("#jsGrid").hide();
+    $("#div_RightPage").show();
+
+    //从数据库获取用户信息
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/getCurUserInfo/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        var jsonObj = JSON.parse(result);
+        $("#userType").html(jsonObj.userType);
+        $("#userState").html(jsonObj.userState);
+        $("#userOffice").val(jsonObj.userOffice);
+        $("#userPhone").val(jsonObj.userPhone);
+    });
+
+}
+
+//修改密码
+function modifyPassword()
+{
+}
+
+//退出登录
+function logout()
+{
+}
+
 //用户状态管理
 function showUserStates()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     $("#jsGrid").jsGrid({
         height: "600px",
         width: "88%",
@@ -93,6 +129,9 @@ function showUserStates()
 //用户类型管理
 function showUserTypes()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     $("#jsGrid").jsGrid({
         height: "600px",
         width: "88%",
@@ -180,6 +219,9 @@ function showUserTypes()
 //学生类型管理
 function showStudentTypes()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     $("#jsGrid").jsGrid({
         height: "600px",
         width: "88%",
@@ -267,6 +309,9 @@ function showStudentTypes()
 //管理员管理
 function showAdministrators()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     var userStates = [];  //数组用于存储从数据库中获取的信息
     userStates.push({"id":0, "EF_TypeName":""});
 
@@ -381,6 +426,10 @@ function showAdministrators()
 //院长管理
 function showChiefCollegeLeaders()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
+
     var userStates = [];  //数组用于存储从数据库中获取的信息
     userStates.push({"id":0, "EF_TypeName":""});
 
@@ -516,6 +565,9 @@ function showChiefCollegeLeaders()
 //副院长管理
 function showCollegeLeaders()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     var userStates = [];  //数组用于存储从数据库中获取的信息
     userStates.push({"id":0, "EF_TypeName":""});
 
@@ -653,6 +705,9 @@ function showCollegeLeaders()
 //教师管理
 function showTeachers()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     var userStates = [];  //数组用于存储从数据库中获取的信息
     userStates.push({"id":0, "EF_TypeName":""});
 
@@ -767,6 +822,9 @@ function showTeachers()
 //学生管理
 function showStudents()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     var userStates = [];  //数组用于存储从数据库中获取的信息
     userStates.push({"id":0, "EF_TypeName":""});
 
@@ -925,6 +983,9 @@ function showStudents()
 //经费管理
 function showFinances()
 {
+    $("#div_RightPage").hide();
+    $("#jsGrid").show();
+
     var teachers = []; //获取所有的教师
     teachers.push({"id":0, "EF_UserStateId":0, "EF_FinancialId":0, "EF_UserName":"",
                 "EF_PassWord":"", "EF_OfficeAddress":"", "EF_PhoneNum":""});

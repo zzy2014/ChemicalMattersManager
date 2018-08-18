@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'register/$', views.register, name='register'),
     url(r'loginVerify/$', views.loginVerify, name='loginVerify'),
     url(r'userHome/$', views.userHome, name='userHome'),
+    url(r'getCurUserInfo/$', views.getCurUserInfo, name='getCurUserInfo'),
     url(r'userTypes/$', CUserTypesView.as_view(), name='userTypes'),
     url(r'userTypes/(?P<intTypeId>[0-9]+)/?$', CUserTypesView.as_view(), name='deleteUserType'),
     url(r'userStates/$', CUserStatesView.as_view(), name='userStates'),

@@ -195,10 +195,97 @@ def userHome(request):
     if (strUserName == ""):
         return HttpResponse("用户名或密码错误")
 
+
+    #设置session
+    request.session['id'] = intUserId
+    request.session['userType'] = strUserType
+    request.session.set_expiry(0)
+
+
     context = {} #一个字典对象
     context['userType'] = arrTypeIndex[2] #传入模板中的变量
     context['userName'] = strUserName #传入模板中的变量
     return render(request, 'userHome.html', context)
+
+
+#获取当前登录的用户相关的信息
+def getCurUserInfo(request):
+    #从session中获取登录的用户id
+    intUserId = request.session.get('id', default=0)
+    strUserType = request.session.get('userType', default='')
+
+    #拆分后若不足两项，返回
+    arrTypeIndex = strUserType.split("_");
+    if (len(arrTypeIndex) < 3):
+         return JsonResponse({'userId':intUserId})
+
+    strUserType = arrTypeIndex[2]
+    strUserState = ""
+    strUserOffice = ""
+    strUserPhone = ""
+
+    #按用户的类别加载不同的个人界面
+    if (arrTypeIndex[0] == "User"):
+        if (arrTypeIndex[2] == SuperAdministrators.Type):
+            setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId)
+            if (setSuperAdmin.count() > 0):
+                strUserOffice = setSuperAdmin[0].EF_OfficeAddress
+                strUserPhone = setSuperAdmin[0].EF_PhoneNum
+                setState = UserStates.objects.filter(id = setSuperAdmin[0].EF_UserStateId)
+                if (setState.count() > 0):
+                    strUserState = setState[0].EF_TypeName 
+
+        elif (arrTypeIndex[2] == Administrators.Type):
+            setAdmin = Administrators.objects.filter(id = intUserId)
+            if (setAdmin.count() > 0):
+                strUserOffice = setAdmin[0].EF_OfficeAddress
+                strUserPhone = setAdmin[0].EF_PhoneNum
+                setState = UserStates.objects.filter(id = setAdmin[0].EF_UserStateId)
+                if (setState.count() > 0):
+                    strUserState = setState[0].EF_TypeName 
+        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
+            setChiefLeader = ChiefCollegeLeaders.objects.filter(id = intUserId)
+            if (setChiefLeader.count() > 0):
+                strUserOffice = setChiefLeader[0].EF_OfficeAddress
+                strUserPhone = setChiefLeader[0].EF_PhoneNum
+                setState = UserStates.objects.filter(id = setChiefLeader[0].EF_UserStateId)
+                if (setState.count() > 0):
+                    strUserState = setState[0].EF_TypeName 
+        elif (arrTypeIndex[2] == CollegeLeaders.Type):
+            setLeader = CollegeLeaders.objects.filter(id = intUserId)
+            if (setLeader.count() > 0):
+                strUserOffice = setLeader[0].EF_OfficeAddress
+                strUserPhone = setLeader[0].EF_PhoneNum
+                setState = UserStates.objects.filter(id = setLeader[0].EF_UserStateId)
+                if (setState.count() > 0):
+                    strUserState = setState[0].EF_TypeName 
+        elif (arrTypeIndex[2] == Teachers.Type):
+            setTeacher = Teachers.objects.filter(id = intUserId)
+            if (setTeacher.count() > 0):
+                strUserOffice = setTeacher[0].EF_OfficeAddress
+                strUserPhone = setTeacher[0].EF_PhoneNum
+                setState = UserStates.objects.filter(id = setTeacher[0].EF_UserStateId)
+                if (setState.count() > 0):
+                    strUserState = setState[0].EF_TypeName 
+    elif (arrTypeIndex[0] == "Student"):
+        setStudent = Students.objects.filter(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
+        if (setStudent.count() > 0):
+            strUserOffice = setStudent[0].EF_OfficeAddress
+            strUserPhone = setStudent[0].EF_PhoneNum
+            setState = UserStates.objects.filter(id = setStudent[0].EF_UserStateId)
+            if (setState.count() > 0):
+                strUserState = setState[0].EF_TypeName 
+
+    jsonDict = {}
+    jsonDict["userType"] = strUserType
+    jsonDict["userState"] = strUserState
+    jsonDict["userOffice"] = strUserOffice
+    jsonDict["userPhone"] = strUserPhone
+    jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
+
+    return JsonResponse(jsonStr, status = 200, safe = False)
+
+
 
 
 #用户状态接口
