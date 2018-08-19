@@ -1,4 +1,7 @@
 from django.conf.urls import url
+from django.views.static import serve
+from django.conf import settings
+from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CUserTypesView, CUserStatesView, CStudentTypesView
 from .views import CAdministratorsView, CChiefCollegeLeadersView, CCollegeLeadersView
@@ -8,6 +11,8 @@ urlpatterns = [
     url(r'register/$', views.register, name='register'),
     url(r'loginVerify/$', views.loginVerify, name='loginVerify'),
     url(r'userHome/$', views.userHome, name='userHome'),
+    url(r'uploadCurUserImage/$', views.uploadCurUserImage, name='uploadCurUserImage'),
+    url(r'^media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),
     url(r'getCurUserInfo/$', views.getCurUserInfo, name='getCurUserInfo'),
     url(r'userTypes/$', CUserTypesView.as_view(), name='userTypes'),
     url(r'userTypes/(?P<intTypeId>[0-9]+)/?$', CUserTypesView.as_view(), name='deleteUserType'),

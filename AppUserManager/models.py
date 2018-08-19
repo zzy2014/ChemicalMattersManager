@@ -22,6 +22,7 @@ class SuperAdministrators(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15, default="")
+    EF_Image = models.ImageField(upload_to='userImage/superAdminImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 
@@ -34,6 +35,7 @@ class Administrators(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15, default="")
+    EF_Image = models.ImageField(upload_to='userImage/adminImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 
@@ -47,6 +49,7 @@ class ChiefCollegeLeaders(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15, default="")
+    EF_Image = models.ImageField(upload_to='userImage/chiefLeaderImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 
@@ -60,6 +63,7 @@ class CollegeLeaders(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15,default="")
+    EF_Image = models.ImageField(upload_to='userImage/leaderImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 
@@ -72,6 +76,7 @@ class Teachers(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15, default="")
+    EF_Image = models.ImageField(upload_to='userImage/teacherImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 
@@ -101,6 +106,7 @@ class Students(models.Model):
     EF_PassWord = models.CharField(max_length=30)
     EF_OfficeAddress = models.TextField(default="")
     EF_PhoneNum = models.CharField(max_length=15, default="")
+    EF_Image = models.ImageField(upload_to='userImage/studentImage', default="defalut.png")
     def __str__(self):
         return self.EF_UserName
 

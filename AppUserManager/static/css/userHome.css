@@ -120,11 +120,18 @@ div#div_Image{
 img#infoImage{
     position:relative;
     left:45%;
+    width:150px;
+    height:200px;
+}
+
+input#uploadImage{
+    position:relative;
+    display:none;
 }
 
 hr#infoLine{
     position:relative;
-    overflow:hidden
+    overflow:hidden;
 }
 
 div#div_Content{

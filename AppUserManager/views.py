@@ -2,6 +2,7 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render
 from simple_rest import Resource #第三方的小类
 from django.core import serializers #导入序列化
+from django.core.files.base import ContentFile
 from .models import UserTypes, UserStates
 from .models import SuperAdministrators, Administrators, ChiefCollegeLeaders, CollegeLeaders
 from .models import Teachers, Finances, StudentTypes, Students
@@ -208,6 +209,70 @@ def userHome(request):
     return render(request, 'userHome.html', context)
 
 
+#上传当前用户的头像
+def uploadCurUserImage(request):
+    #从session中获取登录的用户id
+    intUserId = request.session.get('id', default=0)
+    strUserType = request.session.get('userType', default='')
+
+    #拆分后若不足两项，返回
+    arrTypeIndex = strUserType.split("_");
+    if (int(intUserId) <= 0 or len(arrTypeIndex) < 3 or request.method != 'POST'):
+        return JsonResponse({'intRetCode':-1, 'newUrl':""})
+
+    strNewUrl = ""
+    imageContent = ContentFile(request.FILES.get('uploadImage').read())
+
+    #按用户的类别加载不同的个人界面
+    if (arrTypeIndex[0] == "User"):
+        if (arrTypeIndex[2] == SuperAdministrators.Type):
+            setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId)
+            if (setSuperAdmin.count() > 0):
+               setSuperAdmin[0].EF_Image.delete()
+               setSuperAdmin[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+               setSuperAdmin[0].save()
+               strNewUrl = setSuperAdmin[0].EF_Image.url
+
+        elif (arrTypeIndex[2] == Administrators.Type):
+            setAdmin = Administrators.objects.filter(id = intUserId)
+            if (setAdmin.count() > 0):
+                setAdmin[0].EF_Image.delete()
+                setAdmin[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+                setAdmin[0].save()
+                strNewUrl = setAdmin[0].EF_Image.url
+        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
+            setChiefLeader = ChiefCollegeLeaders.objects.filter(id = intUserId)
+            if (setChiefLeader.count() > 0):
+                setChiefLeader[0].EF_Image.delete()
+                setChiefLeader[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+                setChiefLeader[0].save()
+                strNewUrl = setChiefLeader[0].EF_Image.url
+        elif (arrTypeIndex[2] == CollegeLeaders.Type):
+            setLeader = CollegeLeaders.objects.filter(id = intUserId)
+            if (setLeader.count() > 0):
+                setLeader[0].EF_Image.delete()
+                setLeader[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+                setLeader[0].save()
+                strNewUrl = setLeader[0].EF_Image.url
+        elif (arrTypeIndex[2] == Teachers.Type):
+            setTeacher = Teachers.objects.filter(id = intUserId)
+            if (setTeacher.count() > 0):
+                setTeacher[0].EF_Image.delete()
+                setTeacher[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+                setTeacher[0].save()
+                strNewUrl = setTeacher[0].EF_Image.url
+    elif (arrTypeIndex[0] == "Student"):
+        setStudent = Students.objects.filter(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
+        if (setStudent.count() > 0):
+            setStudent[0].EF_Image.delete()
+            setStudent[0].EF_Image.save(request.FILES.get('uploadImage').name, imageContent) 
+            setStudent[0].save()
+            strNewUrl = setStudent[0].EF_Image.url
+
+    return JsonResponse({'intRetCode':1, 'newUrl':strNewUrl})
+
+
+
 #获取当前登录的用户相关的信息
 def getCurUserInfo(request):
     #从session中获取登录的用户id
@@ -223,6 +288,7 @@ def getCurUserInfo(request):
     strUserState = ""
     strUserOffice = ""
     strUserPhone = ""
+    strImageUrl = ""
 
     #按用户的类别加载不同的个人界面
     if (arrTypeIndex[0] == "User"):
@@ -231,6 +297,7 @@ def getCurUserInfo(request):
             if (setSuperAdmin.count() > 0):
                 strUserOffice = setSuperAdmin[0].EF_OfficeAddress
                 strUserPhone = setSuperAdmin[0].EF_PhoneNum
+                strImageUrl = setSuperAdmin[0].EF_Image.url
                 setState = UserStates.objects.filter(id = setSuperAdmin[0].EF_UserStateId)
                 if (setState.count() > 0):
                     strUserState = setState[0].EF_TypeName 
@@ -240,6 +307,7 @@ def getCurUserInfo(request):
             if (setAdmin.count() > 0):
                 strUserOffice = setAdmin[0].EF_OfficeAddress
                 strUserPhone = setAdmin[0].EF_PhoneNum
+                strImageUrl = setAdmin[0].EF_Image.url
                 setState = UserStates.objects.filter(id = setAdmin[0].EF_UserStateId)
                 if (setState.count() > 0):
                     strUserState = setState[0].EF_TypeName 
@@ -248,6 +316,7 @@ def getCurUserInfo(request):
             if (setChiefLeader.count() > 0):
                 strUserOffice = setChiefLeader[0].EF_OfficeAddress
                 strUserPhone = setChiefLeader[0].EF_PhoneNum
+                strImageUrl = setChiefLeader[0].EF_Image.url
                 setState = UserStates.objects.filter(id = setChiefLeader[0].EF_UserStateId)
                 if (setState.count() > 0):
                     strUserState = setState[0].EF_TypeName 
@@ -256,6 +325,7 @@ def getCurUserInfo(request):
             if (setLeader.count() > 0):
                 strUserOffice = setLeader[0].EF_OfficeAddress
                 strUserPhone = setLeader[0].EF_PhoneNum
+                strImageUrl = setLeader[0].EF_Image.url
                 setState = UserStates.objects.filter(id = setLeader[0].EF_UserStateId)
                 if (setState.count() > 0):
                     strUserState = setState[0].EF_TypeName 
@@ -264,6 +334,7 @@ def getCurUserInfo(request):
             if (setTeacher.count() > 0):
                 strUserOffice = setTeacher[0].EF_OfficeAddress
                 strUserPhone = setTeacher[0].EF_PhoneNum
+                strImageUrl = setTeacher[0].EF_Image.url
                 setState = UserStates.objects.filter(id = setTeacher[0].EF_UserStateId)
                 if (setState.count() > 0):
                     strUserState = setState[0].EF_TypeName 
@@ -272,6 +343,7 @@ def getCurUserInfo(request):
         if (setStudent.count() > 0):
             strUserOffice = setStudent[0].EF_OfficeAddress
             strUserPhone = setStudent[0].EF_PhoneNum
+            strImageUrl = setStudent[0].EF_Image.url
             setState = UserStates.objects.filter(id = setStudent[0].EF_UserStateId)
             if (setState.count() > 0):
                 strUserState = setState[0].EF_TypeName 
@@ -281,11 +353,10 @@ def getCurUserInfo(request):
     jsonDict["userState"] = strUserState
     jsonDict["userOffice"] = strUserOffice
     jsonDict["userPhone"] = strUserPhone
+    jsonDict["userImageUrl"] = strImageUrl
     jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
 
     return JsonResponse(jsonStr, status = 200, safe = False)
-
-
 
 
 #用户状态接口

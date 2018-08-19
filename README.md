@@ -11,9 +11,10 @@ The real manager of chemical labs can organize all kinds of matters easily.
 6. javascript
 7. jquery-3.3.1
 7. swiper-4.3.3
+8. pillow-5.2.0
 # Run it in cmd
 1. cd "project dir";
 2. python manage.py runserver 0.0.0.0:8000;
 3. open "127.0.0.1:8000/home" in your browser.
 # Alert
-1. we are busily developing it now, and we have accomplished about 20% of the total workload. 
+1. we are busily developing it now, and we have accomplished about 30% of the total workload. 

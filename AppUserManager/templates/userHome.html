@@ -185,7 +185,9 @@
      <div id="div_UserInfo">
         <div id="div_Image">
             <!--点击图片更换头像-->
-            <img id="infoImage" src="/static/img/zzy.png"/>
+            <img id="infoImage" src="" onclick="clickUserImage('uploadImage');"/>
+            <!--此按钮不显示，只是用来实出上传功能-->
+            <input  id="uploadImage" type="file" accept="image/*" name="uploadImage" onchange="changeUserImage(this);">
             <hr id="infoLine"/>
         </div>
         <div id="div_Content">
