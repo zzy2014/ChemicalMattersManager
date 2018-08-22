@@ -80,14 +80,90 @@ function showUserInfo()
         var jsonObj = JSON.parse(result);
         $("#userType").html(jsonObj.userType);
         $("#userState").html(jsonObj.userState);
-        $("#userOffice").val(jsonObj.userOffice);
-        $("#userPhone").val(jsonObj.userPhone);
+        if (jsonObj.userOffice.length > 0)
+            $("#userOffice").html(jsonObj.userOffice);
+        if (jsonObj.userPhone.length > 0)
+            $("#userPhone").html(jsonObj.userPhone);
         $("#infoImage").attr("src", jsonObj.userImageUrl);
     }).fail(function(result)
     {
         alert("获取个人信息出错!");
     });
 
+}
+
+
+//点击修改信息
+function changeInformation(ItemId)
+{
+    curItem = $('#'+ItemId);
+
+    //防止多次点击
+    if ($(curItem).hasClass('clicked'))
+    {
+        return false;
+    }
+
+    if ($(curItem).hasClass('dealed'))
+    {
+        $(curItem).removeClass('dealed');
+        return false;
+    }
+
+    $(curItem).addClass('clicked');
+
+    var oldString = $(curItem).html();
+
+    var strContent = '<form id = "formInform">';
+    strContent = '<textarea id = "textInform" rows="1">' + oldString + '</textarea>';
+    strContent += '<input id = "saveBtn" type="button" value="Save" />';
+    strContent += '<input id = "cancelBtn" type="button" value="Cancel" />';
+    strContent += '</form>';
+    $(curItem).html(strContent);
+    var textarea = $('textarea');
+
+    $('#saveBtn').click(function()
+    {
+        var curString = textarea.val();
+        if (curString.length == 0)
+        {
+            alert("请输入信息！");
+        }
+        else
+        {
+            $(curItem).html(curString);
+            $(curItem).removeClass('clicked');
+            //用removeClass后，事件处理程序仍会走一遍点击事件，导致html未恢复到原来
+            $(curItem).addClass('dealed');
+
+            //ajsx保存
+            var postData = {
+                type:ItemId,
+                value:curString,
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/AppUserManager/saveCurUserInfo/",
+                dataType: "json",
+                data: postData,
+                async :false,  //改为同步执行，否则不能对外部变量附值
+            }).done(function(result)
+            {
+            }).fail(function(result)
+            {
+                alert("保存信息失败!");
+            });
+
+        }
+    });
+
+    $('#cancelBtn').click(function()
+    {
+        $(curItem).html(oldString);
+        $(curItem).removeClass('clicked');
+        $(curItem).addClass('dealed');
+    });
 }
 
 //修改密码

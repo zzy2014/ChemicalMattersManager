@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'uploadCurUserImage/$', views.uploadCurUserImage, name='uploadCurUserImage'),
     url(r'^media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),
     url(r'getCurUserInfo/$', views.getCurUserInfo, name='getCurUserInfo'),
+    url(r'saveCurUserInfo/$', views.saveCurUserInfo, name='saveCurUserInfo'),
     url(r'userTypes/$', CUserTypesView.as_view(), name='userTypes'),
     url(r'userTypes/(?P<intTypeId>[0-9]+)/?$', CUserTypesView.as_view(), name='deleteUserType'),
     url(r'userStates/$', CUserStatesView.as_view(), name='userStates'),

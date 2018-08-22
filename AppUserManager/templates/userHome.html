@@ -191,25 +191,20 @@
             <hr id="infoLine"/>
         </div>
         <div id="div_Content">
-            <p id="p_Type">
-                <span>类&nbsp&nbsp&nbsp&nbsp型:</span>
-                <label id="userType" for="spanType" />userType</label>
-            </p>
-            <p>
-                <span>状&nbsp&nbsp&nbsp&nbsp态:</span>
-                <label id="userState" for="spanState" />userState</label>
-            </p>
-            <form id="form_Office">
-                <!--双击input时调整为可编辑状态-->
-                <p>
-                    <span>办公室:</span>
-                    <input id="userOffice" type="text" name="userOffice" readonly="readonly" />
-                </p>
-                <p>
-                    <span>电&nbsp&nbsp&nbsp&nbsp话:</span>
-                    <input id="userPhone" type="text" name="userPhone" readonly="readonly" />
-                </p>
-            </form>
+            类&nbsp&nbsp&nbsp&nbsp型:
+            <h4 id="userType">Unknown</h4>
+            
+            <br>
+            状&nbsp&nbsp&nbsp&nbsp态:
+            <h4 id="userState">Unknown</h4>
+
+            <br>
+            办公室:
+            <h4 id="userOffice" onclick="changeInformation('userOffice');">Clicked to Edit</h4>
+
+            <br>
+            电&nbsp&nbsp&nbsp&nbsp话:
+            <h4 id="userPhone" onclick="changeInformation('userPhone');">Clicked to Edit</h4>
         </div>
     </div>
 </div>
