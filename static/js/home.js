@@ -136,7 +136,7 @@ function loginVertify(idLoginType, idLoginName, idLoginPs)
                 else
                 {
                     //验证成功后将当前用户信息传入，登录首页
-                    location.href = '/AppUserManager/userHome/?userType='+strUserType + '&userId=' + intUserId +'&userPassWord=' + strPassWord;
+                    location.href = '/AppUserManager/userHome/';
                     return true;
                 }
 

@@ -23,12 +23,12 @@ def register(request):
 
     #有空值时返回
     if (strUserType == "" or strUserName == "" or strPassWord == ""):
-         return JsonResponse({'userId':intUserId})
+         return JsonResponse({'retCode':intRetCode})
 
     #拆分后若不足两项，返回
     arrTypeIndex = strUserType.split("_");
     if (len(arrTypeIndex) < 3):
-         return JsonResponse({'userId':intUserId})
+         return JsonResponse({'retCode':intRetCode})
 
     if (arrTypeIndex[0] == "User"):
         #是否为管理员
@@ -147,65 +147,49 @@ def loginVerify(request):
         if (setStudent.count() > 0):
             intUserId = setStudent[0].id
 
+    #id有效时将其写入session
+    if (intUserId > 0):
+        request.session['id'] = intUserId
+        request.session['userType'] = strUserType
+        request.session.set_expiry(0)
+
     return JsonResponse({'userId':intUserId})
 
 
 #用户登录成功后界面接口，用以为每种用户分配主页
 def userHome(request):
-    if (request.method != 'GET'):
-        return HttpResponse("访问错误");
-
-    intUserId = request.GET.get('userId')
-    strUserType = request.GET.get('userType')
-    strUserName = ""
-    strUserPassWord = request.GET.get('userPassWord')
+    #从session中获取登录的用户id
+    intUserId = request.session.get('id', default=0)
+    strUserType = request.session.get('userType', default='')
 
     #拆分后若不足两项，返回
     arrTypeIndex = strUserType.split("_");
-    if (len(arrTypeIndex) < 3):
-         return JsonResponse({'userId':intUserId})
+    if (int(intUserId) < 1 or len(arrTypeIndex) < 3):
+        return HttpResponse("用户未登录！")
 
     #按用户的类别加载不同的个人界面
+    curUser = ""
     if (arrTypeIndex[0] == "User"):
         if (arrTypeIndex[2] == SuperAdministrators.Type):
-            setSuperAdmin = SuperAdministrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-            if (setSuperAdmin.count() > 0):
-                strUserName = setSuperAdmin[0].EF_UserName
+            curUser = SuperAdministrators.objects.get(id = intUserId)
         elif (arrTypeIndex[2] == Administrators.Type):
-            setAdmin = Administrators.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-            if (setAdmin.count() > 0):
-                strUserName = setAdmin[0].EF_UserName
+            curUser = Administrators.objects.get(id = intUserId)
         elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
-            setChiefLeader = ChiefCollegeLeaders.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-            if (setChiefLeader.count() > 0):
-                strUserName = setChiefLeader[0].EF_UserName
+            curUser = ChiefCollegeLeaders.objects.get(id = intUserId)
         elif (arrTypeIndex[2] == CollegeLeaders.Type):
-            setLeader = CollegeLeaders.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-            if (setLeader.count() > 0):
-                strUserName = setLeader[0].EF_UserName
+            curUser = CollegeLeaders.objects.get(id = intUserId)
         elif (arrTypeIndex[2] == Teachers.Type):
-            setTeacher = Teachers.objects.filter(id = intUserId, EF_PassWord = strUserPassWord)
-            if (setTeacher.count() > 0):
-                strUserName = setTeacher[0].EF_UserName
+            curUser = Teachers.objects.get(id = intUserId)
     elif (arrTypeIndex[0] == "Student"):
-        setStudent = Students.objects.filter(id = intUserId, EF_PassWord = strUserPassWord, EF_TypeId = int(arrTypeIndex[1]))
-        if (setStudent.count() > 0):
-            strUserName = setStudent[0].EF_UserName
+        curUser = Students.objects.filter(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
 
     #没有找到任何用户
-    if (strUserName == ""):
-        return HttpResponse("用户名或密码错误")
-
-
-    #设置session
-    request.session['id'] = intUserId
-    request.session['userType'] = strUserType
-    request.session.set_expiry(0)
-
+    if (curUser == ""):
+        return HttpResponse("用户不存在！")
 
     context = {} #一个字典对象
     context['userType'] = arrTypeIndex[2] #传入模板中的变量
-    context['userName'] = strUserName #传入模板中的变量
+    context['userName'] = curUser.EF_UserName #传入模板中的变量
     return render(request, 'userHome.html', context)
 
 
@@ -295,6 +279,9 @@ def getCurUserInfo(request):
 
 #保存当前登录的用户相关的信息
 def saveCurUserInfo(request):
+    if (request.method != "POST"):
+         return HttpResponse({"intRetCode":-1})
+
     itemType = request.POST.get('type')
     newValue = request.POST.get('value')
     if (itemType == ""):
@@ -308,8 +295,6 @@ def saveCurUserInfo(request):
     arrTypeIndex = strUserType.split("_");
     if (len(arrTypeIndex) < 3):
          return JsonResponse({'userId':intUserId})
-
-    strUserType = arrTypeIndex[2]
 
     #获取当前用户
     curUser = ""
