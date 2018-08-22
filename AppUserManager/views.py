@@ -156,16 +156,24 @@ def loginVerify(request):
     return JsonResponse({'userId':intUserId})
 
 
-#用户登录成功后界面接口，用以为每种用户分配主页
-def userHome(request):
+#获取当前用户的接口
+def getCurUser(request):
     #从session中获取登录的用户id
     intUserId = request.session.get('id', default=0)
     strUserType = request.session.get('userType', default='')
 
+    #返回的字典结果
+    retDict = {}
+
     #拆分后若不足两项，返回
     arrTypeIndex = strUserType.split("_");
     if (int(intUserId) < 1 or len(arrTypeIndex) < 3):
-        return HttpResponse("用户未登录！")
+        retDict["id"] = int(intUserId)
+        retDict["type"] = ""
+        retDict["subType"] = ""
+        retDict["typeName"] = ""
+        retDict["curUser"] = ""
+        return retDict 
 
     #按用户的类别加载不同的个人界面
     curUser = ""
@@ -181,45 +189,33 @@ def userHome(request):
         elif (arrTypeIndex[2] == Teachers.Type):
             curUser = Teachers.objects.get(id = intUserId)
     elif (arrTypeIndex[0] == "Student"):
-        curUser = Students.objects.filter(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
+        curUser = Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
 
-    #没有找到任何用户
+    retDict["id"] = int(intUserId)
+    retDict["type"] = arrTypeIndex[0]
+    retDict["subType"] = arrTypeIndex[1]
+    retDict["typeName"] = arrTypeIndex[2]
+    retDict["curUser"] = curUser
+    return retDict 
+
+
+#用户登录成功后界面接口，用以为每种用户分配主页
+def userHome(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
     if (curUser == ""):
         return HttpResponse("用户不存在！")
 
     context = {} #一个字典对象
-    context['userType'] = arrTypeIndex[2] #传入模板中的变量
+    context['userType'] = userDict["typeName"] #传入模板中的变量
     context['userName'] = curUser.EF_UserName #传入模板中的变量
     return render(request, 'userHome.html', context)
 
 
 #上传当前用户的头像
 def uploadCurUserImage(request):
-    #从session中获取登录的用户id
-    intUserId = request.session.get('id', default=0)
-    strUserType = request.session.get('userType', default='')
-
-    #拆分后若不足两项，返回
-    arrTypeIndex = strUserType.split("_");
-    if (int(intUserId) <= 0 or len(arrTypeIndex) < 3 or request.method != 'POST'):
-        return JsonResponse({'intRetCode':-1, 'newUrl':""})
-
-    #获取当前用户
-    curUser = ""
-    if (arrTypeIndex[0] == "User"):
-        if (arrTypeIndex[2] == SuperAdministrators.Type):
-            curUser = SuperAdministrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Administrators.Type):
-            curUser = Administrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
-            curUser = ChiefCollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == CollegeLeaders.Type):
-            curUser = CollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Teachers.Type):
-            curUser = Teachers.objects.get(id = intUserId)
-    elif (arrTypeIndex[0] == "Student"):
-        curUser = Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
-
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
     if (curUser == ""):
         return JsonResponse({'intRetCode':0, 'newUrl':""})
 
@@ -233,38 +229,13 @@ def uploadCurUserImage(request):
 
 #获取当前登录的用户相关的信息
 def getCurUserInfo(request):
-    #从session中获取登录的用户id
-    intUserId = request.session.get('id', default=0)
-    strUserType = request.session.get('userType', default='')
-
-    #拆分后若不足两项，返回
-    arrTypeIndex = strUserType.split("_");
-    if (len(arrTypeIndex) < 3):
-         return JsonResponse({'userId':intUserId})
-
-    strUserType = arrTypeIndex[2]
-
-    #获取当前用户
-    curUser = "";
-    if (arrTypeIndex[0] == "User"):
-        if (arrTypeIndex[2] == SuperAdministrators.Type):
-            curUser = SuperAdministrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Administrators.Type):
-            curUser = Administrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
-            curUser = ChiefCollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == CollegeLeaders.Type):
-            curUser = CollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Teachers.Type):
-            curUser = Teachers.objects.get(id = intUserId)
-    elif (arrTypeIndex[0] == "Student"):
-        curUser = Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
-
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
     if (curUser == ""):
         return JsonResponse({'userId':intUserId})
 
     jsonDict = {}
-    jsonDict["userType"] = strUserType
+    jsonDict["userType"] = userDict["typeName"]
 
     setState = UserStates.objects.filter(id = curUser.EF_UserStateId)
     if (setState.count() > 0):
@@ -280,38 +251,15 @@ def getCurUserInfo(request):
 #保存当前登录的用户相关的信息
 def saveCurUserInfo(request):
     if (request.method != "POST"):
-         return HttpResponse({"intRetCode":-1})
+        return JsonResponse({"intRetCode":-1})
 
     itemType = request.POST.get('type')
     newValue = request.POST.get('value')
     if (itemType == ""):
-         return HttpResponse({"intRetCode":-1})
+        return JsonResponse({"intRetCode":-1})
 
-    #从session中获取登录的用户id
-    intUserId = request.session.get('id', default=0)
-    strUserType = request.session.get('userType', default='')
-
-    #拆分后若不足两项，返回
-    arrTypeIndex = strUserType.split("_");
-    if (len(arrTypeIndex) < 3):
-         return JsonResponse({'userId':intUserId})
-
-    #获取当前用户
-    curUser = ""
-    if (arrTypeIndex[0] == "User"):
-        if (arrTypeIndex[2] == SuperAdministrators.Type):
-            curUser = SuperAdministrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Administrators.Type):
-            curUser = Administrators.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == ChiefCollegeLeaders.Type):
-            curUser = ChiefCollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == CollegeLeaders.Type):
-            curUser = CollegeLeaders.objects.get(id = intUserId)
-        elif (arrTypeIndex[2] == Teachers.Type):
-            curUser = Teachers.objects.get(id = intUserId)
-    elif (arrTypeIndex[0] == "Student"):
-        curUser= Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
-
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
     if (curUser == ""):
         return JsonResponse({"intRetCode":0})
 
@@ -322,6 +270,24 @@ def saveCurUserInfo(request):
         curUser.EF_PhoneNum = newValue
     curUser.save();
     
+    return JsonResponse({"intRetCode":1})
+
+
+#修改密码
+def modifyCurPassword(request):
+    if (request.method != "POST"):
+        return JsonResponse({"intRetCode":-1})
+
+    strOldPassword = request.POST.get('oldPassword')
+    strNewPassword = request.POST.get('newPassword')
+
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == "" or curUser.EF_PassWord != strOldPassword):
+        return JsonResponse({"intRetCode":0})
+
+    curUser.EF_PassWord = strNewPassword
+    curUser.save()
     return JsonResponse({"intRetCode":1})
 
 

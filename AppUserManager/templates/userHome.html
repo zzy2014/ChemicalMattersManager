@@ -38,12 +38,12 @@
             <ul id="ul_usercenter" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showUserInfo('div_RightPage', 'jsGrid')">{{ userName }}
+                        onclick="showUserInfo()">{{ userName }}
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="modifyPassword()">修改密码
+                        onclick="showModifyPassword()">修改密码
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
@@ -206,6 +206,22 @@
             电&nbsp&nbsp&nbsp&nbsp话:
             <h4 id="userPhone" onclick="changeInformation('userPhone');">Clicked to Edit</h4>
         </div>
+    </div>
+
+    <div id="div_ModifyPassword">
+        原&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:
+        <input id = "input_OldPassword" type="password"/>
+
+        <br>
+        新&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:
+        <input id = "input_NewPassword" type="password"/>
+
+        <br>
+        再次输入新密码:
+        <input id = "input_ReNewPassword" type="password"/>
+
+        <br>
+        <input id = "input_ModifyPassword" type="submit" value="确认" onclick=" return modifyPassword('input_OldPassword', 'input_NewPassword', 'input_ReNewPassword')"/>
     </div>
 </div>
 
