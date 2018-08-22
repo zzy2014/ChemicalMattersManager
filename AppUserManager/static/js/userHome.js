@@ -240,6 +240,35 @@ function modifyPassword(oldPasswordId, newPasswordId, reNewPasswordId)
 //退出登录
 function logout()
 {
+    var retCode = confirm("确定要退出吗？");
+	if(!retCode)
+	    return false;
+
+    $.ajax({
+        type: "POST",
+        url: "/AppUserManager/logout/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        intRetCode = result["intRetCode"]
+        if (intRetCode > 0)
+        {
+            location.href = '/home/';
+            return true;
+        }
+        else
+        {
+            alert("退出失败!");
+            return false;
+        }
+    }).fail(function(result)
+    {
+        alert("退出失败!");
+        return false;
+    });
+
+    return false;
 }
 
 //用户状态管理

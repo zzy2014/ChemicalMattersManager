@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'getCurUserInfo/$', views.getCurUserInfo, name='getCurUserInfo'),
     url(r'saveCurUserInfo/$', views.saveCurUserInfo, name='saveCurUserInfo'),
     url(r'modifyCurPassword/$', views.modifyCurPassword, name='modifyCurPassword'),
+    url(r'logout/$', views.logout, name='logout'),
     url(r'userTypes/$', CUserTypesView.as_view(), name='userTypes'),
     url(r'userTypes/(?P<intTypeId>[0-9]+)/?$', CUserTypesView.as_view(), name='deleteUserType'),
     url(r'userStates/$', CUserStatesView.as_view(), name='userStates'),

@@ -204,7 +204,7 @@ def userHome(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("用户不存在！")
+        return HttpResponse("用户未登录或不存在！")
 
     context = {} #一个字典对象
     context['userType'] = userDict["typeName"] #传入模板中的变量
@@ -290,6 +290,11 @@ def modifyCurPassword(request):
     curUser.save()
     return JsonResponse({"intRetCode":1})
 
+#登出
+def logout(request):
+    del request.session["id"]
+    del request.session["userType"]
+    return JsonResponse({"intRetCode":1})
 
 #用户状态接口
 class CUserStatesView(Resource):
