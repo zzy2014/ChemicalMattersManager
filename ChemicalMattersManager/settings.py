@@ -120,7 +120,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET='utf-8' 
+DEFAULT_CHARSET='utf-8' 
 
 
 # Static files (CSS, JavaScript, Images)

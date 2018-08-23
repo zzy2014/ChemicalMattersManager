@@ -6,24 +6,8 @@
     <title>个人管理页面</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
     <link rel="stylesheet" type="text/css" href="/static/css/userHome.css"/>
-    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
-    <!--jsgrid相关的css与js-->
-    <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/jsgrid.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/theme.css" />
-    <script src="/static/js/jsgrid/jsgrid.core.js"></script>
-    <script src="/static/js/jsgrid/jsgrid.load-indicator.js"></script>
-    <script src="/static/js/jsgrid/jsgrid.load-strategies.js"></script>
-    <script src="/static/js/jsgrid/jsgrid.sort-strategies.js"></script>
-    <script src="/static/js/jsgrid/jsgrid.field.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.text.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.number.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.float.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.select.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.checkbox.js"></script>
-    <script src="/static/js/jsgrid/fields/jsgrid.field.control.js"></script>
-
-    <!--数据管理相关的js-->
     <script src="/static/js/userHome.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
 </head>
 
 <body>
@@ -38,12 +22,12 @@
             <ul id="ul_usercenter" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showUserInfo()">{{ userName }}
+                        onclick="showRightPage('showUserInfo')">{{ userName }}
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showModifyPassword()">修改密码
+                        onclick="showRightPage('showModifyPassword')">修改密码
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
@@ -63,41 +47,41 @@
             <ul id="ul_usermanage" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi"  href="javascript:void(0)"
-                        onclick="showUserStates()">用户状态
+                        onclick="showRightPage('showUserStates')">用户状态
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showUserTypes()">用户类型</a>
+                        onclick="showRightPage('showUserTypes')">用户类型</a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showStudentTypes()">学生类型
+                        onclick="showRightPage('showStudentTypes')">学生类型
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showAdministrators()">管理员
+                        onclick="showRightPage('showAdministrators')">管理员
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showChiefCollegeLeaders()">院长
+                        onclick="showRightPage('showChiefLeaders')">院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showCollegeLeaders()">副院长
+                        onclick="showRightPage('showLeaders')">副院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showTeachers()">教师
+                        onclick="showRightPage('showTeachers')">教师
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showStudents()">学生
+                        onclick="showRightPage('showStudents')">学生
                     </a> 
                 </li>
             </ul>
@@ -129,7 +113,7 @@
                 {% if userType == '超级管理员' %}
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showFinances()">所有经费
+                        onclick="showRightPage('showFinances')">所有经费
                     </a>
                 </li>
 
@@ -180,55 +164,9 @@
     <ul>
 </div>
 
-<!--用户个人界面，修改密码等-->
+<!--右侧的界面，如用户个人界面，修改密码，table列表等等-->
 <div id="div_RightPage">
-     <div id="div_UserInfo">
-        <div id="div_Image">
-            <!--点击图片更换头像-->
-            <img id="infoImage" src="" onclick="clickUserImage('uploadImage');"/>
-            <!--此按钮不显示，只是用来实出上传功能-->
-            <input  id="uploadImage" type="file" accept="image/*" name="uploadImage" onchange="changeUserImage(this);">
-            <hr id="infoLine"/>
-        </div>
-        <div id="div_Content">
-            类&nbsp&nbsp&nbsp&nbsp型:
-            <h4 id="userType">Unknown</h4>
-            
-            <br>
-            状&nbsp&nbsp&nbsp&nbsp态:
-            <h4 id="userState">Unknown</h4>
-
-            <br>
-            办公室:
-            <h4 id="userOffice" onclick="changeInformation('userOffice');">Clicked to Edit</h4>
-
-            <br>
-            电&nbsp&nbsp&nbsp&nbsp话:
-            <h4 id="userPhone" onclick="changeInformation('userPhone');">Clicked to Edit</h4>
-        </div>
-    </div>
-
-    <div id="div_ModifyPassword">
-        原&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:
-        <input id = "input_OldPassword" type="password"/>
-
-        <br>
-        新&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp密&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp码:
-        <input id = "input_NewPassword" type="password"/>
-
-        <br>
-        再次输入新密码:
-        <input id = "input_ReNewPassword" type="password"/>
-
-        <br>
-        <input id = "input_ModifyPassword" type="submit" value="确认" onclick=" return modifyPassword('input_OldPassword', 'input_NewPassword', 'input_ReNewPassword')"/>
-    </div>
 </div>
-
-<!--右侧的用户列表-->
-<div id="jsGrid">
-</div>
-
 
 </body>
 </html>

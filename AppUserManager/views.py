@@ -1,5 +1,6 @@
+ # coding=utf8
 from django.http import HttpResponse,JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from simple_rest import Resource #第三方的小类
 from django.core import serializers #导入序列化
 from django.core.files.base import ContentFile
@@ -7,9 +8,10 @@ from .models import UserTypes, UserStates
 from .models import SuperAdministrators, Administrators, ChiefCollegeLeaders, CollegeLeaders
 from .models import Teachers, Finances, StudentTypes, Students
 import json
+import sys
 
 
-#注册入口
+#注册用户
 def register(request):
     intRetCode = -1 #返回结果码，小于0表示注册失败，=0表示当前用户名己存在，>0表示注册成功
     strUserType = "";
@@ -175,7 +177,6 @@ def getCurUser(request):
         retDict["curUser"] = ""
         return retDict 
 
-    #按用户的类别加载不同的个人界面
     curUser = ""
     if (arrTypeIndex[0] == "User"):
         if (arrTypeIndex[2] == SuperAdministrators.Type):
@@ -199,7 +200,7 @@ def getCurUser(request):
     return retDict 
 
 
-#用户登录成功后界面接口，用以为每种用户分配主页
+#用户登录成功后的主页，不同类型用户的可见项不同
 def userHome(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
@@ -210,6 +211,66 @@ def userHome(request):
     context['userType'] = userDict["typeName"] #传入模板中的变量
     context['userName'] = curUser.EF_UserName #传入模板中的变量
     return render(request, 'userHome.html', context)
+
+
+#获取userHome界面中的右侧界面
+def showRightPage(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("用户尚未登录！")
+
+    if (request.method != "POST"):
+        return HttpResponse("访问类型错误！")
+
+    strPageType = request.POST.get('pageType')
+    if (strPageType == ""):
+        return HttpResponse("页面类型无效！")
+
+    context = {} #一个字典对象
+    context["pageType"] = strPageType
+
+    if (strPageType == "showUserInfo"):
+        context["userImageUrl"] = curUser.EF_Image.url
+        context["userType"] = userDict["typeName"]
+
+        setState = UserStates.objects.filter(id = curUser.EF_UserStateId)
+        if (setState.count() > 0):
+            context["userState"] = setState[0].EF_TypeName 
+        else:
+            context["userState"] = "Unknown"
+   
+        if (curUser.EF_OfficeAddress != ""):
+            context["userOffice"] = curUser.EF_OfficeAddress
+        else:
+            context["userOffice"] = "Clicked to Edit"            
+
+        if (curUser.EF_PhoneNum != ""):
+            context["userPhone"] = curUser.EF_PhoneNum
+        else:
+            context["userPhone"] = "Clicked to Edit" 
+
+        return render_to_response("showUserInfo.html", context)
+    elif (strPageType == "showModifyPassword"):
+        return render_to_response("showModifyPassword.html", context)
+    elif (strPageType == "showUserStates"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showUserTypes"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showStudentTypes"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showAdministrators"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showChiefLeaders"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showLeaders"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showTeachers"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showStudents"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showFinances"):
+        return render_to_response("showJsGrid.html", context)
 
 
 #上传当前用户的头像
@@ -229,11 +290,6 @@ def uploadCurUserImage(request):
 
 #获取当前登录的用户相关的信息
 def getCurUserInfo(request):
-    userDict = getCurUser(request)
-    curUser = userDict["curUser"]
-    if (curUser == ""):
-        return JsonResponse({'userId':intUserId})
-
     jsonDict = {}
     jsonDict["userType"] = userDict["typeName"]
 
@@ -295,6 +351,7 @@ def logout(request):
     del request.session["id"]
     del request.session["userType"]
     return JsonResponse({"intRetCode":1})
+
 
 #用户状态接口
 class CUserStatesView(Resource):

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from AppUserManager.models import UserTypes, StudentTypes
  
 #主页
-def home(request):
+def index(request):
     setUserTypes = UserTypes.objects.all().exclude(EF_TypeName = "学生")
     setStudentTypes = StudentTypes.objects.all()
 
@@ -11,4 +11,4 @@ def home(request):
     context['userTypes_login'] = setUserTypes #传入模板中的变量
     context['studentTypes'] = setStudentTypes #传入模板中的变量
 
-    return render(request, "home.html", context)
+    return render(request, "index.html", context)
