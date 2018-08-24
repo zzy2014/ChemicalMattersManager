@@ -41,6 +41,7 @@ class Matters(models.Model):
     EF_StateId = models.IntegerField(default=0)
     EF_PurityId = models.IntegerField(default=0)
     EF_UnitId = models.IntegerField(default=0)
+    EF_StoreId = models.IntegerField(default=0)
     EF_Name = models.CharField(max_length=100)
     EF_CAS = models.CharField(max_length=100)
     EF_Format = models.CharField(max_length=100)

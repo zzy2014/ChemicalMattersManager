@@ -4,7 +4,7 @@ from django.conf import settings
 from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CMatterUnitsView, CMatterStatesView, CPurityLevelsView, CMatterTypesView
-from .views import CStoreRoomsView
+from .views import CStoreRoomsView, CMattersView
 
 urlpatterns = [
     url(r'showRightPage/$', views.showRightPage, name='showRightPage'),
@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'matterTypes/(?P<intTypeId>[0-9]+)/?$', CMatterTypesView.as_view(), name='deleteMatterTypes'),
     url(r'storeRooms/$', CStoreRoomsView.as_view(), name='StoreRooms'),
     url(r'storeRooms/(?P<intTypeId>[0-9]+)/?$', CStoreRoomsView.as_view(), name='deleteStoreRooms'),
+    url(r'matters/$', CMattersView.as_view(), name='matters'),
+    url(r'matters/(?P<intTypeId>[0-9]+)/?$', CMattersView.as_view(), name='deleteMatters'),
 ]
 

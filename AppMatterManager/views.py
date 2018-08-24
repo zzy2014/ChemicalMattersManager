@@ -39,6 +39,8 @@ def showRightPage(request):
         return render_to_response("showJsGrid.html", context)
     elif (strPageType == "showStoreRooms"):
         return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showMatters"):
+        return render_to_response("showJsGrid.html", context)
     else:
         return HttpResponse("")
 
@@ -216,6 +218,142 @@ class CStoreRoomsView(Resource):
 
     def delete(self, request, intTypeId):
         curItem = StoreRooms.objects.get(id = int(intTypeId))
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+
+#所有药品
+class CMattersView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strTypeId = request.GET.get("EF_TypeId", "") 
+        strStateId = request.GET.get("EF_StateId", "") 
+        strPurityId = request.GET.get("EF_PurityId", "") 
+        strUnitId = request.GET.get("EF_UnitId", "") 
+        strStoreId = request.GET.get("EF_StoreId", "") 
+        strName = request.GET.get("EF_Name", "") 
+        strCas = request.GET.get("EF_CAS", "") 
+        strFormat = request.GET.get("EF_Format", "") 
+        strAmount = request.GET.get("EF_Amount", "") 
+        strPrice = request.GET.get("EF_Price", "") 
+        strLocation = request.GET.get("EF_Location", "") 
+        strSaler = request.GET.get("EF_Saler", "") 
+        strNote = request.GET.get("EF_Note", "") 
+        arrValidItems = Matters.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strTypeId != "" and strTypeId != "0"):
+            arrValidItems = arrValidItems.filter(EF_TypeId__contains = strTypeId)
+        if (strStateId != "" and strStateId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StateId__contains = strStateId)
+        if (strPurityId != "" and strPurityId != "0"):
+            arrValidItems = arrValidItems.filter(EF_PurityId__contains = strPurityId)
+        if (strUnitId != "" and strUnitId != "0"):
+            arrValidItems = arrValidItems.filter(EF_UnitId__contains = strUnitId)
+        if (strStoreId != "" and strUnitId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StoreId__contains = strStoreId)
+        if (strName != ""):
+            arrValidItems = arrValidItems.filter(EF_Name__contains = strName)
+        if (strCas != ""):
+            arrValidItems = arrValidItems.filter(EF_CAS__contains = strCas)
+        if (strFormat != ""):
+            arrValidItems = arrValidItems.filter(EF_Format__contains = strFormat)
+        if (strAmount != ""):
+            arrValidItems = arrValidItems.filter(EF_Amount__contains = strAmount)
+        if (strPrice != ""):
+            arrValidItems = arrValidItems.filter(EF_Price__contains = strPrice)
+        if (strLocation != ""):
+            arrValidItems = arrValidItems.filter(EF_Location__contains = strLocation)
+        if (strSaler != ""):
+            arrValidItems = arrValidItems.filter(EF_Saler__contains = strSaler)
+        if (strNote != ""):
+            arrValidItems = arrValidItems.filter(EF_Note__contains = strNote)
+
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strTypeId = request.POST.get("EF_TypeId", "") 
+        strStateId = request.POST.get("EF_StateId", "") 
+        strPurityId = request.POST.get("EF_PurityId", "") 
+        strUnitId = request.POST.get("EF_UnitId", "") 
+        strStoreId = request.POST.get("EF_StoreId", "") 
+        strName = request.POST.get("EF_Name", "") 
+        strCas = request.POST.get("EF_CAS", "") 
+        strFormat = request.POST.get("EF_Format", "") 
+        strAmount = request.POST.get("EF_Amount", "") 
+        strPrice = request.POST.get("EF_Price", "") 
+        strLocation = request.POST.get("EF_Location", "") 
+        strSaler = request.POST.get("EF_Saler", "") 
+        strNote = request.POST.get("EF_Note", "") 
+        newItem = Matters.objects.create(EF_TypeId = strTypeId, EF_StateId = strStateId, EF_PurityId = strPurityId,
+                EF_UnitId = strUnitId, EF_StoreId = strStoreId, EF_Name = strName, EF_CAS = strCas, EF_Format = strFormat,
+                EF_Amount = strAmount, EF_Price = strPrice, EF_Location = strLocation, EF_Saler = strSaler, EF_Note = strNote)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_TypeId"] = int(strTypeId)
+        jsonDict["EF_StateId"] = int(strStateId)
+        jsonDict["EF_PurityId"] = int(strPurityId)
+        jsonDict["EF_UnitId"] = int(strUnitId)
+        jsonDict["EF_StoreId"] = int(strStoreId)
+        jsonDict["EF_Name"] = strName
+        jsonDict["EF_CAS"] = strCas
+        jsonDict["EF_Format"] = strFormat
+        jsonDict["EF_Amount"] = strAmount
+        jsonDict["EF_Price"] = float(strPrice)
+        jsonDict["EF_Location"] = strLocation
+        jsonDict["EF_Saler"] = strSaler
+        jsonDict["EF_Note"] = strNote
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        curItem = Matters.objects.get(id = intCurId)
+
+        curItem.EF_TypeId = request.PUT.get("EF_TypeId", "") 
+        curItem.EF_StateId = request.PUT.get("EF_StateId", "") 
+        curItem.EF_PurityId = request.PUT.get("EF_PurityId", "") 
+        curItem.EF_UniteId = request.PUT.get("EF_UnitId", "") 
+        curItem.EF_StoreId = request.PUT.get("EF_StoreId", "") 
+        curItem.EF_Name = request.PUT.get("EF_Name", "") 
+        curItem.EF_CAS = request.PUT.get("EF_CAS", "") 
+        curItem.EF_Format = request.PUT.get("EF_Format", "") 
+        curItem.EF_Amount = request.PUT.get("EF_Amount", "") 
+        curItem.EF_Price = request.PUT.get("EF_Price", "") 
+        curItem.EF_Location = request.PUT.get("EF_Location", "") 
+        curItem.EF_Saler = request.PUT.get("EF_Saler", "") 
+        curItem.EF_Note = request.PUT.get("EF_Note", "") 
+        curItem.save()
+
+        jsonDict = {}
+        jsonDict["id"] = curItem.id
+        jsonDict["EF_TypeId"] = int(curItem.EF_TypeId)
+        jsonDict["EF_StateId"] = int(curItem.EF_StateId)
+        jsonDict["EF_PurityId"] = int(curItem.EF_PurityId)
+        jsonDict["EF_UnitId"] = int(curItem.EF_UnitId)
+        jsonDict["EF_StoreId"] = int(curItem.EF_StoreId)
+        jsonDict["EF_Name"] = curItem.EF_Name
+        jsonDict["EF_CAS"] = curItem.EF_CAS
+        jsonDict["EF_Format"] = curItem.EF_Format
+        jsonDict["EF_Amount"] = curItem.EF_Amount
+        jsonDict["EF_Price"] = curItem.EF_Price
+        jsonDict["EF_Location"] = curItem.EF_Location
+        jsonDict["EF_Saler"] = curItem.EF_Saler
+        jsonDict["EF_Note"] = curItem.EF_Note
+        jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
+
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = Matters.objects.get(id = int(intTypeId))
         curItem.delete()
         return HttpResponse(status = 200)
 
