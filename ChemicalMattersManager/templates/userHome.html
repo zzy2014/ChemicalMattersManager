@@ -22,12 +22,12 @@
             <ul id="ul_usercenter" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showUserInfo')">{{ userName }}
+                        onclick="showRightPage('AppUserManager', 'showUserInfo')">{{ userName }}
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showModifyPassword')">修改密码
+                        onclick="showRightPage('AppUserManager', 'showModifyPassword')">修改密码
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
@@ -47,41 +47,41 @@
             <ul id="ul_usermanage" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi"  href="javascript:void(0)"
-                        onclick="showRightPage('showUserStates')">用户状态
+                        onclick="showRightPage('AppUserManager', 'showUserStates')">用户状态
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showUserTypes')">用户类型</a>
+                        onclick="showRightPage('AppUserManager', 'showUserTypes')">用户类型</a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showStudentTypes')">学生类型
+                        onclick="showRightPage('AppUserManager', 'showStudentTypes')">学生类型
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showAdministrators')">管理员
+                        onclick="showRightPage('AppUserManager', 'showAdministrators')">管理员
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showChiefLeaders')">院长
+                        onclick="showRightPage('AppUserManager', 'showChiefLeaders')">院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showLeaders')">副院长
+                        onclick="showRightPage('AppUserManager', 'showLeaders')">副院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showTeachers')">教师
+                        onclick="showRightPage('AppUserManager', 'showTeachers')">教师
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showStudents')">学生
+                        onclick="showRightPage('AppUserManager', 'showStudents')">学生
                     </a> 
                 </li>
             </ul>
@@ -95,9 +95,24 @@
                 onclick="showSubNavi('ul_mattermanage')">药品管理
             </a>
             <ul id="ul_mattermanage" class="ul_leftsubnavi">
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">入库</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库</a> </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showRightPage('AppMatterManager', 'showMatterUnits')">计量单位
+                    </a>
+                </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">理化状态</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">纯度规格</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品类别</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">存放仓库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">存量预警</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">领取权限</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">所有药品</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品入库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">入库清单</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品出库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库清单</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购清单</a> </li>
             </ul>
         </li>
         {% endif %}
@@ -113,7 +128,7 @@
                 {% if userType == '超级管理员' %}
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showRightPage('showFinances')">所有经费
+                        onclick="showRightPage('AppUserManager', 'showFinances')">所有经费
                     </a>
                 </li>
 

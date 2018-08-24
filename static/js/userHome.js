@@ -5,11 +5,11 @@ function showSubNavi(subUlId)
 }
 
 //显示右侧界面, 传入类型参数
-function showRightPage(strPageType)
+function showRightPage(strAppName, strPageType)
 {
     $.ajax({
         type: "POST",
-        url: "/AppUserManager/showRightPage/",
+        url: "/" + strAppName + "/showRightPage/",
         data: {"pageType":strPageType},
         dataType: "text",
         async :false,  //改为同步执行，否则不能对外部变量附值

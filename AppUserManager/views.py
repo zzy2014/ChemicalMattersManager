@@ -1,4 +1,4 @@
- # coding=utf8
+# coding=utf8
 from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render, render_to_response
 from simple_rest import Resource #第三方的小类
