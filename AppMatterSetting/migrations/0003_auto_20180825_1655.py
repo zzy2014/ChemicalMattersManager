@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('AppMatterManager', '0002_matters_ef_storeid'),
+        ('AppMatterSetting', '0002_matters_ef_storeid'),
     ]
 
     operations = [

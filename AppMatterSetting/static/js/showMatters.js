@@ -7,7 +7,7 @@ $(function()
     //从数据库获取单位
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/matterUnits/",
+        url: "/AppMatterSetting/matterUnits/",
         dataType: "json",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -29,7 +29,7 @@ $(function()
     //从数据库获取理化状态
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/matterStates/",
+        url: "/AppMatterSetting/matterStates/",
         dataType: "json",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -51,7 +51,7 @@ $(function()
     //从数据库获取纯度规格
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/purityLevels/",
+        url: "/AppMatterSetting/purityLevels/",
         dataType: "json",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -73,7 +73,7 @@ $(function()
     //从数据库获取单位
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/matterTypes/",
+        url: "/AppMatterSetting/matterTypes/",
         dataType: "json",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -95,7 +95,7 @@ $(function()
     //从数据库获取单位
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/storeRooms/",
+        url: "/AppMatterSetting/storeRooms/",
         dataType: "json",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -133,7 +133,7 @@ $(function()
 
                 $.ajax({
                     type: "GET",
-                    url: "/AppMatterManager/matters/",
+                    url: "/AppMatterSetting/matters/",
                     dataType: "json",
                     data: filter
                 }).done(function(result) {
@@ -149,7 +149,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "POST",
-                    url: "/AppMatterManager/matters/",
+                    url: "/AppMatterSetting/matters/",
                     dataType: "json",
                     data: newItem,
                 }).done(function(response, textStatus){
@@ -166,7 +166,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "PUT",
-                    url: "/AppMatterManager/matters/",
+                    url: "/AppMatterSetting/matters/",
                     dataType: "json",
                     data: curItem,
                 }).done(function(response, textStatus){
@@ -182,7 +182,7 @@ $(function()
             deleteItem: function(curItem){
                 return $.ajax({
                     type: "DELETE",
-                    url: "/AppMatterManager/matters/" + curItem.id,
+                    url: "/AppMatterSetting/matters/" + curItem.id,
                 });
             }
         },

@@ -1,4 +1,4 @@
-//药品类别
+//纯度规格
 $(function()
 {
     $("#jsGrid").jsGrid({
@@ -23,7 +23,7 @@ $(function()
 
                 $.ajax({
                     type: "GET",
-                    url: "/AppMatterManager/matterTypes/",
+                    url: "/AppMatterSetting/purityLevels/",
                     dataType: "json",
                     data: filter
                 }).done(function(result) {
@@ -39,7 +39,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "POST",
-                    url: "/AppMatterManager/matterTypes/",
+                    url: "/AppMatterSetting/purityLevels/",
                     dataType: "json",
                     data: newItem,
                 }).done(function(response, textStatus){
@@ -56,7 +56,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "PUT",
-                    url: "/AppMatterManager/matterTypes/",
+                    url: "/AppMatterSetting/purityLevels/",
                     dataType: "json",
                     data: curItem,
                 }).done(function(response, textStatus){
@@ -72,14 +72,14 @@ $(function()
             deleteItem: function(curItem){
                 return $.ajax({
                     type: "DELETE",
-                    url: "/AppMatterManager/matterTypes/" + curItem.id,
+                    url: "/AppMatterSetting/purityLevels/" + curItem.id,
                 });
             }
         },
 
         fields: [
-            { name: "id", title: "类别ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_TypeName", title:"名称", type: "text", width: 100, align:"left"},
+            { name: "id", title: "规格ID", type: "number", width: 80, editing: false, align:"left"},
+            { name: "EF_LevelName", title:"名称", type: "text", width: 100, align:"left"},
             { type: "control" }
         ]
     });

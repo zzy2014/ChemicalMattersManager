@@ -1,4 +1,4 @@
-//计量单位管理
+//药品仓库
 $(function()
 {
     $("#jsGrid").jsGrid({
@@ -23,7 +23,7 @@ $(function()
 
                 $.ajax({
                     type: "GET",
-                    url: "/AppMatterManager/matterUnits/",
+                    url: "/AppMatterSetting/storeRooms/",
                     dataType: "json",
                     data: filter
                 }).done(function(result) {
@@ -39,7 +39,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "POST",
-                    url: "/AppMatterManager/matterUnits/",
+                    url: "/AppMatterSetting/storeRooms/",
                     dataType: "json",
                     data: newItem,
                 }).done(function(response, textStatus){
@@ -56,7 +56,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "PUT",
-                    url: "/AppMatterManager/matterUnits/",
+                    url: "/AppMatterSetting/storeRooms/",
                     dataType: "json",
                     data: curItem,
                 }).done(function(response, textStatus){
@@ -72,14 +72,14 @@ $(function()
             deleteItem: function(curItem){
                 return $.ajax({
                     type: "DELETE",
-                    url: "/AppMatterManager/matterUnits/" + curItem.id,
+                    url: "/AppMatterSetting/storeRooms/" + curItem.id,
                 });
             }
         },
 
         fields: [
-            { name: "id", title: "单位ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_UnitName", title:"名称", type: "text", width: 100, align:"left"},
+            { name: "id", title: "仓库ID", type: "number", width: 80, editing: false, align:"left"},
+            { name: "EF_RoomName", title:"名称", type: "text", width: 100, align:"left"},
             { type: "control" }
         ]
     });

@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^index/$', view.index, name='index'),
     url(r'^AppUserManager/', include('AppUserManager.urls')),
-    url(r'^AppMatterManager/', include('AppMatterManager.urls')),
+    url(r'^AppMatterSetting/', include('AppMatterSetting.urls')),
 ]
 
