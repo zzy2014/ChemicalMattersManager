@@ -5,11 +5,11 @@ function showSubNavi(subUlId)
 }
 
 //显示右侧界面, 传入类型参数
-function showRightPage(strAppName, strPageType)
+function showOneTable(strAppName, strPageType)
 {
     $.ajax({
         type: "POST",
-        url: "/" + strAppName + "/showRightPage/",
+        url: "/" + strAppName + "/showOneTable/",
         data: {"pageType":strPageType},
         dataType: "text",
         async :false,  //改为同步执行，否则不能对外部变量附值
@@ -21,6 +21,25 @@ function showRightPage(strAppName, strPageType)
         $("#div_RightPage").html(result);
     });
 }
+
+//显示上下两级界面，
+function showTwoTables(strAppName, strPageType)
+{
+    $.ajax({
+        type: "POST",
+        url: "/" + strAppName + "/showTwoTables/",
+        data: {"pageType":strPageType},
+        dataType: "text",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        $("#div_RightPage").html(result);
+    }).fail(function(result)
+    {
+        $("#div_RightPage").html(result);
+    });
+}
+
 
 //退出登录
 function logout()

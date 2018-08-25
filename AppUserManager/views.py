@@ -254,23 +254,23 @@ def showRightPage(request):
     elif (strPageType == "showModifyPassword"):
         return render_to_response("showModifyPassword.html", context)
     elif (strPageType == "showUserStates"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showUserTypes"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showStudentTypes"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showAdministrators"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showChiefLeaders"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showLeaders"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showTeachers"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showStudents"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showFinances"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
 
 
 #上传当前用户的头像

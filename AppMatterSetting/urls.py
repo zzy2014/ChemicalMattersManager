@@ -8,7 +8,7 @@ from .views import CStoreRoomsView, CMattersView, CMatterAlertsView, CMatterMinR
 from .views import CMatterAccessBlocksView
 
 urlpatterns = [
-    url(r'showRightPage/$', views.showRightPage, name='showRightPage'),
+    url(r'showOneTable/$', views.showOneTable, name='showOneTable'),
     url(r'matterUnits/$', CMatterUnitsView.as_view(), name='matterUnits'),
     url(r'matterUnits/(?P<intTypeId>[0-9]+)/?$', CMatterUnitsView.as_view(), name='deleteMatterUnits'),
     url(r'matterStates/$', CMatterStatesView.as_view(), name='matterStates'),

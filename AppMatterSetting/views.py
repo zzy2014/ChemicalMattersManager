@@ -11,7 +11,7 @@ from .models import MatterAlerts, MatterMinRemains, MatterAccessBlocks
 import json
 
 #获取userHome界面中的右侧界面
-def showRightPage(request):
+def showOneTable(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
@@ -28,25 +28,25 @@ def showRightPage(request):
     context["pageType"] = strPageType
 
     if (strPageType == "showMatterUnits"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterStates"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterTypes"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterUnits"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showPurityLevels"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showStoreRooms"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatters"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterAlerts"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterMinRemains"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
     elif (strPageType == "showMatterAccessBlocks"):
-        return render_to_response("showJsGrid.html", context)
+        return render_to_response("showOneTable.html", context)
 
 
     else:
@@ -502,7 +502,6 @@ class CMatterAccessBlocksView(Resource):
         strId = request.GET.get("id", "") 
         strMatterId = request.GET.get("EF_MatterId", "") 
         strStudentTypeId = request.GET.get("EF_StudentTypeId", "") 
-        strStudentId = request.GET.get("EF_StudentId", "") 
         arrValidItems = MatterAccessBlocks.objects.all() 
 
         if (strId != ""):
@@ -511,23 +510,18 @@ class CMatterAccessBlocksView(Resource):
             arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
         if (strStudentTypeId != "" and strStudentTypeId != "0"):
             arrValidItems = arrValidItems.filter(EF_StudentTypeId__contains = strStudentTypeId)
-        if (strStudentId != "" and strStudentId != "0"):
-            arrValidItems = arrValidItems.filter(EF_StudentId__contains = strStudentId)
 
         return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
 
     def post(self, request):
         strMatterId = request.POST.get("EF_MatterId", "") 
         strStudentTypeId = request.POST.get("EF_StudentTypeId", "") 
-        strStudentId = request.POST.get("EF_StudentId", "") 
-        newItem = MatterAccessBlocks.objects.create(EF_MatterId = strMatterId, EF_StudentTypeId = strStudentTypeId,
-                EF_StudentId = strStudentId)
+        newItem = MatterAccessBlocks.objects.create(EF_MatterId = strMatterId, EF_StudentTypeId = strStudentTypeId)
 
         jsonDict = {}
         jsonDict["id"] = newItem.id
         jsonDict["EF_MatterId"] = int(newItem.EF_MatterId)
         jsonDict["EF_StudentTypeId"] = int(newItem.EF_StudentTypeId)
-        jsonDict["EF_StudentId"] = int(newItem.EF_StudentId)
         jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
 
         return JsonResponse(jsonStr, status = 201, safe=False)
@@ -537,14 +531,12 @@ class CMatterAccessBlocksView(Resource):
         curItem = MatterAccessBlocks.objects.get(id = intCurId)
         curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
         curItem.EF_StudentTypeId = request.PUT.get("EF_StudentTypeId", "")
-        curItem.EF_StudentId = request.PUT.get("EF_StudentId", "")
         curItem.save()
 
         jsonDict = {}
         jsonDict["id"] = curItem.id
         jsonDict["EF_MatterId"] = int(curItem.EF_MatterId)
         jsonDict["EF_StudentTypeId"] = int(curItem.EF_StudentTypeId)
-        jsonDict["EF_StudentId"] = int(curItem.EF_StudentId)
         jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
 
         return JsonResponse(jsonStr, status = 200, safe=False)

@@ -74,5 +74,8 @@ class MatterMinRemains(models.Model):
 class MatterAccessBlocks(models.Model):
     EF_MatterId = models.IntegerField(default=0)
     EF_StudentTypeId = models.IntegerField(default=0)
-    EF_StudentId = models.IntegerField(default=0) #此值为空则表示此类型下的学生均无权限，否则只对该学生设置
 
+#药品不能领取配置中对应的学生
+class SubMatterAccessBlocks(models.Model):
+    EF_BlockId = models.IntegerField(default=0)
+    EF_StudentId = models.IntegerField(default=0) #学生类型下的学生

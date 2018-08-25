@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'register/$', views.register, name='register'),
     url(r'loginVerify/$', views.loginVerify, name='loginVerify'),
     url(r'userHome/$', views.userHome, name='userHome'),
-    url(r'showRightPage/$', views.showRightPage, name='showRightPage'),
+    url(r'showOneTable/$', views.showRightPage, name='showOneTable'),
     url(r'uploadCurUserImage/$', views.uploadCurUserImage, name='uploadCurUserImage'),
     url(r'^media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),
     url(r'getCurUserInfo/$', views.getCurUserInfo, name='getCurUserInfo'),
