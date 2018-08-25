@@ -88,13 +88,13 @@
         </li>
         {% endif %}
 
-        <!--只有超级管理员和管理员才可以看到-->
-        {% if userType == '超级管理员' or userType == '管理员' %}
+        <!--只有超级管理员才可以看到-->
+        {% if userType == '超级管理员' %}
         <li class="li_leftnavi">
             <a class="a_leftnavi" href="javascript:void(0)"
-                onclick="showSubNavi('ul_mattermanage')">药品管理
+                onclick="showSubNavi('ul_matterconfig')">药品配置
             </a>
-            <ul id="ul_mattermanage" class="ul_leftsubnavi">
+            <ul id="ul_matterconfig" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
                         onclick="showRightPage('AppMatterManager', 'showMatterUnits')">计量单位
@@ -125,18 +125,42 @@
                         onclick="showRightPage('AppMatterManager', 'showMatters')">所有药品
                     </a>
                 </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showRightPage('AppMatterManager', 'showMatterAlerts')">存量预警
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showRightPage('AppMatterManager', 'showMatterMinRemains')">最小剩余量
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showRightPage('AppMatterManager', 'showMatterAccessBlocks')">领取权限禁止
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
 
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">存量预警</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">领取权限</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品入库</a> </li>
+        <!--只有超级管理员和管理员才可以看到-->
+        {% if userType == '超级管理员' or userType == '管理员' %}
+        <li class="li_leftnavi">
+            <a class="a_leftnavi" href="javascript:void(0)"
+                onclick="showSubNavi('ul_mattermanage')">药品管理
+            </a>
+            <ul id="ul_mattermanage" class="ul_leftsubnavi">
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">入库</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">入库清单</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品出库</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库清单</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购</a> </li>
                 <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购清单</a> </li>
             </ul>
         </li>
         {% endif %}
+
 
         <!--只有超级管理员、教师和学生可见-->
         {% if userType == '超级管理员' or userType == '教师' or userType == '研究生' or userType == '本科生' %}

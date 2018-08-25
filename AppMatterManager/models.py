@@ -57,7 +57,7 @@ class Matters(models.Model):
 #存量预警
 class MatterAlerts(models.Model):
     EF_MatterId = models.IntegerField(default=0)
-    EF_YellowAlert = models.IntegerField(default=0)
+    EF_YellowAmount = models.IntegerField(default=0)
     EF_RedAmount = models.IntegerField(default=0)
     def __str__(self):
         return "Alert"
@@ -67,7 +67,8 @@ class MatterMinRemains(models.Model):
     EF_MatterId = models.IntegerField(default=0)
     EF_StudentTypeId = models.IntegerField(default=0)
     EF_MinRemain = models.IntegerField(default=0)
-
+    def __str__(self):
+        return "Alert"
 
 #药品不能领取的的配置
 class MatterAccessBlocks(models.Model):

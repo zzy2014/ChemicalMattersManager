@@ -41,6 +41,14 @@ def showRightPage(request):
         return render_to_response("showJsGrid.html", context)
     elif (strPageType == "showMatters"):
         return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showMatterAlerts"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showMatterMinRemains"):
+        return render_to_response("showJsGrid.html", context)
+    elif (strPageType == "showMatterAccessBlocks"):
+        return render_to_response("showJsGrid.html", context)
+
+
     else:
         return HttpResponse("")
 
@@ -359,4 +367,195 @@ class CMattersView(Resource):
 
     def to_json(self, objects):
         return serializers.serialize('json', objects)
+
+
+#药品存量预警
+class CMatterAlertsView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strMatterId = request.GET.get("EF_MatterId", "") 
+        strYellowAmount = request.GET.get("EF_YellowAmount", "") 
+        strRedAmount = request.GET.get("EF_RedAmount", "") 
+        arrValidItems = MatterAlerts.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strMatterId != "" and strMatterId != "0"):
+            arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
+        if (strYellowAmount != ""):
+            arrValidItems = arrValidItems.filter(EF_YellowAmount__contains = strYellowAmount)
+        if (strRedAmount != ""):
+            arrValidItems = arrValidItems.filter(EF_RedAmount__contains = strRedAmount)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strMatterId = request.POST.get("EF_MatterId", "") 
+        strYellowAmount = request.POST.get("EF_YellowAmount", "") 
+        strRedAmount = request.POST.get("EF_RedAmount", "") 
+        newItem = MatterAlerts.objects.create(EF_MatterId = strMatterId, EF_YellowAmount = strYellowAmount,
+                EF_RedAmount = strRedAmount)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_MatterId"] = int(newItem.EF_MatterId)
+        jsonDict["EF_YellowAmount"] = int(newItem.EF_YellowAmount)
+        jsonDict["EF_RedAmount"] = int(newItem.EF_RedAmount)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        curItem = MatterAlerts.objects.get(id = intCurId)
+        curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
+        curItem.EF_YellowAmount = request.PUT.get("EF_YellowAmount", "")
+        curItem.EF_RedAmount = request.PUT.get("EF_RedAmount", "")
+        curItem.save()
+
+        jsonDict = {}
+        jsonDict["id"] = curItem.id
+        jsonDict["EF_MatterId"] = int(curItem.EF_MatterId)
+        jsonDict["EF_YellowAmount"] = int(curItem.EF_YellowAmount)
+        jsonDict["EF_RedAmount"] = int(curItem.EF_RedAmount)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = MatterAlerts.objects.get(id = int(intTypeId))
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+
+#药品最小剩余量
+class CMatterMinRemainsView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strMatterId = request.GET.get("EF_MatterId", "") 
+        strStudentTypeId = request.GET.get("EF_StudentTypeId", "") 
+        strMinRemain = request.GET.get("EF_MinRemain", "") 
+        arrValidItems = MatterMinRemains.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strMatterId != "" and strMatterId != "0"):
+            arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
+        if (strStudentTypeId != "" and strStudentTypeId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StudentTypeId__contains = strStudentTypeId)
+        if (strMinRemain != ""):
+            arrValidItems = arrValidItems.filter(EF_MinRemain__contains = strMinRemain)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strMatterId = request.POST.get("EF_MatterId", "") 
+        strStudentTypeId = request.POST.get("EF_StudentTypeId", "") 
+        strMinRemain = request.POST.get("EF_MinRemain", "") 
+        newItem = MatterMinRemains.objects.create(EF_MatterId = strMatterId, EF_StudentTypeId = strStudentTypeId,
+                EF_MinRemain = strMinRemain)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_MatterId"] = int(newItem.EF_MatterId)
+        jsonDict["EF_StudentTypeId"] = int(newItem.EF_StudentTypeId)
+        jsonDict["EF_MinRemain"] = int(newItem.EF_MinRemain)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        curItem = MatterMinRemains.objects.get(id = intCurId)
+        curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
+        curItem.EF_StudentTypeId = request.PUT.get("EF_StudentTypeId", "")
+        curItem.EF_MinRemain = request.PUT.get("EF_MinRemain", "")
+        curItem.save()
+
+        jsonDict = {}
+        jsonDict["id"] = curItem.id
+        jsonDict["EF_MatterId"] = int(curItem.EF_MatterId)
+        jsonDict["EF_StudentTypeId"] = int(curItem.EF_StudentTypeId)
+        jsonDict["EF_MinRemain"] = int(curItem.EF_MinRemain)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = MatterMinRemains.objects.get(id = int(intTypeId))
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+
+#药品权限禁止
+class CMatterAccessBlocksView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strMatterId = request.GET.get("EF_MatterId", "") 
+        strStudentTypeId = request.GET.get("EF_StudentTypeId", "") 
+        strStudentId = request.GET.get("EF_StudentId", "") 
+        arrValidItems = MatterAccessBlocks.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strMatterId != "" and strMatterId != "0"):
+            arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
+        if (strStudentTypeId != "" and strStudentTypeId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StudentTypeId__contains = strStudentTypeId)
+        if (strStudentId != "" and strStudentId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StudentId__contains = strStudentId)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strMatterId = request.POST.get("EF_MatterId", "") 
+        strStudentTypeId = request.POST.get("EF_StudentTypeId", "") 
+        strStudentId = request.POST.get("EF_StudentId", "") 
+        newItem = MatterAccessBlocks.objects.create(EF_MatterId = strMatterId, EF_StudentTypeId = strStudentTypeId,
+                EF_StudentId = strStudentId)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_MatterId"] = int(newItem.EF_MatterId)
+        jsonDict["EF_StudentTypeId"] = int(newItem.EF_StudentTypeId)
+        jsonDict["EF_StudentId"] = int(newItem.EF_StudentId)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        curItem = MatterAccessBlocks.objects.get(id = intCurId)
+        curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
+        curItem.EF_StudentTypeId = request.PUT.get("EF_StudentTypeId", "")
+        curItem.EF_StudentId = request.PUT.get("EF_StudentId", "")
+        curItem.save()
+
+        jsonDict = {}
+        jsonDict["id"] = curItem.id
+        jsonDict["EF_MatterId"] = int(curItem.EF_MatterId)
+        jsonDict["EF_StudentTypeId"] = int(curItem.EF_StudentTypeId)
+        jsonDict["EF_StudentId"] = int(curItem.EF_StudentId)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = MatterAccessBlocks.objects.get(id = int(intTypeId))
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
+
 
