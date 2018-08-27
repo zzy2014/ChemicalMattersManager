@@ -5,10 +5,11 @@ from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CMatterUnitsView, CMatterStatesView, CPurityLevelsView, CMatterTypesView
 from .views import CStoreRoomsView, CMattersView, CMatterAlertsView, CMatterMinRemainsView
-from .views import CMatterAccessBlocksView
+from .views import CMatterAccessBlocksView, CSubMatterAccessBlocksView
 
 urlpatterns = [
     url(r'showOneTable/$', views.showOneTable, name='showOneTable'),
+    url(r'showTwoTables/$', views.showTwoTables, name='showTwoTables'),
     url(r'matterUnits/$', CMatterUnitsView.as_view(), name='matterUnits'),
     url(r'matterUnits/(?P<intTypeId>[0-9]+)/?$', CMatterUnitsView.as_view(), name='deleteMatterUnits'),
     url(r'matterStates/$', CMatterStatesView.as_view(), name='matterStates'),
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'matterMinRemains/(?P<intTypeId>[0-9]+)/?$', CMatterMinRemainsView.as_view(), name='deleteMatterMinRemains'),
     url(r'matterAccessBlocks/$', CMatterAccessBlocksView.as_view(), name='matterAccessBlocks'),
     url(r'matterAccessBlocks/(?P<intTypeId>[0-9]+)/?$', CMatterAccessBlocksView.as_view(), name='deleteMatterAccessBlocks'),
-
+    url(r'subMatterAccessBlocks/$', CSubMatterAccessBlocksView.as_view(), name='subMatterAccessBlocks'),
+    url(r'subMatterAccessBlocks/(?P<intTypeId>[0-9]+)/?$', CSubMatterAccessBlocksView.as_view(), name='deleteSubMatterAccessBlocks'),
 ]
 

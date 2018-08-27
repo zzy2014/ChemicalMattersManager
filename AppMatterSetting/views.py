@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from AppUserManager.views import getCurUser
 from .models import MatterUnits, MatterStates
 from .models import PurityLevels, MatterTypes, StoreRooms, Matters
-from .models import MatterAlerts, MatterMinRemains, MatterAccessBlocks
+from .models import MatterAlerts, MatterMinRemains, MatterAccessBlocks, SubMatterAccessBlocks
 import json
 
 #获取userHome界面中的右侧界面
@@ -49,6 +49,29 @@ def showOneTable(request):
         return render_to_response("showOneTable.html", context)
 
 
+    else:
+        return HttpResponse("")
+
+
+#获取userHome界面中的右侧界面--上下表格
+def showTwoTables(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("用户尚未登录！")
+
+    if (request.method != "POST"):
+        return HttpResponse("访问类型错误！")
+
+    strPageType = request.POST.get('pageType')
+    if (strPageType == ""):
+        return HttpResponse("页面类型无效！")
+
+    context = {} #一个字典对象
+    context["pageType"] = strPageType
+
+    if (strPageType == "showMatterAccessBlocks"):
+        return render_to_response("showTwoTables.html", context)
     else:
         return HttpResponse("")
 
@@ -529,9 +552,16 @@ class CMatterAccessBlocksView(Resource):
     def put(self, request):
         intCurId = int(request.PUT.get("id"))
         curItem = MatterAccessBlocks.objects.get(id = intCurId)
+        intOldTypeId = curItem.EF_StudentTypeId
         curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
         curItem.EF_StudentTypeId = request.PUT.get("EF_StudentTypeId", "")
         curItem.save()
+
+        #若类型改变了，则删除其相关表的信息
+        if (intOldTypeId != curItem.EF_StudentTypeId):
+            subItemList = SubMatterAccessBlocks.objects.all().filter(EF_BlockId = intCurId)
+            for index in subItemList:
+                index.delete()
 
         jsonDict = {}
         jsonDict["id"] = curItem.id
@@ -543,11 +573,73 @@ class CMatterAccessBlocksView(Resource):
 
     def delete(self, request, intTypeId):
         curItem = MatterAccessBlocks.objects.get(id = int(intTypeId))
+
+        #删除其相关表的信息
+        subItemList = SubMatterAccessBlocks.objects.all().filter(EF_BlockId = intTypeId)
+        for index in subItemList:
+            index.delete()
+
         curItem.delete()
         return HttpResponse(status = 200)
 
     def to_json(self, objects):
         return serializers.serialize('json', objects)
+
+
+#学生药品权限禁止
+class CSubMatterAccessBlocksView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strBlockId = request.GET.get("EF_BlockId", "") 
+        strStudentId = request.GET.get("EF_StudentId", "") 
+        arrValidItems = SubMatterAccessBlocks.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strBlockId != "" and strBlockId != "0"):
+            arrValidItems = arrValidItems.filter(EF_BlockId__contains = strBlockId)
+        if (strStudentId != "" and strStudentId != "0"):
+            arrValidItems = arrValidItems.filter(EF_StudentId__contains = strStudentId)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        strBlockId = request.POST.get("EF_BlockId", "") 
+        strStudentId = request.POST.get("EF_StudentId", "") 
+        newItem = SubMatterAccessBlocks.objects.create(EF_BlockId = strBlockId, EF_StudentId = strStudentId)
+
+        jsonDict = {}
+        jsonDict["id"] = newItem.id
+        jsonDict["EF_BlockId"] = int(newItem.EF_BlockId)
+        jsonDict["EF_StudentId"] = int(newItem.EF_StudentId)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        intCurId = int(request.PUT.get("id"))
+        curItem = SubMatterAccessBlocks.objects.get(id = intCurId)
+        curItem.EF_BlockId = request.PUT.get("EF_BlockId", "")
+        curItem.EF_StudentId = request.PUT.get("EF_StudentId", "")
+        curItem.save()
+
+        jsonDict = {}
+        jsonDict["id"] = curItem.id
+        jsonDict["EF_BlockId"] = int(curItem.EF_BlockId)
+        jsonDict["EF_StudentId"] = int(curItem.EF_StudentId)
+        jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
+
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = SubMatterAccessBlocks.objects.get(id = int(intTypeId))
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
 
 
 
