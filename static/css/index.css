@@ -84,7 +84,7 @@ a.a_headsubnavi{
 a.a_headsubnavi:hover{
     text-decoration:none;
     color:white;
-    background-color:blue;
+	background-color:blue;
 }
 
 /*鼠标移动到主菜单时，显示子菜单*/

@@ -5,8 +5,14 @@ function showSubNavi(subUlId)
 }
 
 //显示右侧界面, 传入类型参数
-function showOneTable(strAppName, strPageType)
+function showOneTable(curLink, strAppName, strPageType)
 {
+    //高亮此节点
+    $("a.a_leftsubnavi").css("background-color", "");
+    $("a.a_leftsubnavi").css("color", "black");
+    $(curLink).css("background-color","blue");
+    $(curLink).css("color","white");
+
     $.ajax({
         type: "POST",
         url: "/" + strAppName + "/showOneTable/",
@@ -23,8 +29,14 @@ function showOneTable(strAppName, strPageType)
 }
 
 //显示上下两级界面，
-function showTwoTables(strAppName, strPageType)
+function showTwoTables(curLink, strAppName, strPageType)
 {
+    //高亮此节点
+    $("a.a_leftsubnavi").css("background-color", "");
+    $("a.a_leftsubnavi").css("color", "black");
+    $(curLink).css("background-color","blue");
+    $(curLink).css("color","white");
+
     $.ajax({
         type: "POST",
         url: "/" + strAppName + "/showTwoTables/",
@@ -42,8 +54,14 @@ function showTwoTables(strAppName, strPageType)
 
 
 //退出登录
-function logout()
+function logout(curLink)
 {
+    //高亮此节点
+    $("a.a_leftsubnavi").css("background-color", "");
+    $("a.a_leftsubnavi").css("color", "black");
+    $(curLink).css("background-color","blue");
+    $(curLink).css("color","white");
+
     var retCode = confirm("确定要退出吗？");
 	if(!retCode)
 	    return false;
