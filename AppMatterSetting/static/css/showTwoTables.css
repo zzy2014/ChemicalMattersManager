@@ -13,3 +13,7 @@ div#jsDownGrid{
     width:100%;
     min-width:800px;
 }
+
+.highLightRow td{
+    background-color: #c4e2ff !important; 
+}

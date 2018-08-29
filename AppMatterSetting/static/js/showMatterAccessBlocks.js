@@ -43,7 +43,9 @@ $(function()
             studentTypes.push(newFields);
         });
     });
-    
+
+
+    var lastClickRow = "";
 
     $("#jsUpGrid").jsGrid({
         height: "100%",
@@ -64,6 +66,12 @@ $(function()
         //点击时显示下面表格
         rowClick: function (args)
         {
+            if (lastClickRow != "")
+                lastClickRow.removeClass("highLightRow");
+
+            lastClickRow = $("#jsUpGrid").jsGrid("rowByItem", args.item);
+            lastClickRow.addClass("highLightRow");
+
             var intBlockId = args.item.id;
             var intStudentTypeId = args.item.EF_StudentTypeId;
             ShowDownGrid(intBlockId, intStudentTypeId);
