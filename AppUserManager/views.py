@@ -214,7 +214,7 @@ def userHome(request):
 
 
 #获取userHome界面中的右侧界面
-def showRightPage(request):
+def showOneTable(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
@@ -231,8 +231,12 @@ def showRightPage(request):
     context["pageType"] = strPageType
 
     if (strPageType == "showUserInfo"):
-        context["userImageUrl"] = curUser.EF_Image.url
         context["userType"] = userDict["typeName"]
+
+        try:
+            context["userImageUrl"] = curUser.EF_Image.url
+        except ValueError :
+            context["userImageUrl"] = ""
 
         setState = UserStates.objects.filter(id = curUser.EF_UserStateId)
         if (setState.count() > 0):
@@ -299,7 +303,10 @@ def getCurUserInfo(request):
 
     jsonDict["userOffice"] = curUser.EF_OfficeAddress
     jsonDict["userPhone"] = curUser.EF_PhoneNum
-    jsonDict["userImageUrl"] = curUser.EF_Image.url
+    if (curUser.EF_Image.url != ""):
+        jsonDict["userImageUrl"] = curUser.EF_Image.url
+    else:
+        jsonDict["userImageUrl"] = "default.png"
     jsonStr = json.dumps(jsonDict, ensure_ascii=False) 
 
     return JsonResponse(jsonStr, status = 200, safe = False)

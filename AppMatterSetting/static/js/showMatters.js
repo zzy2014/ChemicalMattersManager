@@ -188,7 +188,7 @@ $(function()
         },
 
         fields: [
-            { name: "id", title: "药品ID", type: "number", width: 70, editing: false, align:"left"},
+            { name: "id", title: "药品ID", type: "number", width: 70, editing: false, align:"left", visible: false},
             { name: "EF_TypeId", title: "类别", type: "select", width:70, items: matterTypes, valueField:"id", textField:"EF_TypeName"},
             { name: "EF_StateId", title: "理化状态", type: "select", width:70, items: matterStates, valueField:"id", textField:"EF_StateName"},
             { name: "EF_PurityId", title: "纯度规格", type: "select", width:70, items: matterPurities, valueField:"id", textField:"EF_LevelName"},
@@ -198,9 +198,9 @@ $(function()
             { name: "EF_CAS", title:"CAS号", type: "text", width: 70, align:"left"},
             { name: "EF_Format", title:"化学式", type: "text", width: 70, align:"left"},
             { name: "EF_Amount", title:"数量", type: "number", width: 70, align:"left"},
-            { name: "EF_Price", title:"单价", type: "floatNumber", width: 70, align:"left"},
+            { name: "EF_Price", title:"单价", type: "floatNumber", width: 70, align:"left", visible: false},
             { name: "EF_Location", title:"位置", type: "text", width: 70, align:"left"},
-            { name: "EF_Saler", title:"供应商", type: "text", width: 70, align:"left"},
+            { name: "EF_Saler", title:"供应商", type: "text", width: 70, align:"left",  visible: false},
             { name: "EF_Note", title:"备注", type: "text", width:70, align:"left"},
             { type: "control" }
         ]

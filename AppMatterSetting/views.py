@@ -318,7 +318,11 @@ class CMattersView(Resource):
         strCas = request.POST.get("EF_CAS", "") 
         strFormat = request.POST.get("EF_Format", "") 
         strAmount = request.POST.get("EF_Amount", "") 
+        if (strAmount == ""):
+            strAmount = "0"
         strPrice = request.POST.get("EF_Price", "") 
+        if (strPrice == ""):
+            strPrice = "0.0"
         strLocation = request.POST.get("EF_Location", "") 
         strSaler = request.POST.get("EF_Saler", "") 
         strNote = request.POST.get("EF_Note", "") 
