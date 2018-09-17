@@ -18,7 +18,7 @@ $(function()
             //将后面的元素合并到前面的参数中
             var newFields = {id : item.pk};
             $.extend(newFields, item.fields);
-            matters.push(newFields);
+            userTypes.push(newFields);
         });
     });
 
@@ -100,11 +100,11 @@ $(function()
         },
 
         fields: [
-            { name: "id", title: "状态ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_StepsCount", title: "药品名", type: "number", width:70, alin:"left"},
-            { name: "EF_UserTypeId1", title:"用户类型1", type: "number", width: 100, align:"left"},
-            { name: "EF_UserTypeId2", title:"用户类型2", type: "number", width: 100, align:"left"},
-            { name: "EF_UserTypeId3", title:"用户类型3", type: "number", width: 100, align:"left"},
+            { name: "id", title: "审核流程ID", type: "number", width: 80, editing: false, align:"left"},
+            { name: "EF_StepsCount", title: "审核步数", type: "number", width:70, alin:"left"},
+            { name: "EF_UserTypeId1", title: "用户类型1", type: "select", items: userTypes, valueField:"id", textField:"EF_TypeName"},
+            { name: "EF_UserTypeId2", title: "用户类型2", type: "select", items: userTypes, valueField:"id", textField:"EF_TypeName"},
+            { name: "EF_UserTypeId3", title: "用户类型3", type: "select", items: userTypes, valueField:"id", textField:"EF_TypeName"},
             { type: "control" }
         ]
     });

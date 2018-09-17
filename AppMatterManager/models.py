@@ -2,7 +2,7 @@ from django.db import models
 
 #审核状态，通过，取消，未通过等下拉框式
 class CensoreStates(models.Model):
-    EF_States = models.CharField(max_length=30)
+    EF_StateName = models.CharField(max_length=30)
     def __str__(self):
         return self.EF_States;
 
@@ -41,6 +41,6 @@ class ImportForms(models.Model):
 
 #入库表单中的所有药品信息
 class MatterDetails(models.Model):
-    EF_ImportMatterId = models.IntegerField(default=0)
+    EF_ImportFormId = models.IntegerField(default=0)
     EF_MatterId = models.IntegerField(default=0)
     EF_MatterCount = models.IntegerField(default=0)

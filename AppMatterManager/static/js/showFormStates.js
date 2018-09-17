@@ -1,4 +1,4 @@
-//审核状态
+//单据状态
 $(function()
 {
     $("#jsGrid").jsGrid({
@@ -23,7 +23,7 @@ $(function()
 
                 $.ajax({
                     type: "GET",
-                    url: "/AppMatterManager/censoreStates/",
+                    url: "/AppMatterManager/formStates/",
                     dataType: "json",
                     data: filter
                 }).done(function(result) {
@@ -39,7 +39,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "POST",
-                    url: "/AppMatterManager/censoreStates/",
+                    url: "/AppMatterManager/formStates/",
                     dataType: "json",
                     data: newItem,
                 }).done(function(response, textStatus){
@@ -56,7 +56,7 @@ $(function()
                 var d = $.Deferred();
                 $.ajax({
                     type: "PUT",
-                    url: "/AppMatterManager/censoreStates/",
+                    url: "/AppMatterManager/formStates/",
                     dataType: "json",
                     data: curItem,
                 }).done(function(response, textStatus){
@@ -72,7 +72,7 @@ $(function()
             deleteItem: function(curItem){
                 return $.ajax({
                     type: "DELETE",
-                    url: "/AppMatterManager/censoreStates/" + curItem.id,
+                    url: "/AppMatterManager/formStates/" + curItem.id,
                 });
             }
         },

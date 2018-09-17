@@ -1,0 +1,30 @@
+div#jsGrid{
+    position:relative;
+    height:90%;
+    min-height:600px;
+    width:100%;
+    min-width:800px;
+}
+
+div#div_operate{
+    position:relative;
+    height:10%;
+    min-height:60px;
+    width:100%;
+    min-width:800px;
+}
+
+button#btn_load{
+    position:relative;
+    left:20%;
+}
+
+button#btn_cancel{
+    position:relative;
+    left:30%;
+}
+
+button#btn_submit{
+    position:relative;
+    left:40%;
+}
