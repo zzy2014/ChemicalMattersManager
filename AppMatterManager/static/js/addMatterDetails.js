@@ -12,6 +12,27 @@ $(function()
         return;
     });
 
+    var matters = [];  //数组用于存储从数据库中获取的信息
+    matters.push({"id":0});
+
+    //从数据库获取所有药品
+    $.ajax({
+        type: "GET",
+        url: "/AppMatterSetting/matters/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            matters.push(newFields);
+        });
+    });
+
 
     $("#jsGrid").jsGrid({
         height: "100%",
@@ -92,7 +113,7 @@ $(function()
         fields: [
             { name: "id", title: "入库药品信息ID", type: "number", width: 80, editing: false, align:"left"},
             { name: "EF_ImportFormId", title: "入库单ID", type: "number", width: 80, editing: false, visible:false, align:"left"},
-            { name: "EF_MatterId", title: "药品ID", type: "text", width:80, editing:true, align:"left"},
+            { name: "EF_MatterId", title: "药品名", type: "select", width:70, items: matters, valueField:"id", textField:"EF_Name"},
             { name: "EF_MatterCount", title: "药品数量", type: "number", width:80, editing:true, align:"left"},
             { type: "control" }
         ]
