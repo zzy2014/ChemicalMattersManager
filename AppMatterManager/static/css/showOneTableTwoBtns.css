@@ -19,12 +19,13 @@ button#btn_load{
     left:20%;
 }
 
-button#btn_cancel{
+button#btn_submit{
     position:relative;
     left:30%;
 }
 
-button#btn_submit{
+button#btn_cancel{
     position:relative;
     left:40%;
 }
+

@@ -33,6 +33,41 @@ $(function()
         });
     });
 
+    var purities = [];  //数组用于存储从数据库中获取的信息
+    purities.push({"id":0, "EF_LevelName":""});
+
+    //从数据库获取所有纯度规格
+    $.ajax({
+        type: "GET",
+        url: "/AppMatterSetting/purityLevels/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            purities.push(newFields);
+        });
+    });
+
+    //纯度规格字典
+    var purityDict = {};
+    for (var nIndex = 0; nIndex < purities.length; nIndex++)
+    {
+        purityDict[ purities[nIndex].id ] = purities[nIndex].EF_LevelName;
+    }
+
+    //生成材料ID对应的纯度规格名
+    var mattersPurityDict = {};
+    for (var nIndex = 0; nIndex < matters.length; nIndex++)
+    {
+        mattersPurityDict[ matters[nIndex].id ] = purityDict[ matters[nIndex].EF_PurityId ];
+    }
+
 
     $("#jsGrid").jsGrid({
         height: "100%",
@@ -114,6 +149,16 @@ $(function()
             { name: "id", title: "入库药品信息ID", type: "number", width: 80, editing: false, align:"left"},
             { name: "EF_ImportFormId", title: "入库单ID", type: "number", width: 80, editing: false, visible:false, align:"left"},
             { name: "EF_MatterId", title: "药品名", type: "select", width:70, items: matters, valueField:"id", textField:"EF_Name"},
+            {
+                headerTemplate: function() 
+                {
+                       return "药品规格";
+                },
+                itemTemplate: function(value, item)
+                {
+                    return mattersPurityDict[item.EF_MatterId]
+                }
+            },
             { name: "EF_MatterCount", title: "药品数量", type: "number", width:80, editing:true, align:"left"},
             { type: "control" }
         ]
@@ -121,3 +166,20 @@ $(function()
 
 });
 
+
+function importForm()
+{
+    alert("import");
+}
+
+function upLoadForm()
+{
+    //判断审核模式
+    //显示审核人员
+    alert("hello");
+}
+
+function cancelForm()
+{
+    alert("cancel");
+}
