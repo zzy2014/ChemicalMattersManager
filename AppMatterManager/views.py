@@ -5,6 +5,7 @@ from simple_rest import Resource #第三方的小类
 from django.core import serializers #导入序列化
 from django.core.files.base import ContentFile
 import json
+import datetime
 from AppUserManager.views import getCurUser
 from AppMatterSetting.models import MatterUnits, MatterStates
 from AppMatterSetting.models import PurityLevels, MatterTypes, StoreRooms, Matters
@@ -208,25 +209,6 @@ class CFormStatesView(Resource):
     def to_json(self, objects):
         return serializers.serialize('json', objects)
 
-
-#获取最大的ImportForm主键
-def getMaxImportFormId(request):
-    userDict = getCurUser(request)
-    curUser = userDict["curUser"]
-    if (curUser == ""):
-        return HttpResponse("用户尚未登录！")
-
-    if (request.method != "GET"):
-        return HttpResponse("访问类型错误！")
-
-    arrValidItems = ImportForms.objects.all().order_by("id")
-    intLen = len(arrValidItems)
-    if (intLen == 0):
-        return JsonResponse({"maxId":1})
-    else:
-        return JsonResponse({"maxId":arrValidItems[intLen-1].id})
-
-
 #从MatterDetails中删除所有ImportFormId=0的临时数据
 def delTempMatterDetails(request):
     userDict = getCurUser(request)
@@ -300,4 +282,31 @@ class CAddMatterDetailsView(Resource):
 
     def to_json(self, objects):
         return serializers.serialize('json', objects)
+
+
+def upLoadImportForm(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("当前用户不存在或未登录！")
+
+    #获取当前时间，并格式化为数据库中格式
+    timeNow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    #创建一个新的入库单
+    newForm = ImportForms.objects.create(EF_UserId = userDict["id"], EF_FormStateId = "0", EF_Time = timeNow)
+
+    #更新临时的药品明细列表中的入库单ID
+    arrValidItems = MatterDetails.objects.all().filter(id = newForm.id)
+    for item in arrValidItems:
+        item.EF_ImportFormId = 0
+        item.save()
+
+
+
+
+    return HttpResponse(newForm.id)
+    
+
+
 

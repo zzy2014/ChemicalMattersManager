@@ -17,4 +17,4 @@ The real manager of chemical labs can organize all kinds of matters easily.
 2. python manage.py runserver 0.0.0.0:8000;
 3. open "127.0.0.1:8000/index" in your browser.
 # Alert
-1. we are busily developing it now, and we have accomplished about 50% of the total workload. 
+1. we are busily developing it now, and we have accomplished about 30% of the total workload. 

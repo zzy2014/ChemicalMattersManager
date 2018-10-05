@@ -24,7 +24,6 @@ class FormStates(models.Model):
 class ImportForms(models.Model):
     EF_UserId = models.IntegerField(default=0)
     EF_FormStateId = models.IntegerField(default=0)
-    EF_MatterDetailId = models.IntegerField(default=0)
     EF_Time = models.DateTimeField(default=0)
     #以下为审核的流程和结果
     EF_CensorePatternId = models.IntegerField(default=0)

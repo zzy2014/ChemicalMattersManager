@@ -15,9 +15,9 @@ urlpatterns = [
     url(r'censorePatterns/(?P<intTypeId>[0-9]+)/?$', CCensorePatternsView.as_view(), name='deleteCensorePatterns'),
     url(r'formStates/$', CFormStatesView.as_view(), name='formStates'),
     url(r'formStates/(?P<intTypeId>[0-9]+)/?$', CFormStatesView.as_view(), name='deleteFormStates'),
-    url(r'getMaxImportFormId/$', views.getMaxImportFormId, name='getMaxImportFormId'),
     url(r'delTempMatterDetails/$', views.delTempMatterDetails, name='delTempMatterDetails'),
     url(r'addMatterDetails/$', CAddMatterDetailsView.as_view(), name='addMatterDetails'),
     url(r'addMatterDetails/(?P<intTypeId>[0-9]+)/?$', CAddMatterDetailsView.as_view(), name='deleteAddMatterDetails'),
+    url(r'upLoadImportForm/$', views.upLoadImportForm, name='upLoadImportForm'),
 ]
 

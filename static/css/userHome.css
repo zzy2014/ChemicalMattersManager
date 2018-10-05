@@ -61,7 +61,7 @@ a.a_leftnavi:hover{
 /*头部的次级导航栏*/
 ul.ul_leftsubnavi{
     position:relative;
-	z-index:999999; /*显示在最上层*/
+	z-index:99999; /*显示在最上层*/
   	display:none; /*子菜单初始状态时不显示*/
 	border-bottom: 2px solid #ef3dba;
     background-color:white;
