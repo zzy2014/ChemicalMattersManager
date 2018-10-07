@@ -6,6 +6,7 @@ from django.core import serializers #导入序列化
 from django.core.files.base import ContentFile
 import json
 import datetime
+from AppUserManager.models import UserTypes, SuperAdministrators, Administrators, ChiefCollegeLeaders, CollegeLeaders, Teachers
 from AppUserManager.views import getCurUser
 from AppMatterSetting.models import MatterUnits, MatterStates
 from AppMatterSetting.models import PurityLevels, MatterTypes, StoreRooms, Matters
@@ -296,16 +297,62 @@ def upLoadImportForm(request):
     #创建一个新的入库单
     newForm = ImportForms.objects.create(EF_UserId = userDict["id"], EF_FormStateId = "0", EF_Time = timeNow)
 
+
     #更新临时的药品明细列表中的入库单ID
+    #并检查是否存在有毒，燃，爆的类型
+    bIsDangerous = False;
     arrValidItems = MatterDetails.objects.all().filter(id = newForm.id)
     for item in arrValidItems:
-        item.EF_ImportFormId = 0
+        item.EF_ImportFormId = newForm.id
         item.save()
+        if (not bIsDangerous):
+            curMatter = Matters.objects.get(id = item.EF_MatterId)
+            print(curMatter.EF_TypeId)
+            bIsDangerous = (curMatter.EF_TypeId == 1)
 
+    #确定审核模型ID
+    arrCensoreTypeIds = UserTypes.objects.all();
+    if (bIsDangerous):
+        arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "院长")
+    else:
+        arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "副院长")
 
+ 
+    arrCensorePatterns = CensorePatterns.objects.all();
+    arrCensorePatterns = arrCensorePatterns.filter(EF_StepsCount = len(arrCensoreTypeIds))
+    nIndex = 0
+    for item in arrCensoreTypeIds:
+        nIndex += 1
+        strField = "EF_UserTypeId%d" %(nIndex)
+        strCondition = {strField:item.id}
+        arrCensorePatterns = arrCensorePatterns.filter(**strCondition)
 
+        
+    #设置入库单的审核ID
+    if (len(arrCensorePatterns) < 1):
+        return HttpResponse("没有审核人！")
 
-    return HttpResponse(newForm.id)
+    newForm.EF_CensorePatternId = arrCensorePatterns[0].id
+    newForm.save();
+
+    #获取第一个审核人
+    arrCensores = []
+    strFirstCensoreType = UserTypes.objects.get(id = arrCensoreTypeIds[0].id).EF_TypeName
+    if (strFirstCensoreType == SuperAdministrators.Type):
+        arrCensores = SuperAdministrators.objects.all()
+    elif (strFirstCensoreType == Administrators.Type):
+        arrCensores = Administrators.objects.all()
+    elif (strFirstCensoreType == ChiefCollegeLeaders.Type):
+        arrCensores = ChiefCollegeLeaders.objects.all()
+    elif (strFirstCensoreType == CollegeLeaders.Type):
+        arrCensores = CollegeLeaders.objects.all()
+    elif (strFirstCensoreType == Teachers.Type):
+        arrCensores = Teachers.objects.all()
+
+    context = {} #一个字典对象
+    context['censoreTypeName'] =  strFirstCensoreType#传入模板中的变量
+    context['arrCensores'] = arrCensores #传入模板中的变量
+    return render_to_response("censoreOption.html", context)
     
 
 

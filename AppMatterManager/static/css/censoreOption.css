@@ -1,0 +1,44 @@
+table#table_censoreOption{
+    position:relative;
+    height:100%;
+    width:100%;
+    border:1px solid black;
+}
+
+select#select_censoreOption{
+    position:relative;
+    height:40%;
+    width:80%;
+}
+
+button#btnOk_censoreOption{
+    position:relative;
+    height:40%;
+    width:50%;
+}
+
+button#btnCancel_censoreOption{
+    position:relative;
+    height:40%;
+    width:50%;
+}
+
+td#td_censoreType
+{
+    text-align:left;
+}
+
+td#td_censores
+{
+    text-align:right;
+}
+
+td#td_censoreOk
+{
+    text-align:center;
+}
+
+td#td_censoreCancel
+{
+    text-align:center;
+}
