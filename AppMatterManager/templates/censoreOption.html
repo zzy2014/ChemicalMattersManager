@@ -4,19 +4,20 @@
 <table id = "table_censoreOption">
   <tr id = "tr_nameCensoreOption">
     <td id = "td_censoreType">
-            {{ censoreTypeName }}：
+        &nbsp &nbsp &nbsp{{ censoreTypeName }}：
     </td>
     <td id = "td_censores">
         <select id = "select_censoreOption">
             {% for item in arrCensores%}
-            <option value ={{ item.EF_UserName}}>{{ item.EF_UserName}}     </option>
+            <option value ={{ item.EF_UserName}}>{{ item.EF_UserName}}</option>
             {% endfor %}
         </select>
+        &nbsp &nbsp &nbsp
     </td>
   </tr>
   <tr id = "tr_btnCensoreOption">
     <td id = "td_censoreOk">
-      <button id = "btnOk_censoreOption" type="button" onclick="confirmCensore()">OK</button>
+      <button id = "btnOk_censoreOption" type="button" onclick="confirmCensore()">Confirm</button>
     </td>
     <td id = "td_censoreCancel">
       <button id = "btnCancel_censoreOption" type="button" onclick="cancelCensore()">Cancel</button>

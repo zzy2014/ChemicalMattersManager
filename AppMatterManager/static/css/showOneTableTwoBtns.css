@@ -21,15 +21,11 @@ button#btn_load{
 
 button#btn_submit{
     position:relative;
-    left:30%;
-}
-
-button#btn_cancel{
-    position:relative;
     left:40%;
 }
 
 div#div_popWindow{
+    display: none; 
     position:absolute;
     z-index:999999; 
     width:30%; 

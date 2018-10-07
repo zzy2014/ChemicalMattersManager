@@ -87,8 +87,9 @@ $(function()
 
         controller: {
             loadData: function(filter) {
-                var d = $.Deferred();
+                filter["EF_ImportFormId"] = 0;
 
+                var d = $.Deferred();
                 $.ajax({
                     type: "GET",
                     url: "/AppMatterManager/addMatterDetails/",
@@ -104,6 +105,7 @@ $(function()
             },
 
             insertItem: function(newItem) {
+                newItem["EF_ImportFormId"] = 0;
                 var d = $.Deferred();
                 $.ajax({
                     type: "POST",
@@ -121,6 +123,7 @@ $(function()
             },
 
             updateItem: function(curItem){
+                curItem["EF_ImportFormId"] = 0;
                 var d = $.Deferred();
                 $.ajax({
                     type: "PUT",
@@ -187,13 +190,9 @@ function upLoadForm()
     });
 
     $("#div_popWindow").html(tmpHtml);
+    $("#div_popWindow").css('display','block');
     $("#div_block").css('display','block');
 
     //展示审核流程界面
     //显示审核人员
-}
-
-function cancelForm()
-{
-    alert("cancel");
 }

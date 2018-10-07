@@ -59,7 +59,7 @@ def showTwoTables(request):
     context = {} #一个字典对象
     context["pageType"] = strPageType
 
-    if (strPageType == "showMatterAccessBlocks"):
+    if (strPageType == "showImportForms"):
         return render_to_response("showTwoTables.html", context)
     else:
         return HttpResponse("")
@@ -226,15 +226,15 @@ class CAddMatterDetailsView(Resource):
 
     def get(self, request):
         strId = request.GET.get("id", "") 
-        strFormId = "0" 
+        strFormId = request.GET.get("EF_ImportFormId", "") 
         strMatterId = request.GET.get("EF_MatterId", "") 
         strCount = request.GET.get("EF_MatterCount", "") 
         arrValidItems = MatterDetails.objects.all() 
 
-        arrValidItems = arrValidItems.filter(EF_ImportFormId__contains = strFormId)
-
         if (strId != ""):
             arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strFormId != ""):
+            arrValidItems = arrValidItems.filter(EF_ImportFormId = strFormId)
         if (strMatterId != "" and strMatterId != "0"):
             arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
         if (strCount != ""):
@@ -243,7 +243,7 @@ class CAddMatterDetailsView(Resource):
         return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
 
     def post(self, request):
-        strFormId = 0 
+        strFormId = request.POST.get("EF_ImportFormId", "") 
         strMatterId = request.POST.get("EF_MatterId", "") 
         strCount = request.POST.get("EF_MatterCount", "") 
 
@@ -252,7 +252,7 @@ class CAddMatterDetailsView(Resource):
 
         jsonDict = {}
         jsonDict["id"] = newItem.id
-        jsonDict["EF_ImportFormId"] = strFormId 
+        jsonDict["EF_ImportFormId"] = int(strFormId)
         jsonDict["EF_MatterId"] = int(strMatterId)
         jsonDict["EF_MatterCount"] = int(strCount)
         jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
@@ -262,7 +262,7 @@ class CAddMatterDetailsView(Resource):
     def put(self, request):
         intCurId = int(request.PUT.get("id"))
         curItem = MatterDetails.objects.get(id = intCurId)
-        curItem.EF_ImportFormId = 0
+        curItem.EF_ImportFormId = int(request.PUT.get("EF_ImportFormId"))
         curItem.EF_MatterId= request.PUT.get("EF_MatterId", "")
         curItem.EF_MatterCount= request.PUT.get("EF_MatterCount", "")
         curItem.save()
@@ -301,14 +301,14 @@ def upLoadImportForm(request):
     #更新临时的药品明细列表中的入库单ID
     #并检查是否存在有毒，燃，爆的类型
     bIsDangerous = False;
-    arrValidItems = MatterDetails.objects.all().filter(id = newForm.id)
+    arrValidItems = MatterDetails.objects.all().filter(EF_ImportFormId = 0)
     for item in arrValidItems:
         item.EF_ImportFormId = newForm.id
         item.save()
         if (not bIsDangerous):
             curMatter = Matters.objects.get(id = item.EF_MatterId)
             print(curMatter.EF_TypeId)
-            bIsDangerous = (curMatter.EF_TypeId == 1)
+            bIsDangerous = (curMatter.EF_TypeId != 1)
 
     #确定审核模型ID
     arrCensoreTypeIds = UserTypes.objects.all();
@@ -317,7 +317,6 @@ def upLoadImportForm(request):
     else:
         arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "副院长")
 
- 
     arrCensorePatterns = CensorePatterns.objects.all();
     arrCensorePatterns = arrCensorePatterns.filter(EF_StepsCount = len(arrCensoreTypeIds))
     nIndex = 0
@@ -353,7 +352,76 @@ def upLoadImportForm(request):
     context['censoreTypeName'] =  strFirstCensoreType#传入模板中的变量
     context['arrCensores'] = arrCensores #传入模板中的变量
     return render_to_response("censoreOption.html", context)
-    
 
 
+#入库清单
+class CImportFormsView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strUserId = request.GET.get("EF_UserId", "") 
+        strFormStateId = request.GET.get("EF_FormStateId", "") 
+        strTime = request.GET.get("EF_Time", "") 
+        strCensore1 = request.GET.get("EF_UserId1", "") 
+        strCensoreState1 = request.GET.get("EF_CensoreStateId1", "") 
+        strCensoreComment1 = request.GET.get("EF_CensoreComment1", "") 
+        strCensore2 = request.GET.get("EF_UserId2", "") 
+        strCensoreState2 = request.GET.get("EF_CensoreStateId2", "") 
+        strCensoreComment2 = request.GET.get("EF_CensoreComment2", "") 
+        strCensore3 = request.GET.get("EF_UserId3", "") 
+        strCensoreState3 = request.GET.get("EF_CensoreStateId3", "") 
+        strCensoreComment3 = request.GET.get("EF_CensoreComment3", "") 
+
+        arrValidItems = ImportForms.objects.all() 
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strUserId != ""):
+            arrValidItems = arrValidItems.filter(EF_UserId__contains = strUserId)
+        if (strFormStateId != ""):
+            arrValidItems = arrValidItems.filter(EF_FormStateId__contains = strFormStateId)
+        if (strTime != ""):
+            arrValidItems = arrValidItems.filter(EF_Time__contains = strTime)
+        if (strCensore1 != ""):
+            arrValidItems = arrValidItems.filter(EF_UserId1__contains = strCensore1)
+        if (strCensoreState1 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreStateId1__contains = strCensoreState1)
+        if (strCensoreComment1 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreComment1__contains = strCensoreComment1)
+        if (strCensore2 != ""):
+            arrValidItems = arrValidItems.filter(EF_UserId2__contains = strCensore2)
+        if (strCensoreState2 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreStateId2__contains = strCensoreState2)
+        if (strCensoreComment2 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreComment2__contains = strCensoreComment2)
+        if (strCensore3 != ""):
+            arrValidItems = arrValidItems.filter(EF_UserId3__contains = strCensore3)
+        if (strCensoreState3 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreStateId3__contains = strCensoreState3)
+        if (strCensoreComment3 != ""):
+            arrValidItems = arrValidItems.filter(EF_CensoreComment3__contains = strCensoreComment3)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        #不可修改
+        return JsonResponse(jsonStr, status = 201, safe=False)
+
+    def put(self, request):
+        #新增
+        return JsonResponse(jsonStr, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        curItem = ImportForms.objects.get(id = int(intTypeId))
+        
+        #删除相对应的药品明细
+        subItemList = MatterDetails.objects.all().filter(EF_ImportFormId = intTypeId)
+        for index in subItemList:
+            index.delete()
+
+        curItem.delete()
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
 

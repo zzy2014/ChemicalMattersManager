@@ -4,7 +4,7 @@ from django.conf import settings
 from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CCensoreStatesView, CCensorePatternsView, CFormStatesView
-from .views import CAddMatterDetailsView
+from .views import CAddMatterDetailsView, CImportFormsView
 
 urlpatterns = [
     url(r'showOneTable/$', views.showOneTable, name='showOneTable'),
@@ -19,5 +19,7 @@ urlpatterns = [
     url(r'addMatterDetails/$', CAddMatterDetailsView.as_view(), name='addMatterDetails'),
     url(r'addMatterDetails/(?P<intTypeId>[0-9]+)/?$', CAddMatterDetailsView.as_view(), name='deleteAddMatterDetails'),
     url(r'upLoadImportForm/$', views.upLoadImportForm, name='upLoadImportForm'),
+    url(r'importForms/$', CImportFormsView.as_view(), name='importForms'),
+    url(r'importForms/(?P<intTypeId>[0-9]+)/?$', CImportFormsView.as_view(), name='deleteImportForms'),
 ]
 
