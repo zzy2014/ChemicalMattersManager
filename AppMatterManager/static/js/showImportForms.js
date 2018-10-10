@@ -1,7 +1,65 @@
 //入库清单
 $(function()
 {
-     var lastClickRow = "";
+    //从数据库获取所有用户类型
+    var userTypes = [];
+    $.ajax({
+        type: "GET",
+        url: "/AppUserManager/userTypes/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            userTypes.push(newFields);
+        });
+    });
+
+    //获取所有的单据状态
+    var formStates = [];
+    $.ajax({
+        type: "GET",
+        url: "/AppMatterManager/formStates/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            formStates.push(newFields);
+        });
+    });
+
+    //获取所有的审核状态
+    var censoreStates = [];
+    $.ajax({
+        type: "GET",
+        url: "/AppMatterManager/censoreStates/",
+        dataType: "json",
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        //对result数组中每个元素执行function
+        $.map(result, function(item)
+        {
+            //将后面的元素合并到前面的参数中
+            var newFields = {id : item.pk};
+            $.extend(newFields, item.fields);
+            censoreStates.push(newFields);
+        });
+    });
+
+
+    var lastClickRow = "";
 
     $("#jsUpGrid").jsGrid({
         height: "100%",
@@ -70,18 +128,126 @@ $(function()
         },
 
         fields: [
-            { name: "id", title: "清单ID", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_UserId", title: "入库用户", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_FormStateId", title: "单据状态", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "入库用户类型";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curUserType =$.grep(userTypes,function(tmp){ return tmp.id == item.EF_UserTypeId });
+                    if (curUserType.length > 0)
+                        return curUserType[0].EF_TypeName;
+                }
+            },
+
+            {
+                headerTemplate: function() 
+                {
+                       return "入库用户";
+                },
+                itemTemplate: function(value, item)
+                {
+                    //获取用户类型
+                    var curUserType =$.grep(userTypes,function(tmp){ return tmp.id == item.EF_UserTypeId });
+                    if (curUserType.length < 1)
+                        return "";
+
+                    var strUrl = "/AppUserManager/"
+                    if (curUserType[0].EF_TypeName == "超级管理员")
+                        strUrl += "superAdministrators/";
+                    else if (curUserType[0].EF_TypeName == "管理员")
+                        strUrl += "administrators/";
+                    else if (curUserType[0].EF_TypeName == "教师")
+                        strUrl += "teachers/";
+                    else if (curUserType[0].EF_TypeName == "院长")
+                        strUrl += "chiefCollegeLeaders/";
+                    else if (curUserType[0].EF_TypeName == "副院长")
+                        strUrl += "collegeLeaders/";
+                    else if (curUserType[0].EF_TypeName == "学生")
+                        strUrl += "students/";
+
+
+                    //从数据库获取相应用户
+                    var users = [];
+                    $.ajax({
+                        type: "GET",
+                        url: strUrl,
+                        dataType: "json",
+                        async :false,  //改为同步执行，否则不能对外部变量附值
+                    }).done(function(result)
+                    {
+                        //对result数组中每个元素执行function
+                        $.map(result, function(item)
+                        {
+                            //将后面的元素合并到前面的参数中
+                            var newFields = {id : item.pk};
+                            $.extend(newFields, item.fields);
+                            users.push(newFields);
+                        });
+                    });
+
+                    var curUser =$.grep(users,function(tmp){ return tmp.id == item.EF_UserId });
+                    if (curUser.length > 0)
+                        return curUser[0].EF_UserName;
+                }
+            },
+
+            {
+                headerTemplate: function() 
+                {
+                       return "单据状态";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curformState =$.grep(formStates,function(tmp){ return tmp.id == item.EF_FormStateId });
+                    if (curformState.length > 0)
+                        return curformState[0].EF_StateName;
+                }
+            },
+
             { name: "EF_Time", title: "创建时间", type: "text", width: 80, editing: false, align:"left"},
             { name: "EF_UserId1", title: "审核人1", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_CensoreStateId1", title: "审核状态1", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "审核状态1";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId1 });
+                    if (curcensoreState.length > 0)
+                        return curcensoreState[0].EF_StateName;
+                }
+            },
             { name: "EF_CensoreComment1", title: "审核明细1", type: "number", width: 80, editing: false, align:"left"},
             { name: "EF_UserId2", title: "审核人2", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_CensoreStateId2", title: "审核状态2", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "审核状态2";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId2 });
+                    if (curcensoreState.length > 0)
+                        return curcensoreState[0].EF_StateName;
+                }
+            },
             { name: "EF_CensoreComment2", title: "审核明细2", type: "number", width: 80, editing: false, align:"left"},
             { name: "EF_UserId3", title: "审核人3", type: "number", width: 80, editing: false, align:"left"},
-            { name: "EF_CensoreStateId3", title: "审核状态3", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "审核状态3";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId3 });
+                    if (curcensoreState.length > 0)
+                        return curcensoreState[0].EF_StateName;
+                }
+            },
             { name: "EF_CensoreComment3", title: "审核明细3", type: "number", width: 80, editing: false, align:"left"},
 
             { type: "control" }
@@ -200,7 +366,6 @@ function ShowDownGrid(intImportFormId)
         },
 
         fields: [
-            { name: "id", title: "入库药品信息ID", type: "number", width: 80, editing: false, align:"left"},
             { name: "EF_ImportFormId", title: "入库单ID", type: "number", width: 80, editing: false, visible:false, align:"left"},
             { name: "EF_MatterId", title: "药品名", type: "select", width:70, items: matters, valueField:"id", textField:"EF_Name"},
             {

@@ -295,7 +295,8 @@ def upLoadImportForm(request):
     timeNow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     #创建一个新的入库单
-    newForm = ImportForms.objects.create(EF_UserId = userDict["id"], EF_FormStateId = "0", EF_Time = timeNow)
+    newForm = ImportForms.objects.create(EF_UserTypeId = userDict["typeId"], EF_UserId = userDict["id"],
+            EF_FormStateId = "1", EF_Time = timeNow)
 
 
     #更新临时的药品明细列表中的入库单ID
@@ -359,6 +360,7 @@ class CImportFormsView(Resource):
 
     def get(self, request):
         strId = request.GET.get("id", "") 
+        strUserTypeId = request.GET.get("EF_UserTypeId", "") 
         strUserId = request.GET.get("EF_UserId", "") 
         strFormStateId = request.GET.get("EF_FormStateId", "") 
         strTime = request.GET.get("EF_Time", "") 
@@ -376,6 +378,8 @@ class CImportFormsView(Resource):
 
         if (strId != ""):
             arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strUserTypeId != ""):
+            arrValidItems = arrValidItems.filter(EF_UserTypeId__contains = strUserTypeId)
         if (strUserId != ""):
             arrValidItems = arrValidItems.filter(EF_UserId__contains = strUserId)
         if (strFormStateId != ""):

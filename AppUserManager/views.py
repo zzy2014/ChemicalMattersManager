@@ -192,9 +192,16 @@ def getCurUser(request):
     elif (arrTypeIndex[0] == "Student"):
         curUser = Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
 
+    #获取用户类型ID
+    intUserTypeId = 0
+    arrAllTypes = UserTypes.objects.all().filter(EF_TypeName = arrTypeIndex[2])
+    if (len(arrAllTypes) > 0):
+        intUserTypeId = arrAllTypes[0].id
+
     retDict["id"] = int(intUserId)
     retDict["type"] = arrTypeIndex[0]
     retDict["subType"] = arrTypeIndex[1]
+    retDict["typeId"] = intUserTypeId
     retDict["typeName"] = arrTypeIndex[2]
     retDict["curUser"] = curUser
     return retDict 
@@ -468,6 +475,48 @@ class CStudentTypesView(Resource):
 
     def to_json(self, objects):
         return serializers.serialize('json', objects)
+
+
+#超级管理员接口
+class CSuperAdministratorsView(Resource):
+
+    def get(self, request):
+        strId = request.GET.get("id", "") 
+        strUserStateId = request.GET.get("EF_UserStateId", "") 
+        strUserName = request.GET.get("EF_UserName", "") 
+        strPassWord = request.GET.get("EF_PassWord", "") 
+        strOfficeAddress = request.GET.get("EF_OfficeAddress", "") 
+        strPhoneNum = request.GET.get("EF_PhoneNum", "") 
+        arrAllItems = SuperAdministrators.objects.all()
+        arrValidItems = arrAllItems
+
+        if (strId != ""):
+            arrValidItems = arrValidItems.filter(id__contains = int(strId))
+        if (strUserStateId != "" and strUserStateId != "0"):
+            arrValidItems = arrValidItems.filter(EF_UserStateId__contains = int(strUserStateId))
+        if (strUserName != ""):
+            arrValidItems = arrValidItems.filter(EF_UserName__contains = strUserName)
+        if (strPassWord != ""):
+            arrValidItems = arrValidItems.filter(EF_PassWord__contains = strPassWord)
+        if (strOfficeAddress != ""):
+            arrValidItems = arrValidItems.filter(EF_OfficeAddress__contains = strOfficeAddress)
+        if (strPhoneNum != ""):
+            arrValidItems = arrValidItems.filter(EF_PhoneNum__contains = strPhoneNum)
+
+        return HttpResponse(self.to_json(arrValidItems), content_type = 'application/json', status = 200)
+
+    def post(self, request):
+        return JsonResponse({"ret":1}, status = 201, safe=False)
+
+    def put(self, request):
+        return JsonResponse({"ret":1}, status = 200, safe=False)
+
+    def delete(self, request, intTypeId):
+        return HttpResponse(status = 200)
+
+    def to_json(self, objects):
+        return serializers.serialize('json', objects)
+
 
 #管理员接口
 class CAdministratorsView(Resource):

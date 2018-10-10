@@ -22,6 +22,7 @@ class FormStates(models.Model):
 
 #入库表单
 class ImportForms(models.Model):
+    EF_UserTypeId = models.IntegerField(default=0)
     EF_UserId = models.IntegerField(default=0)
     EF_FormStateId = models.IntegerField(default=0)
     EF_Time = models.DateTimeField(default=0)

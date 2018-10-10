@@ -4,8 +4,8 @@ from django.conf import settings
 from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CUserTypesView, CUserStatesView, CStudentTypesView
-from .views import CAdministratorsView, CChiefCollegeLeadersView, CCollegeLeadersView
-from .views import CTeachersView, CStudentsView, CFinancesView
+from .views import CSuperAdministratorsView, CAdministratorsView, CChiefCollegeLeadersView
+from .views import CCollegeLeadersView, CTeachersView, CStudentsView, CFinancesView
 
 urlpatterns = [
     url(r'register/$', views.register, name='register'),
@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'userStates/(?P<intTypeId>[0-9]+)/?$', CUserStatesView.as_view(), name='deleteUserState'),
     url(r'studentTypes/$', CStudentTypesView.as_view(), name='studentTypes'),
     url(r'studentTypes/(?P<intTypeId>[0-9]+)/?$', CStudentTypesView.as_view(), name='deleteStudentType'),
+    url(r'superAdministrators/$', CSuperAdministratorsView.as_view(), name='superAdministrators'),
     url(r'administrators/$', CAdministratorsView.as_view(), name='administrators'),
     url(r'administrators/(?P<intTypeId>[0-9]+)/?$', CAdministratorsView.as_view(), name='deleteAdministrators'),
     url(r'chiefCollegeLeaders/$', CChiefCollegeLeadersView.as_view(), name='chiefCollegeLeaders'),
