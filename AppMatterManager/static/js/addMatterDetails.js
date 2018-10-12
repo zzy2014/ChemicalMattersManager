@@ -178,10 +178,10 @@ function importForm()
 function upLoadForm()
 {
     var tmpHtml = "<p>访问服务器出错！</p>";
-    //设置审核模式，并返回弹出的html
+    //获取审核模式，并返回弹出的html
     $.ajax({
         type: "GET",
-        url: "/AppMatterManager/upLoadImportForm/",
+        url: "/AppMatterManager/calculateCensorePattern/",
         dataType: "text",
         async :false,  //改为同步执行，否则不能对外部变量附值
     }).done(function(result)
@@ -192,7 +192,4 @@ function upLoadForm()
     $("#div_popWindow").html(tmpHtml);
     $("#div_popWindow").css('display','block');
     $("#div_block").css('display','block');
-
-    //展示审核流程界面
-    //显示审核人员
 }

@@ -18,8 +18,9 @@ urlpatterns = [
     url(r'delTempMatterDetails/$', views.delTempMatterDetails, name='delTempMatterDetails'),
     url(r'addMatterDetails/$', CAddMatterDetailsView.as_view(), name='addMatterDetails'),
     url(r'addMatterDetails/(?P<intTypeId>[0-9]+)/?$', CAddMatterDetailsView.as_view(), name='deleteAddMatterDetails'),
-    url(r'upLoadImportForm/$', views.upLoadImportForm, name='upLoadImportForm'),
+    url(r'calculateCensorePattern/$', views.calculateCensorePattern, name='calculateCensorePattern'),
     url(r'importForms/$', CImportFormsView.as_view(), name='importForms'),
     url(r'importForms/(?P<intTypeId>[0-9]+)/?$', CImportFormsView.as_view(), name='deleteImportForms'),
+    url(r'createNewImportForm/$', views.createNewImportForm, name='createNewImportForm'),
 ]
 

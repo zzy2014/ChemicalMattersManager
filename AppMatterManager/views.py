@@ -285,34 +285,27 @@ class CAddMatterDetailsView(Resource):
         return serializers.serialize('json', objects)
 
 
-def upLoadImportForm(request):
+def calculateCensorePattern(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
         return HttpResponse("当前用户不存在或未登录！")
 
-    #获取当前时间，并格式化为数据库中格式
-    timeNow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    #创建一个新的入库单
-    newForm = ImportForms.objects.create(EF_UserTypeId = userDict["typeId"], EF_UserId = userDict["id"],
-            EF_FormStateId = "1", EF_Time = timeNow)
-
-
-    #更新临时的药品明细列表中的入库单ID
     #并检查是否存在有毒，燃，爆的类型
     bIsDangerous = False;
     arrValidItems = MatterDetails.objects.all().filter(EF_ImportFormId = 0)
     for item in arrValidItems:
-        item.EF_ImportFormId = newForm.id
-        item.save()
-        if (not bIsDangerous):
+        if (bIsDangerous):
+            break
+        else:
             curMatter = Matters.objects.get(id = item.EF_MatterId)
-            print(curMatter.EF_TypeId)
             bIsDangerous = (curMatter.EF_TypeId != 1)
 
     #确定审核模型ID
     arrCensoreTypeIds = UserTypes.objects.all();
+
+    #如果当前用户为学生，则应添加其导师
+
     if (bIsDangerous):
         arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "院长")
     else:
@@ -332,8 +325,10 @@ def upLoadImportForm(request):
     if (len(arrCensorePatterns) < 1):
         return HttpResponse("没有审核人！")
 
-    newForm.EF_CensorePatternId = arrCensorePatterns[0].id
-    newForm.save();
+    #将审核模型写入session
+    request.session['censorePatternId'] = arrCensorePatterns[0].id
+    request.session.set_expiry(0)
+
 
     #获取第一个审核人
     arrCensores = []
@@ -428,4 +423,35 @@ class CImportFormsView(Resource):
 
     def to_json(self, objects):
         return serializers.serialize('json', objects)
+
+
+def createNewImportForm(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("当前用户不存在或未登录！")
+
+    #从session中获取己计算出的审核模型ID
+    censorePatternId = request.session.get('censorePatternId', default=0)
+
+    #获取用户选择的第一个审核人
+    censoreUserId = 0
+    if request.method == 'POST' :
+        censoreUserId = request.POST.get('censoreUserId')
+
+    #获取当前时间，并格式化为数据库中格式
+    timeNow = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    #创建一个新的入库单
+    newForm = ImportForms.objects.create(EF_UserTypeId = userDict["typeId"], EF_UserId = userDict["id"],
+            EF_FormStateId = "1", EF_Time = timeNow, EF_CensorePatternId = censorePatternId, EF_UserId1 = censoreUserId)
+
+    #更新临时的药品明细列表中的入库单ID
+    arrValidItems = MatterDetails.objects.all().filter(EF_ImportFormId = 0)
+    for item in arrValidItems:
+        item.EF_ImportFormId = newForm.id
+        item.save()
+
+    return JsonResponse({'retCode':1})
+
 
