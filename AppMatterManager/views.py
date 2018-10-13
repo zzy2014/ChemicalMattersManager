@@ -433,6 +433,7 @@ def createNewImportForm(request):
 
     #从session中获取己计算出的审核模型ID
     censorePatternId = request.session.get('censorePatternId', default=0)
+    del request.session['censorePatternId']
 
     #获取用户选择的第一个审核人
     censoreUserId = 0
@@ -444,7 +445,8 @@ def createNewImportForm(request):
 
     #创建一个新的入库单
     newForm = ImportForms.objects.create(EF_UserTypeId = userDict["typeId"], EF_UserId = userDict["id"],
-            EF_FormStateId = "1", EF_Time = timeNow, EF_CensorePatternId = censorePatternId, EF_UserId1 = censoreUserId)
+            EF_FormStateId = "1", EF_Time = timeNow, EF_CensorePatternId = censorePatternId,
+            EF_UserId1 = censoreUserId, EF_CensoreStateId1 = 6)
 
     #更新临时的药品明细列表中的入库单ID
     arrValidItems = MatterDetails.objects.all().filter(EF_ImportFormId = 0)
@@ -454,4 +456,52 @@ def createNewImportForm(request):
 
     return JsonResponse({'retCode':1})
 
+
+#执行审核
+def doCensore(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("当前用户不存在或未登录！")
+
+    if request.method != 'POST' :
+        return HttpResponse("访问方法不正确！")
+
+    curCensoreUserId =  request.POST.get('curCensoreUserId')
+    curCensoreStateId =  request.POST.get('curCensoreStateId')
+    censoreStates =  request.POST.get('censoreStates')
+    nextUserTypeId =  request.POST.get('nextUserTypeId')
+
+    #判断当前用户是否为审核用户
+    if (int(curCensoreUserId) != int(userDict["id"])):
+        return HttpResponse("您无权代替他人进行审核！")
+
+    #获取其他的审核结果
+    #for item in censoreStates:
+     #   if (item.id == curCensoreStateId):
+      #      censoreStates.remove(item)
+       #     break
+ 
+    #获取下一个人
+    strNextCensoreType = ""
+    arrCensores = []
+    if (nextUserTypeId != "" and int(nextUserTypeId) > 0):
+        strNextCensoreType = UserTypes.objects.get(id = nextUserTypeId).EF_TypeName;
+        if (strNextCensoreType == SuperAdministrators.Type):
+            arrCensores = SuperAdministrators.objects.all()
+        elif (strNextCensoreType == Administrators.Type):
+            arrCensores = Administrators.objects.all()
+        elif (strNextCensoreType == ChiefCollegeLeaders.Type):
+            arrCensores = ChiefCollegeLeaders.objects.all()
+        elif (strNextCensoreType == CollegeLeaders.Type):
+            arrCensores = CollegeLeaders.objects.all()
+        elif (strNextCensoreType == Teachers.Type):
+            arrCensores = Teachers.objects.all()
+
+
+    context = {} #一个字典对象
+    context['censoreStates'] =  censoreStates#传入模板中的变量
+    context['censoreTypeName'] =  strNextCensoreType#传入模板中的变量
+    context['arrCensores'] = arrCensores #传入模板中的变量
+    return render_to_response("doCensore.html", context)
 

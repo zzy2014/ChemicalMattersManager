@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'importForms/$', CImportFormsView.as_view(), name='importForms'),
     url(r'importForms/(?P<intTypeId>[0-9]+)/?$', CImportFormsView.as_view(), name='deleteImportForms'),
     url(r'createNewImportForm/$', views.createNewImportForm, name='createNewImportForm'),
+    url(r'doCensore/$', views.doCensore, name='doCensore'),
 ]
 
