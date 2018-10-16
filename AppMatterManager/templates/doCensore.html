@@ -1,43 +1,52 @@
 <link rel="stylesheet" type="text/css" href="/static/css/doCensore.css" />
 <script src="/static/js/doCensore.js"></script>
 
-<textarea id = "textarea_censoreComment" rows="10" cols="30">
-</textarea>
 
 <table id = "table_doCensore">
-  <tr id = "tr_statesAndCensores">
-    <td id = "td_censoreState">
-        &nbsp &nbsp &nbsp审核状态：
-    </td>
-    <td id = "td_states">
-        <select id = "select_StateOption">
-            {% for item in censoreStates%}
-            <option value ={{ item.id }}>{{ item.EF_StateName}}</option>
-            {% endfor %}
-        </select>
-        &nbsp &nbsp &nbsp
-    </td>
-
-    <td id = "td_censoreTypeName">
-        &nbsp &nbsp &nbsp{{ strNextCensoreType }}
-    </td>
-    <td id = "td_censores">
-        <select id = "select_censoreOption">
-            {% for item in arrCensores%}
-            <option value ={{ item.id}}>{{ item.EF_UserName}}</option>
-            {% endfor %}
-        </select>
-        &nbsp &nbsp &nbsp
-    </td>
-  </tr>
-  <tr id = "tr_btnCensoreOption">
-    <td id = "td_censoreOk">
-      <button id = "btnOk_censoreOption" type="button" onclick="confirmCensore()">Confirm</button>
-    </td>
-    <td id = "td_censoreCancel">
-      <button id = "btnCancel_censoreOption" type="button" onclick="cancelCensore()">Cancel</button>
-    </td>
-  </tr>
+    <tr id = "tr_statesAndCensores">
+        <th id = "th_censoreState">
+            审核状态：
+        </th>
+        <td id = "td_states">
+            <select id = "select_StateOption">
+                {% for item in censoreStates%}
+                <option value ={{ item.id }}>{{ item.EF_StateName}}</option>
+                {% endfor %}
+            </select>
+        </td>
+        {% ifnotequal strNextCensoreType '' %} 
+        <th id = "th_censoreTypeName">
+            {{ censoreTypeName }}:
+        </th>
+        <td id = "td_censores">
+            <select id = "select_censoreOption">
+                {% for item in arrCensores%}
+                <option value ={{ item.id}}>{{ item.EF_UserName}}</option>
+                {% endfor %}
+            </select>
+        </td>
+        {% endifnotequal %}
+    </tr>
+    <tr id = "tr_comment">
+        <th id = "th_commentLabel">
+            审核评语：
+        </th>
+        <th id = "th_comment" colspan="3">
+            <textarea id = "textarea_censoreComment" rows="10" cols="30" style="resize:none" ></textarea>
+        </th>
+    </tr>
+    <tr id = "tr_btnDoCensore">
+        <td> </td>
+        <td id = "td_btnOk">
+            <button id = "btnOk_censoreOption" type="button" onclick="confirmCensore()">Confirm</button>
+        </td>
+        <td id = "td_btnCancel">
+            <button id = "btnCancel_censoreOption" type="button" onclick="cancelCensore()">Cancel</button>
+        </td>
+        <td>
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        </td>
+    </tr>
 </table>
 
 

@@ -187,7 +187,14 @@ function upLoadForm()
     }).done(function(result)
     {
         tmpHtml = result;
+    }).fail(function(result, textStatus)
+    {
+        alert(result["responseText"]);
+        return false;
     });
+
+    if (tmpHtml == "")
+        return false;
 
     $("#div_popWindow").html(tmpHtml);
     $("#div_popWindow").css('display','block');

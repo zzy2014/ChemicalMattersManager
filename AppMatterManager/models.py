@@ -4,7 +4,7 @@ from django.db import models
 class CensoreStates(models.Model):
     EF_StateName = models.CharField(max_length=30)
     def __str__(self):
-        return self.EF_States;
+        return self.EF_StateName;
 
 #审核流程, 最多也就三步审核，当提交订单时根据计算出的审核流程Id，提供用户选择审核人
 class CensorePatterns(models.Model):

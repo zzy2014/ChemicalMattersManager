@@ -221,14 +221,17 @@ $(function()
                         return "";
 
                     var paraments = {};
+                    paraments["curCensoreUserTypeId"] = curPattern[0].EF_UserTypeId1;
                     paraments["curCensoreUserId"] = item.EF_UserId1;
                     paraments["curCensoreStateId"] = item.EF_CensoreStateId1;
                     paraments["censoreStates"] = censoreStates;
                     paraments["nextUserTypeId"] = curPattern[0].EF_UserTypeId2;
 
                     var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId1 });
-
-                    return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
+                    if (curcensoreState.length < 1)
+                        return "";
+                    else
+                        return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
                                     .on("click", paraments, ShowCensoreDialog);
                 }
             },
@@ -273,9 +276,10 @@ $(function()
                 },
                 itemTemplate: function(value, item)
                 {
-                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId1 });
+                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId2 });
                     if (curcensoreState.length < 1)
                         return "";
+
 
                     return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
                                     .on("click", ShowCensoreDialog);
@@ -309,7 +313,7 @@ $(function()
                 },
                 itemTemplate: function(value, item)
                 {
-                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId1 });
+                    var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId3 });
                     if (curcensoreState.length < 1)
                         return "";
 
@@ -348,7 +352,6 @@ function GetUsersFromTypeId(userTypes, userTypeId)
     else if (curUserType[0].EF_TypeName == "学生")
         strUrl += "students/";
 
-
     //从数据库获取相应用户
     var users = [];
     $.ajax({
@@ -374,7 +377,7 @@ function GetUsersFromTypeId(userTypes, userTypeId)
 //用户进行审核
 function ShowCensoreDialog(event)
 {
-    var tmpHtml = "<p>访问服务器出错！</p>";
+    var tmpHtml = "";
     //获取审核界面，并返回弹出的html
     $.ajax({
         type: "POST",
@@ -382,13 +385,17 @@ function ShowCensoreDialog(event)
         dataType: "text",
         data:event.data,
         async :false,  //改为同步执行，否则不能对外部变量附值
-    }).done(function(result)
+    }).done(function(result, textStatus)
     {
         tmpHtml = result;
-    }).fail(function(result)
+    }).fail(function(result, textStatus)
     {
-        alert("error");
+        alert(result["responseText"]);
+        return false;
     });
+
+    if (tmpHtml == "")
+        return false;
 
     $("#div_popWindow").html(tmpHtml);
     $("#div_popWindow").css('display','block');
@@ -455,7 +462,6 @@ function ShowDownGrid(intImportFormId)
     {
         mattersPurityDict[ matters[nIndex].id ] = purityDict[ matters[nIndex].EF_PurityId ];
     }
-
 
     $("#jsDownGrid").jsGrid({
         height: "100%",

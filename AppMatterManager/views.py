@@ -289,7 +289,12 @@ def calculateCensorePattern(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("当前用户不存在或未登录！")
+        return HttpResponse("当前用户不存在或未登录！", status = 403)
+
+    #如果当前用户为学生，则应添加其导师
+    arrValues = []
+    if (userDict["type"] == "Student"):
+        arrValues.append("教师")
 
     #并检查是否存在有毒，燃，爆的类型
     bIsDangerous = False;
@@ -301,18 +306,18 @@ def calculateCensorePattern(request):
             curMatter = Matters.objects.get(id = item.EF_MatterId)
             bIsDangerous = (curMatter.EF_TypeId != 1)
 
-    #确定审核模型ID
-    arrCensoreTypeIds = UserTypes.objects.all();
-
-    #如果当前用户为学生，则应添加其导师
-
     if (bIsDangerous):
-        arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "院长")
+        arrValues.append("院长")
     else:
-        arrCensoreTypeIds = arrCensoreTypeIds.filter(EF_TypeName = "副院长")
+        arrValues.append("副院长")
+    
+    strField = "EF_TypeName__in"
+    strCondition = {strField:arrValues}
+    arrCensoreTypeIds = UserTypes.objects.all().filter(**strCondition);
 
-    arrCensorePatterns = CensorePatterns.objects.all();
-    arrCensorePatterns = arrCensorePatterns.filter(EF_StepsCount = len(arrCensoreTypeIds))
+    #确定审核模型ID
+    arrCensorePatterns = CensorePatterns.objects.all().filter(EF_StepsCount = len(arrCensoreTypeIds))
+
     nIndex = 0
     for item in arrCensoreTypeIds:
         nIndex += 1
@@ -323,7 +328,7 @@ def calculateCensorePattern(request):
         
     #设置入库单的审核ID
     if (len(arrCensorePatterns) < 1):
-        return HttpResponse("没有审核人！")
+        return HttpResponse("没有审核人！", status = 403)
 
     #将审核模型写入session
     request.session['censorePatternId'] = arrCensorePatterns[0].id
@@ -462,26 +467,23 @@ def doCensore(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("当前用户不存在或未登录！")
+        return HttpResponse("当前用户不存在或未登录！", status = 403)
 
     if request.method != 'POST' :
-        return HttpResponse("访问方法不正确！")
+        return HttpResponse("访问方法不正确！", status = 403)
 
+    curCensoreUserTypeId =  request.POST.get('curCensoreUserTypeId')
     curCensoreUserId =  request.POST.get('curCensoreUserId')
+    #判断当前用户是否为审核用户
+    if (int(curCensoreUserTypeId) != int(userDict["typeId"]) or int(curCensoreUserId) != int(userDict["id"])):
+        return HttpResponse("您无权代替他人进行审核！", status = 403)
+
     curCensoreStateId =  request.POST.get('curCensoreStateId')
-    censoreStates =  request.POST.get('censoreStates')
     nextUserTypeId =  request.POST.get('nextUserTypeId')
 
-    #判断当前用户是否为审核用户
-    if (int(curCensoreUserId) != int(userDict["id"])):
-        return HttpResponse("您无权代替他人进行审核！")
+    #获取所有的审核状态
+    censoreStates =  CensoreStates.objects.all()
 
-    #获取其他的审核结果
-    #for item in censoreStates:
-     #   if (item.id == curCensoreStateId):
-      #      censoreStates.remove(item)
-       #     break
- 
     #获取下一个人
     strNextCensoreType = ""
     arrCensores = []
@@ -498,10 +500,9 @@ def doCensore(request):
         elif (strNextCensoreType == Teachers.Type):
             arrCensores = Teachers.objects.all()
 
-
     context = {} #一个字典对象
     context['censoreStates'] =  censoreStates#传入模板中的变量
     context['censoreTypeName'] =  strNextCensoreType#传入模板中的变量
     context['arrCensores'] = arrCensores #传入模板中的变量
-    return render_to_response("doCensore.html", context)
+    return render_to_response("doCensore.html", context, status = 200)
 

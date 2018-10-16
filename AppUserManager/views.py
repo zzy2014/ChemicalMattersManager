@@ -177,8 +177,14 @@ def getCurUser(request):
         retDict["curUser"] = ""
         return retDict 
 
+    #获取当前用户和用户类型ID
     curUser = ""
+    intUserTypeId = 0
     if (arrTypeIndex[0] == "User"):
+        arrAllTypes = UserTypes.objects.all().filter(EF_TypeName = arrTypeIndex[2])
+        if (len(arrAllTypes) > 0):
+            intUserTypeId = arrAllTypes[0].id
+
         if (arrTypeIndex[2] == SuperAdministrators.Type):
             curUser = SuperAdministrators.objects.get(id = intUserId)
         elif (arrTypeIndex[2] == Administrators.Type):
@@ -191,12 +197,9 @@ def getCurUser(request):
             curUser = Teachers.objects.get(id = intUserId)
     elif (arrTypeIndex[0] == "Student"):
         curUser = Students.objects.get(id = intUserId, EF_TypeId = int(arrTypeIndex[1]))
-
-    #获取用户类型ID
-    intUserTypeId = 0
-    arrAllTypes = UserTypes.objects.all().filter(EF_TypeName = arrTypeIndex[2])
-    if (len(arrAllTypes) > 0):
-        intUserTypeId = arrAllTypes[0].id
+        arrAllTypes = UserTypes.objects.all().filter(EF_TypeName = Students.Type)
+        if (len(arrAllTypes) > 0):
+            intUserTypeId = arrAllTypes[0].id
 
     retDict["id"] = int(intUserId)
     retDict["type"] = arrTypeIndex[0]

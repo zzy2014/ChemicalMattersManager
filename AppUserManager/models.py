@@ -99,6 +99,7 @@ class StudentTypes(models.Model):
 
 #学生
 class Students(models.Model):
+    Type = "学生"
     EF_UserStateId = models.IntegerField(default=0)
     EF_TypeId = models.IntegerField(default=0)
     EF_TeacherId = models.IntegerField(default=0)
