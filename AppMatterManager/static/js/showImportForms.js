@@ -110,6 +110,23 @@ $(function()
             ShowDownGrid(intImportFormId);
         },
 
+        //自主处理每行的显示
+        rowRenderer: function(item, itemIndex)
+        {
+            var row = $("<tr>");
+
+            //调用父函数处理各单元格
+            this._renderCells(row, item);
+
+            //循环处理每一列,添加tooltip
+            var cells = row.children("td");
+            for(var nIndex = 0; nIndex < cells.length; nIndex++ )
+            {
+                cells.eq(nIndex).attr("title", cells.eq(nIndex).text());
+            }
+
+            return row;
+        },
 
         controller: {
             loadData: function(filter) {
@@ -221,6 +238,8 @@ $(function()
                         return "";
 
                     var paraments = {};
+                    paraments["curImportFormId"] = item.id;
+                    paraments["curUserIndexId"] = 1;
                     paraments["curCensoreUserTypeId"] = curPattern[0].EF_UserTypeId1;
                     paraments["curCensoreUserId"] = item.EF_UserId1;
                     paraments["curCensoreStateId"] = item.EF_CensoreStateId1;
@@ -230,6 +249,8 @@ $(function()
                     var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId1 });
                     if (curcensoreState.length < 1)
                         return "";
+                    else if (curcensoreState[0].id != 6)
+                        return curcensoreState[0].EF_StateName;
                     else
                         return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
                                     .on("click", paraments, ShowCensoreDialog);
@@ -259,7 +280,7 @@ $(function()
                 {
                     //获取此审核模型相应的审核人员类型 
                     var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
-                    if (curPattern.length < 1)
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
                         return "";
 
                     var users = GetUsersFromTypeId(userTypes, curPattern[0].EF_UserTypeId2);
@@ -276,16 +297,43 @@ $(function()
                 },
                 itemTemplate: function(value, item)
                 {
+                    var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
+                        return "";
+
+                    var paraments = {};
+                    paraments["curImportFormId"] = item.id;
+                    paraments["curUserIndexId"] = 2;
+                    paraments["curCensoreUserTypeId"] = curPattern[0].EF_UserTypeId2
+                    paraments["curCensoreUserId"] = item.EF_UserId2;
+                    paraments["curCensoreStateId"] = item.EF_CensoreStateId2;
+                    paraments["censoreStates"] = censoreStates;
+                    paraments["nextUserTypeId"] = curPattern[0].EF_UserTypeId3;
+
                     var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId2 });
                     if (curcensoreState.length < 1)
                         return "";
-
-
-                    return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
-                                    .on("click", ShowCensoreDialog);
+                    else if (curcensoreState[0].id != 6)
+                        return curcensoreState[0].EF_StateName;
+                    else
+                        return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
+                                    .on("click", paraments, ShowCensoreDialog);
                 }
             },
-            { name: "EF_CensoreComment2", title: "审核明细2", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "审核明细2";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
+                        return "";
+                    else
+                        return item.EF_CensoreComment2;
+                }
+            },
 
             {
                 headerTemplate: function() 
@@ -296,7 +344,7 @@ $(function()
                 {
                     //获取此审核模型相应的审核人员类型 
                     var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
-                    if (curPattern.length < 1)
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
                         return "";
 
                     var users = GetUsersFromTypeId(userTypes, curPattern[0].EF_UserTypeId3);
@@ -313,15 +361,43 @@ $(function()
                 },
                 itemTemplate: function(value, item)
                 {
+                    var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
+                        return "";
+
+                    var paraments = {};
+                    paraments["curImportFormId"] = item.id;
+                    paraments["curUserIndexId"] = 1;
+                    paraments["curCensoreUserTypeId"] = curPattern[0].EF_UserTypeId3;
+                    paraments["curCensoreUserId"] = item.EF_UserId3;
+                    paraments["curCensoreStateId"] = item.EF_CensoreStateId3;
+                    paraments["censoreStates"] = censoreStates;
+                    paraments["nextUserTypeId"] = 0;
+
                     var curcensoreState =$.grep(censoreStates,function(tmp){ return tmp.id == item.EF_CensoreStateId3 });
                     if (curcensoreState.length < 1)
                         return "";
-
-                    return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
-                                    .on("click", ShowCensoreDialog);
+                    else if (curcensoreState[0].id != 6)
+                        return curcensoreState[0].EF_StateName;
+                    else
+                        return $("<button>").attr("type", "button").text(curcensoreState[0].EF_StateName)
+                                    .on("click", paraments, ShowCensoreDialog);
                 }
             },
-            { name: "EF_CensoreComment3", title: "审核明细3", type: "number", width: 80, editing: false, align:"left"},
+            {
+                headerTemplate: function() 
+                {
+                       return "审核明细3";
+                },
+                itemTemplate: function(value, item)
+                {
+                    var curPattern = $.grep(censorePatterns,function(tmp){ return tmp.id == item.EF_CensorePatternId });
+                    if (curPattern.length < 0 || curPattern[0].EF_StepsCount < 1)
+                        return "";
+                    else
+                        return item.EF_CensoreComment3;
+                }
+            },
 
             { type: "control" }
         ]
@@ -381,7 +457,7 @@ function ShowCensoreDialog(event)
     //获取审核界面，并返回弹出的html
     $.ajax({
         type: "POST",
-        url: "/AppMatterManager/doCensore/",
+        url: "/AppMatterManager/showCensoreDialog/",
         dataType: "text",
         data:event.data,
         async :false,  //改为同步执行，否则不能对外部变量附值

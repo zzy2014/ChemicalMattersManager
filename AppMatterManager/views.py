@@ -463,7 +463,7 @@ def createNewImportForm(request):
 
 
 #执行审核
-def doCensore(request):
+def showCensoreDialog(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
@@ -500,9 +500,68 @@ def doCensore(request):
         elif (strNextCensoreType == Teachers.Type):
             arrCensores = Teachers.objects.all()
 
+    #将当前审核的入库单ID和审核的用户列名写入session
+    request.session['curImportFormId'] = request.POST.get('curImportFormId')
+    request.session['curUserIndexId'] = request.POST.get('curUserIndexId')
+    request.session.set_expiry(0)
+
+
     context = {} #一个字典对象
     context['censoreStates'] =  censoreStates#传入模板中的变量
-    context['censoreTypeName'] =  strNextCensoreType#传入模板中的变量
+    context['nextCensoreTypeName'] =  strNextCensoreType#传入模板中的变量
     context['arrCensores'] = arrCensores #传入模板中的变量
-    return render_to_response("doCensore.html", context, status = 200)
+    return render_to_response("showCensoreDialog.html", context, status = 200)
 
+def censoreImportForm(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("当前用户不存在或未登录！", status = 403)
+
+    if request.method != 'POST' :
+        return HttpResponse("访问方法不正确！", status = 403)
+
+    #从session中获取当前入库单id和用户所属列
+    curImportFormId = int(request.session.get('curImportFormId', default=0))
+    curUserIndexId = int(request.session.get('curUserIndexId', default=0))
+    del request.session['curImportFormId']
+    del request.session['curUserIndexId']
+
+    if (curImportFormId < 1 or curUserIndexId < 1):
+        return HttpResponse("入库单无效！", status = 403)
+
+    #获取当前选中的审核状态、下一个审核人与评论
+    selCensoreStateId = int(request.POST.get('censoreStateId'))
+    if (selCensoreStateId < 1):
+        return HttpResponse("状态无效！", status = 403)
+
+    nextCensoreUserId = int(request.POST.get('nextCensoreUserId'))
+    strComment =  request.POST.get('strComment')
+
+    #设置当前入库单信息
+    curImportForm = ImportForms.objects.get(id = curImportFormId)
+    strCurCensoreStateField = "EF_CensoreStateId%d"%(curUserIndexId)
+    setattr(curImportForm, strCurCensoreStateField, selCensoreStateId);
+    strCurCommentField = "EF_CensoreComment%d"%(curUserIndexId)
+    setattr(curImportForm, strCurCommentField, strComment)
+
+    strNextUserIdField = "EF_UserId%d"%(curUserIndexId+1)
+    strNextCensoreStateIdField = "EF_CensoreStateId%d"%(curUserIndexId+1)
+
+    #审核通过则传递给下一个，并置状态为审核中
+    if (selCensoreStateId == 3):
+        setattr(curImportForm, strNextUserIdField, nextCensoreUserId)
+        setattr(curImportForm, strNextCensoreStateIdField, 6)
+        if (nextCensoreUserId > 0):
+            setattr(curImportForm, "EF_FormStateId", 2)
+        else:
+            setattr(curImportForm, "EF_FormStateId", 4)
+    #审核未通过，则不进行传递，且置状态为己拒绝
+    elif (selCensoreStateId == 5):
+        setattr(curImportForm, strNextUserIdField, 0)
+        setattr(curImportForm, strNextCensoreStateIdField, 0)
+        setattr(curImportForm, "EF_FormStateId", 5)
+
+    curImportForm.save()
+
+    return HttpResponse("审核成功！", None, 200)

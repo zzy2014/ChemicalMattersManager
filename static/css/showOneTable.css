@@ -1,3 +1,9 @@
+.jsgrid-cell{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 div#jsGrid{
     position:relative;
     height:100%;
