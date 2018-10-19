@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'createNewForm/$', views.createNewForm, name='createNewForm'),
     url(r'showCensoreDialog/$', views.showCensoreDialog, name='showCensoreDialog'),
     url(r'censoreForm/$', views.censoreForm, name='censoreForm'),
+    url(r'formOption/$', views.formOption, name='formOption'),
+    url(r'copyMatterDetails/$', views.copyMatterDetails, name='copyMatterDetails'),
 
     url(r'genPerchaseMatterDetails/$', views.genPerchaseMatterDetails, name='genPerchaseMatterDetails'),
     url(r'perchaseMatterDetails/$', CPerchaseMatterDetailsView.as_view(), name='perchaseMatterDetails'),

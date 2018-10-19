@@ -514,6 +514,46 @@ def censoreForm(request):
     return HttpResponse("审核成功！", None, 200)
 
 
+#获取单据界面
+def formOption(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("用户未登录或无效！", status = 403)
+
+    if request.method != 'POST' :
+        return HttpResponse("访问方法不正确！", status = 403)
+
+    context = {} #一个字典对象
+    context['jsFileName'] = request.POST.get("jsFileName", "") 
+    return render_to_response("formOption.html", context, status = 200)
+
+
+#从一个材料清单表中向另一个表中复制数据
+def copyMatterDetails(request):
+    userDict = getCurUser(request)
+    curUser = userDict["curUser"]
+    if (curUser == ""):
+        return HttpResponse("用户未登录或无效！", status = 403)
+
+    if request.method != 'POST' :
+        return HttpResponse("访问方法不正确！", status = 403)
+
+    fromTable = getFormObject(request.POST.get("fromTableName", ""))
+    toTable = getFormObject(request.POST.get("toTableName", ""))
+    if (fromTable == "" or toTable == ""):
+        return HttpResponse("传入的表名有误！", status = 403)
+
+    fromTableFormId = request.POST.get("fromTableFormId", 0)
+    toTableFormId = request.POST.get("toTableFormId", 0)
+
+    arrFromItems = fromTable.objects.all().filter(EF_FormId = fromTableFormId)
+    for item in arrFromItems:
+        toTable.objects.create(EF_FormId = toTableFormId, EF_MatterId = item.EF_MatterId, EF_MatterCount = item.EF_MatterCount)
+
+    return HttpResponse("复制完成")
+
+
 #生成己满足条件的预采购材料列表
 def genPerchaseMatterDetails(request):
     userDict = getCurUser(request)

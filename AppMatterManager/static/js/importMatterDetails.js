@@ -174,7 +174,31 @@ $(function()
 
 function importForm()
 {
-    alert("import");
+    //获取审核模式，并返回弹出的html
+    var tmpHtml = "";
+    var postData = {jsFileName:"perchaseFormOption"};
+
+    $.ajax({
+        type: "POST",
+        url: "/AppMatterManager/formOption/",
+        dataType: "text",
+        data: postData,
+        async :false,  //改为同步执行，否则不能对外部变量附值
+    }).done(function(result)
+    {
+        tmpHtml = result;
+    }).fail(function(result, textStatus)
+    {
+        alert(result["responseText"]);
+        return false;
+    });
+
+    if (tmpHtml == "")
+        return false;
+
+    $("#div_popWindow").html(tmpHtml);
+    $("#div_popWindow").css('display','block');
+    $("#div_block").css('display','block');
 }
 
 function upLoadForm()

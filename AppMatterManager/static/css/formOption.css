@@ -1,0 +1,40 @@
+div#formGrid{
+    position:relative;
+    height:80%;
+    width:100%;
+}
+
+.highLightRow td{
+    background-color: #c4e2ff !important; 
+}
+
+
+table#table_formOption{
+    position:relative;
+    height:15%;
+    width:100%;
+}
+
+td#td_FormOk
+{
+    text-align:center;
+}
+
+td#td_FormCancel
+{
+    text-align:center;
+}
+
+button#btnOk_FormOption{
+    position:relative;
+    height:100%;
+    width:30%;
+}
+
+button#btnCancel_FormOption{
+    position:relative;
+    height:100%;
+    width:30%;
+}
+
+
