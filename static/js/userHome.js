@@ -37,6 +37,7 @@ function showTwoTables(curLink, strAppName, strPageType)
     $(curLink).css("background-color","blue");
     $(curLink).css("color","white");
 
+
     $.ajax({
         type: "POST",
         url: "/" + strAppName + "/showTwoTables/",

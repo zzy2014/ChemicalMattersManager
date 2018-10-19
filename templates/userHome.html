@@ -22,12 +22,12 @@
             <ul id="ul_usercenter" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showUserInfo')">{{ userName }}
+                        onclick="showOneTable(this, 'AppUserManager', 'userInfo')">{{ userName }}
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showModifyPassword')">修改密码
+                        onclick="showOneTable(this, 'AppUserManager', 'modifyPassword')">修改密码
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
@@ -47,41 +47,41 @@
             <ul id="ul_usermanage" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi"  href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showUserStates')">用户状态
+                        onclick="showOneTable(this, 'AppUserManager', 'userStates')">用户状态
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showUserTypes')">用户类型</a>
+                        onclick="showOneTable(this, 'AppUserManager', 'userTypes')">用户类型</a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showStudentTypes')">学生类型
+                        onclick="showOneTable(this, 'AppUserManager', 'studentTypes')">学生类型
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showAdministrators')">管理员
+                        onclick="showOneTable(this, 'AppUserManager', 'administrators')">管理员
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showChiefLeaders')">院长
+                        onclick="showOneTable(this, 'AppUserManager', 'chiefLeaders')">院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showLeaders')">副院长
+                        onclick="showOneTable(this, 'AppUserManager', 'leaders')">副院长
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showTeachers')">教师
+                        onclick="showOneTable(this, 'AppUserManager', 'teachers')">教师
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showStudents')">学生
+                        onclick="showOneTable(this, 'AppUserManager', 'students')">学生
                     </a> 
                 </li>
             </ul>
@@ -97,49 +97,47 @@
             <ul id="ul_matterconfig" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatterUnits')">计量单位
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matterUnits')">计量单位
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatterStates')">理化状态
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matterStates')">理化状态
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showPurityLevels')">纯度规格
+                        onclick="showOneTable(this, 'AppMatterSetting', 'purityLevels')">纯度规格
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatterTypes')">药品类别
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matterTypes')">药品类别
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showStoreRooms')">存放仓库
+                        onclick="showOneTable(this, 'AppMatterSetting', 'storeRooms')">存放仓库
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatters')">所有药品
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matters')">所有药品
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatterAlerts')">存量预警
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matterAlerts')">预约存量预警
                     </a>
                 </li>
-                <!--
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterSetting', 'showMatterMinRemains')">最小剩余量
+                        onclick="showOneTable(this, 'AppMatterSetting', 'matterMinRemains')">预采购触发量
                     </a>
                 </li>
-                -->
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showTwoTables(this, 'AppMatterSetting', 'showMatterAccessBlocks')">领取权限禁止
+                        onclick="showTwoTables(this, 'AppMatterSetting', 'matterAccessBlocks')">领取权限禁止
                     </a>
                 </li>
             </ul>
@@ -155,34 +153,60 @@
             <ul id="ul_mattermanage" class="ul_leftsubnavi">
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterManager', 'showCensoreStates')">审核结果
+                        onclick="showOneTable(this, 'AppMatterManager', 'censoreStates')">审核结果
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterManager', 'showCensorePatterns')">审核流程
+                        onclick="showOneTable(this, 'AppMatterManager', 'censorePatterns')">审核流程
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterManager', 'showFormStates')">单据状态
+                        onclick="showOneTable(this, 'AppMatterManager', 'formStates')">单据状态
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppMatterManager', 'addMatterDetails')">入库
+                        onclick="showOneTable(this, 'AppMatterManager', 'perchaseMatterDetails')">预采购
                     </a>
                 </li>
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showTwoTables(this, 'AppMatterManager', 'showImportForms')">入库清单
+                        onclick="showTwoTables(this, 'AppMatterManager', 'perchaseForms')">预采购清单
                     </a>
                 </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">出库清单</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预采购清单</a> </li>
-            </ul>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showOneTable(this, 'AppMatterManager', 'importMatterDetails')">入库
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showTwoTables(this, 'AppMatterManager', 'importForms')">入库清单
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showOneTable(this, 'AppMatterManager', 'reserveMatterDetails')">预约
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showTwoTables(this, 'AppMatterManager', 'reserveForms')">预约清单
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showOneTable(this, 'AppMatterManager', 'exportMatterDetails')">出库
+                    </a>
+                </li>
+                <li class="li_leftsubnavi">
+                    <a class="a_leftsubnavi" href="javascript:void(0)"
+                        onclick="showTwoTables(this, 'AppMatterManager', 'exportForms')">出库清单
+                    </a>
+                </li>
+             </ul>
         </li>
         {% endif %}
 
@@ -198,7 +222,7 @@
                 {% if userType == '超级管理员' %}
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'showFinances')">所有经费
+                        onclick="showOneTable(this, 'AppUserManager', 'finances')">所有经费
                     </a>
                 </li>
 
@@ -233,16 +257,11 @@
 
         <li class="li_leftnavi">
             <a class="a_leftnavi" href="javascript:void(0)"
-                onclick="showSubNavi('ul_reserve')">预约系统
+                onclick="showSubNavi('ul_reserve')">消息通知
             </a>
             <ul id="ul_reserve" class="ul_leftsubnavi">
-                <!--除学生外均有审核权限-->
-                {% if userType == '研究生' or userType == '本科生' %}
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">药品预约</a> </li>
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">我的预约</a> </li>
-                {% else %}
-                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">预约审核</a> </li>
-                {% endif %}
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">站内通知</a> </li>
+                <li class="li_leftsubnavi"> <a class="a_leftsubnavi" href="">站内消息</a> </li>
             </ul>
         </li>
 

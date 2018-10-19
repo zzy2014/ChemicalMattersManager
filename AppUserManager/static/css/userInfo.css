@@ -1,0 +1,77 @@
+//用户信息相关
+div#div_UserInfo{
+    position:relative;
+    height:100%;
+    width:100%;
+}
+
+div#div_Image{
+    position:relative;
+}
+
+img#infoImage{
+    position:relative;
+    left:45%;
+    width:150px;
+    height:200px;
+}
+
+input#uploadImage{
+    position:relative;
+    display:none;
+}
+
+hr#infoLine{
+    position:relative;
+    overflow:hidden;
+}
+
+div#div_Content{
+    position:relative;
+}
+
+h4#userType{
+    position:relative;
+    display:inline;
+}
+
+h4#userState{
+    position:relative;
+    display:inline;
+}
+
+h4#userOffice{
+    position:relative;
+    display:inline;
+}
+
+h4#userPhone{
+    position:relative;
+    display:inline;
+}
+
+//修改信息时的控件
+form#formInform{
+    position:relative;
+    margin:0px;
+    min-width:80px;
+}
+
+textarea#textInform{
+    position:relative;
+    font-size:24px;
+    white-space:nowrap;
+    overflow:scroll;
+}
+
+input#saveBtn{
+    position:relative;
+    left:1%;
+    bottom:12px;
+}
+
+input#cancelBtn{
+    position:relative;
+    left:2%;
+    bottom:12px;
+}

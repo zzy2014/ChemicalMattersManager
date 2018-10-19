@@ -1,0 +1,27 @@
+﻿<link rel="stylesheet" type="text/css" href="/static/css/{{ pageType }}.css" />
+<script src="/static/js/{{ pageType }}.js"></script>
+<div id="div_UserInfo">
+    <div id="div_Image">
+        <!--点击图片更换头像-->
+        <img id="infoImage" src="{{userImageUrl}}" onclick="clickUserImage('uploadImage');"/>
+        <!--此按钮不显示，只是用来实出上传功能-->
+        <input  id="uploadImage" type="file" accept="image/*" name="uploadImage" onchange="changeUserImage(this);">
+        <hr id="infoLine"/>
+    </div>
+    <div id="div_Content">
+        类&nbsp&nbsp&nbsp&nbsp型:
+        <h4 id="userType">{{userType}}</h4>
+        
+        <br>
+        状&nbsp&nbsp&nbsp&nbsp态:
+        <h4 id="userState">{{userState}}</h4>
+
+        <br>
+        办公室:
+        <h4 id="userOffice" onclick="changeInformation('userOffice');">{{userOffice}}</h4>
+
+        <br>
+        电&nbsp&nbsp&nbsp&nbsp话:
+        <h4 id="userPhone" onclick="changeInformation('userPhone');">{{userPhone}}</h4>
+    </div>
+</div>

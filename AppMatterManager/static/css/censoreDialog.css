@@ -1,0 +1,58 @@
+table#table_doCensore{
+    position:relative;
+    height:100%;
+    width:100%;
+}
+
+th#th_censoreState{
+    text-align:center;
+}
+
+td#td_states{
+    text-align:left;
+}
+
+select#select_StateOption{
+    position:relative;
+    height:40%;
+    width:100%;
+}
+
+th#th_censoreTypeName{
+    text-align:center;
+}
+
+select#select_censoreOption{
+    position:relative;
+    height:40%;
+    width:100%;
+}
+
+td#td_censores{
+    text-align:left;
+}
+
+th#th_commentLabel{
+    text-align:center;
+}
+
+th#th_comment{
+    text-align:left;
+}
+
+textarea#textarea_censoreComment{
+    position:relative;
+    height:100%;
+    width:95%;
+}
+
+
+td#td_btnOk
+{
+    text-align:center;
+}
+
+td#td_btnCancel
+{
+    text-align:center;
+}

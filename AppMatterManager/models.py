@@ -40,7 +40,85 @@ class ImportForms(models.Model):
 
 
 #入库表单中的所有药品信息
-class MatterDetails(models.Model):
-    EF_ImportFormId = models.IntegerField(default=0)
+class ImportMatterDetails(models.Model):
+    Text = "测试"
+    EF_FormId = models.IntegerField(default=0)
+    EF_MatterId = models.IntegerField(default=0)
+    EF_MatterCount = models.IntegerField(default=0)
+
+#出库表单
+class ExportForms(models.Model):
+    EF_UserTypeId = models.IntegerField(default=0)
+    EF_UserId = models.IntegerField(default=0)
+    EF_FormStateId = models.IntegerField(default=0)
+    EF_Time = models.DateTimeField(default=0)
+    #以下为审核的流程和结果
+    EF_CensorePatternId = models.IntegerField(default=0)
+    EF_UserId1 = models.IntegerField(default=0)
+    EF_CensoreStateId1 = models.IntegerField(default=0)
+    EF_CensoreComment1 = models.CharField(max_length=255, default="")
+    EF_UserId2 = models.IntegerField(default=0)
+    EF_CensoreStateId2 = models.IntegerField(default=0)
+    EF_CensoreComment2 = models.CharField(max_length=255, default="")
+    EF_UserId3 = models.IntegerField(default=0)
+    EF_CensoreStateId3 = models.IntegerField(default=0)
+    EF_CensoreComment3 = models.CharField(max_length=255, default="")
+
+
+#出库表单中的所有药品信息
+class ExportMatterDetails(models.Model):
+    EF_FormId = models.IntegerField(default=0)
+    EF_MatterId = models.IntegerField(default=0)
+    EF_MatterCount = models.IntegerField(default=0)
+
+
+#预采购表单
+class PerchaseForms(models.Model):
+    EF_UserTypeId = models.IntegerField(default=0)
+    EF_UserId = models.IntegerField(default=0)
+    EF_FormStateId = models.IntegerField(default=0)
+    EF_Time = models.DateTimeField(default=0)
+    #以下为审核的流程和结果
+    EF_CensorePatternId = models.IntegerField(default=0)
+    EF_UserId1 = models.IntegerField(default=0)
+    EF_CensoreStateId1 = models.IntegerField(default=0)
+    EF_CensoreComment1 = models.CharField(max_length=255, default="")
+    EF_UserId2 = models.IntegerField(default=0)
+    EF_CensoreStateId2 = models.IntegerField(default=0)
+    EF_CensoreComment2 = models.CharField(max_length=255, default="")
+    EF_UserId3 = models.IntegerField(default=0)
+    EF_CensoreStateId3 = models.IntegerField(default=0)
+    EF_CensoreComment3 = models.CharField(max_length=255, default="")
+
+
+#预采购表单中的所有药品信息
+class PerchaseMatterDetails(models.Model):
+    EF_FormId = models.IntegerField(default=0)
+    EF_MatterId = models.IntegerField(default=0)
+    EF_MatterCount = models.IntegerField(default=0)
+
+
+#预约单
+class ReserveForms(models.Model):
+    EF_UserTypeId = models.IntegerField(default=0)
+    EF_UserId = models.IntegerField(default=0)
+    EF_FormStateId = models.IntegerField(default=0)
+    EF_Time = models.DateTimeField(default=0)
+    #以下为审核的流程和结果
+    EF_CensorePatternId = models.IntegerField(default=0)
+    EF_UserId1 = models.IntegerField(default=0)
+    EF_CensoreStateId1 = models.IntegerField(default=0)
+    EF_CensoreComment1 = models.CharField(max_length=255, default="")
+    EF_UserId2 = models.IntegerField(default=0)
+    EF_CensoreStateId2 = models.IntegerField(default=0)
+    EF_CensoreComment2 = models.CharField(max_length=255, default="")
+    EF_UserId3 = models.IntegerField(default=0)
+    EF_CensoreStateId3 = models.IntegerField(default=0)
+    EF_CensoreComment3 = models.CharField(max_length=255, default="")
+
+
+#预约单中的所有药品信息
+class ReserveMatterDetails(models.Model):
+    EF_FormId = models.IntegerField(default=0)
     EF_MatterId = models.IntegerField(default=0)
     EF_MatterCount = models.IntegerField(default=0)

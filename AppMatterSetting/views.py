@@ -15,42 +15,22 @@ def showOneTable(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("用户尚未登录！")
+        return HttpResponse("用户尚未登录！", status = 403)
 
     if (request.method != "POST"):
-        return HttpResponse("访问类型错误！")
+        return HttpResponse("访问类型错误！", status = 403)
 
     strPageType = request.POST.get('pageType')
     if (strPageType == ""):
-        return HttpResponse("页面类型无效！")
+        return HttpResponse("页面类型无效！", status = 403)
 
     context = {} #一个字典对象
     context["pageType"] = strPageType
 
-    if (strPageType == "showMatterUnits"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterStates"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterTypes"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterUnits"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showPurityLevels"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showStoreRooms"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatters"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterAlerts"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterMinRemains"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showMatterAccessBlocks"):
-        return render_to_response("showOneTable.html", context)
-
-
-    else:
+    if (strPageType == ""):
         return HttpResponse("")
+    else:
+        return render_to_response("showOneTable.html", context)
 
 
 #获取userHome界面中的右侧界面--上下表格
@@ -58,22 +38,22 @@ def showTwoTables(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("用户尚未登录！")
+        return HttpResponse("用户尚未登录！", status = 403)
 
     if (request.method != "POST"):
-        return HttpResponse("访问类型错误！")
+        return HttpResponse("访问类型错误！", status = 403)
 
     strPageType = request.POST.get('pageType')
     if (strPageType == ""):
-        return HttpResponse("页面类型无效！")
+        return HttpResponse("页面类型无效！", status = 403)
 
     context = {} #一个字典对象
     context["pageType"] = strPageType
 
-    if (strPageType == "showMatterAccessBlocks"):
-        return render_to_response("showTwoTables.html", context)
-    else:
+    if (strPageType == ""):
         return HttpResponse("")
+    else:
+        return render_to_response("showTwoTables.html", context)
 
 
 #药品单位接口
@@ -465,7 +445,6 @@ class CMatterMinRemainsView(Resource):
     def get(self, request):
         strId = request.GET.get("id", "") 
         strMatterId = request.GET.get("EF_MatterId", "") 
-        strStudentTypeId = request.GET.get("EF_StudentTypeId", "") 
         strMinRemain = request.GET.get("EF_MinRemain", "") 
         arrValidItems = MatterMinRemains.objects.all() 
 
@@ -473,8 +452,6 @@ class CMatterMinRemainsView(Resource):
             arrValidItems = arrValidItems.filter(id__contains = int(strId))
         if (strMatterId != "" and strMatterId != "0"):
             arrValidItems = arrValidItems.filter(EF_MatterId__contains = strMatterId)
-        if (strStudentTypeId != "" and strStudentTypeId != "0"):
-            arrValidItems = arrValidItems.filter(EF_StudentTypeId__contains = strStudentTypeId)
         if (strMinRemain != ""):
             arrValidItems = arrValidItems.filter(EF_MinRemain__contains = strMinRemain)
 
@@ -482,15 +459,12 @@ class CMatterMinRemainsView(Resource):
 
     def post(self, request):
         strMatterId = request.POST.get("EF_MatterId", "") 
-        strStudentTypeId = request.POST.get("EF_StudentTypeId", "") 
         strMinRemain = request.POST.get("EF_MinRemain", "") 
-        newItem = MatterMinRemains.objects.create(EF_MatterId = strMatterId, EF_StudentTypeId = strStudentTypeId,
-                EF_MinRemain = strMinRemain)
+        newItem = MatterMinRemains.objects.create(EF_MatterId = strMatterId, EF_MinRemain = strMinRemain)
 
         jsonDict = {}
         jsonDict["id"] = newItem.id
         jsonDict["EF_MatterId"] = int(newItem.EF_MatterId)
-        jsonDict["EF_StudentTypeId"] = int(newItem.EF_StudentTypeId)
         jsonDict["EF_MinRemain"] = int(newItem.EF_MinRemain)
         jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
 
@@ -500,14 +474,12 @@ class CMatterMinRemainsView(Resource):
         intCurId = int(request.PUT.get("id"))
         curItem = MatterMinRemains.objects.get(id = intCurId)
         curItem.EF_MatterId = request.PUT.get("EF_MatterId", "")
-        curItem.EF_StudentTypeId = request.PUT.get("EF_StudentTypeId", "")
         curItem.EF_MinRemain = request.PUT.get("EF_MinRemain", "")
         curItem.save()
 
         jsonDict = {}
         jsonDict["id"] = curItem.id
         jsonDict["EF_MatterId"] = int(curItem.EF_MatterId)
-        jsonDict["EF_StudentTypeId"] = int(curItem.EF_StudentTypeId)
         jsonDict["EF_MinRemain"] = int(curItem.EF_MinRemain)
         jsonStr = json.dumps(jsonDict, ensure_ascii=True) 
 

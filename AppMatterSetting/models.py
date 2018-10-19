@@ -62,10 +62,9 @@ class MatterAlerts(models.Model):
     def __str__(self):
         return "Alert"
 
-#药品领取时最低值，在有权限的情况下，若其领取后库存数量低于此值，则本次领取无效
+#药品预采购时最低值
 class MatterMinRemains(models.Model):
     EF_MatterId = models.IntegerField(default=0)
-    EF_StudentTypeId = models.IntegerField(default=0)
     EF_MinRemain = models.IntegerField(default=0)
     def __str__(self):
         return "Alert"

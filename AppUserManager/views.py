@@ -228,19 +228,19 @@ def showOneTable(request):
     userDict = getCurUser(request)
     curUser = userDict["curUser"]
     if (curUser == ""):
-        return HttpResponse("用户尚未登录！")
+        return HttpResponse("用户尚未登录！", status = 403)
 
     if (request.method != "POST"):
-        return HttpResponse("访问类型错误！")
+        return HttpResponse("访问类型错误！", status = 403)
 
     strPageType = request.POST.get('pageType')
     if (strPageType == ""):
-        return HttpResponse("页面类型无效！")
+        return HttpResponse("页面类型无效！", status = 403)
 
     context = {} #一个字典对象
     context["pageType"] = strPageType
 
-    if (strPageType == "showUserInfo"):
+    if (strPageType == "userInfo"):
         context["userType"] = userDict["typeName"]
 
         try:
@@ -264,26 +264,10 @@ def showOneTable(request):
         else:
             context["userPhone"] = "Clicked to Edit" 
 
-        return render_to_response("showUserInfo.html", context)
-    elif (strPageType == "showModifyPassword"):
-        return render_to_response("showModifyPassword.html", context)
-    elif (strPageType == "showUserStates"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showUserTypes"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showStudentTypes"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showAdministrators"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showChiefLeaders"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showLeaders"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showTeachers"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showStudents"):
-        return render_to_response("showOneTable.html", context)
-    elif (strPageType == "showFinances"):
+        return render_to_response("userInfo.html", context)
+    elif (strPageType == "modifyPassword"):
+        return render_to_response("modifyPassword.html", context)
+    else:
         return render_to_response("showOneTable.html", context)
 
 

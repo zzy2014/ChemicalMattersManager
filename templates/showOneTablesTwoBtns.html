@@ -1,5 +1,5 @@
 <!--jsgrid相关的css与js-->
-<link rel="stylesheet" type="text/css" href="/static/css/showOneTable.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/showOneTablesTwoBtns.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/jsgrid.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/jsgrid/theme.css" />
 <script src="/static/js/{{pageType}}.js"></script>
@@ -19,11 +19,18 @@
 <div id="jsGrid">
 </div>
 
-<!--弹出窗口-->
+<div id="div_operate">
+    <button id="btn_load" type="button" onclick="importForm()">{{btnText}}</button>
+    <!--点击按钮时自动判断审核类型-->
+    <button id="btn_submit" type="button" onclick="upLoadForm()">上传审核</button>
+</div>
+
 <div id="div_popWindow">
 </div>
 
 <!--黑背景-->
 <div id="div_block">
 </div>
+
+
 
