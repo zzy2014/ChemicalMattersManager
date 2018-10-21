@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'AppUserManager.templatetags',
     'AppMatterSetting',
     'AppMatterManager',
-    'AppReserve',
+    'AppFinanceManager',
 ]
 
 MIDDLEWARE = [

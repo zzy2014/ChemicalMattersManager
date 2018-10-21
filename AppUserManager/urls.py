@@ -5,7 +5,7 @@ from ChemicalMattersManager.settings import MEDIA_ROOT
 from . import views
 from .views import CUserTypesView, CUserStatesView, CStudentTypesView
 from .views import CSuperAdministratorsView, CAdministratorsView, CChiefCollegeLeadersView
-from .views import CCollegeLeadersView, CTeachersView, CStudentsView, CFinancesView
+from .views import CCollegeLeadersView, CTeachersView, CStudentsView 
 
 urlpatterns = [
     url(r'register/$', views.register, name='register'),
@@ -35,7 +35,5 @@ urlpatterns = [
     url(r'teachers/(?P<intTypeId>[0-9]+)/?$', CTeachersView.as_view(), name='deleteTeachers'),
     url(r'students/$', CStudentsView.as_view(), name='students'),
     url(r'students/(?P<intTypeId>[0-9]+)/?$', CStudentsView.as_view(), name='deleteStudents'),
-    url(r'finances/$', CFinancesView.as_view(), name='finances'),
-    url(r'finances/(?P<intTypeId>[0-9]+)/?$', CFinancesView.as_view(), name='deleteFinances'),
 ]
 

@@ -303,10 +303,12 @@ def calculateCensorePattern(request):
     
     strField = "EF_TypeName__in"
     strCondition = {strField:arrValues}
-    arrCensoreTypeIds = UserTypes.objects.all().filter(**strCondition);
+    #修改为倒序排列，因为设置审核流程时，职位低的肯定在前面
+    arrCensoreTypeIds = UserTypes.objects.all().order_by('-id').filter(**strCondition);
 
     #确定审核模型ID
     arrCensorePatterns = CensorePatterns.objects.all().filter(EF_StepsCount = len(arrCensoreTypeIds))
+
 
     nIndex = 0
     for item in arrCensoreTypeIds:
@@ -315,7 +317,6 @@ def calculateCensorePattern(request):
         strCondition = {strField:item.id}
         arrCensorePatterns = arrCensorePatterns.filter(**strCondition)
 
-        
     #设置入库单的审核ID
     if (len(arrCensorePatterns) < 1):
         return HttpResponse("没有审核人！", status = 403)

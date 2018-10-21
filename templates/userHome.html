@@ -222,7 +222,7 @@
                 {% if userType == '超级管理员' %}
                 <li class="li_leftsubnavi">
                     <a class="a_leftsubnavi" href="javascript:void(0)"
-                        onclick="showOneTable(this, 'AppUserManager', 'finances')">所有经费
+                        onclick="showOneTable(this, 'AppFinanceManager', 'finances')">所有经费
                     </a>
                 </li>
 
@@ -244,7 +244,7 @@
         {% endif %}
 
         <!--只有教师才可以看到-->
-        {% if userType == '教师' %}
+        {% if userType == '教师' or userType == '超级管理员' %}
         <li class="li_leftnavi">
             <a class="a_leftnavi" href="javascript:void(0)"
                 onclick="showSubNavi('ul_studentmanage')">学生管理

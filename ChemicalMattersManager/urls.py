@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^AppUserManager/', include('AppUserManager.urls')),
     url(r'^AppMatterSetting/', include('AppMatterSetting.urls')),
     url(r'^AppMatterManager/', include('AppMatterManager.urls')),
+    url(r'^AppFinanceManager/', include('AppFinanceManager.urls')),
 ]
 
